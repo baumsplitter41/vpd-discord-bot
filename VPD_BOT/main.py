@@ -20,6 +20,10 @@ debug_guilds_up = []
 server_token = os.getenv("SERVER").split(",")
 for i in range(len(server_token)):
     debug_guilds_up.append(int(server_token[i]))
+
+banlog_id = os.getenv("BANLOG")
+if banlog_id is None:
+    raise ValueError("BANLOG ID not found in .env file")
     
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or("!"),
@@ -107,9 +111,6 @@ async def userinfo(
         await ctx.respond(f"This is me - the {bot.user}", ephemeral=True)
         return
 
-
-    
-
     embed = discord.Embed(
         title=f"Information about *{user.name}*",
         description=f"Here you see all details about {user.mention}",
@@ -127,8 +128,8 @@ async def userinfo(
     embed.add_field(name="User ID", value=user.id)
 
     embed.set_thumbnail(url=user.display_avatar.url)
-    embed.set_author(name="World Wide Modding", icon_url="https://i.lcpdfrusercontent.com/uploads/monthly_2022_04/756701490_woldwidemodding.thumb.jpg.00bc1f61c05cc6d24519e1dda202d741.jpg")
-    embed.set_footer(text="World Wide Modding - Bot | Made by BaumSplitter41")
+    embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+    embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
     await ctx.respond(embed=embed)
 #---------------------------------#
@@ -155,8 +156,7 @@ async def ban(
         await ctx.respond("Error: You can't ban yourself!", ephemeral=True)
         return
     
-    #logging in #ban-logs on VicePD
-    channel= discord.utils.get(ctx.guild.channels, id = int(1447580463668400305))
+    channel= discord.utils.get(ctx.guild.channels, id = int(banlog_id))
 
     embed = discord.Embed(
         title=f"Ban of **{user.name}**",
@@ -171,7 +171,8 @@ async def ban(
     embed.add_field(name="User ID", value=user.id)
 
     embed.set_thumbnail(url=user.display_avatar.url)
-    embed.set_footer(text="World Wide Modding - Bot | Made by BaumSplitter41")
+    embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+    embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
     try:
         await ctx.guild.ban(user, reason=reason)
