@@ -27,7 +27,7 @@ if banlog_id is None:
     
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or("!"),
-    description="BaumSplitter41 Test Bot",
+    description="VicePD Bot",
     intents=intents,
     debug_guilds=debug_guilds_up if debug_guilds_up else None
 )
@@ -134,9 +134,11 @@ async def userinfo(
     await ctx.respond(embed=embed)
 #---------------------------------#
 
+#_________________________________#
+#BAN SYSTEM
 
 #---------------------------------#
-##Ban System
+##Ban
 
 @bot.slash_command(name="ban", description="Ban a user from this Server")
 async def ban(
@@ -188,7 +190,58 @@ async def ban(
 
 #---------------------------------#
 
+#Unban
 
+@bot.slash_command(name="unban", description="Unban a user from this Server")
+async def ban(
+    ctx,
+    user: Option(discord.User, description = "Insert User ID", required=True), # type: ignore
+    reason: Option(str, description = "Reason for the unbanning", default="No reason provided") # type: ignore
+    
+):
+    if not ctx.author.guild_permissions.ban_members:
+        await ctx.respond("Error: You don't have the permission to unban Members!", ephemeral=True)
+        return
+    
+    if user == bot.user:
+        await ctx.respond("Error: I can't unban myself!", ephemeral=True)
+        return
+    if user == ctx.author:
+        await ctx.respond("Error: You can't unban yourself!", ephemeral=True)
+        return
+    if user in ctx.guild.members:
+        await ctx.respond("Error: This user is not banned!", ephemeral=True)
+        return
+    
+    channel= discord.utils.get(ctx.guild.channels, id = int(banlog_id))
+
+    embed = discord.Embed(
+        title=f"Unban of **{user.name}**",
+        description=f"User {user.mention} was unbanned from this server.",
+        color=discord.Color.green()
+    )
+    time = discord.utils.format_dt(datetime.now(), "f")
+    embed.add_field(name="Unban Date", value=time, inline=False)
+    embed.add_field(name="Moderator", value=f"{ctx.author}", inline=False)
+    embed.add_field(name="Reason", value=reason, inline=False)
+
+    embed.add_field(name="User ID", value=user.id)
+
+    embed.set_thumbnail(url=user.display_avatar.url)
+    embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+    embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
+
+    try:
+        await ctx.guild.unban(user, reason=reason)
+        await ctx.respond(f"User {user.mention} is now unbanned!", ephemeral=True)
+        await channel.send(embed=embed)
+
+    except discord.Forbidden:
+        await ctx.respond("Error: I don't have permission to unban this user.", ephemeral=True)
+    except discord.HTTPException as e:
+        await ctx.respond(f"Error: Could not unban User {user.mention}. Reason: {e}", ephemeral=True)
+    except Exception as e:
+        await ctx.respond(f"Unexpected error: {e}", ephemeral=True)
 
 
 
