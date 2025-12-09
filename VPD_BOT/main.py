@@ -57,25 +57,6 @@ async def on_guild_join(guild):
 #---------------------------------------------------------------------------------------#
 
 #---------------------------------#
-## Deleted Message
-"""
-@bot.event
-async def on_message_delete(
-    ctx = discord.Message,
-):
-    if ctx.author != bot.user:
-        await ctx.send(f"Eine Nachricht von {ctx.author} wurde gelöscht: {ctx.content}", ephemeral=False)
-"""
-#---------------------------------#
-
-#---------------------------------#
-@bot.event
-async def on_message_delete(msg):
-    if msg.author != bot.user:  
-        await msg.channel.send(f"A Message from {msg.author} has been deleted: {msg.content}")
-#---------------------------------#
-
-#---------------------------------#
 ## Greet
 @bot.slash_command(description="Greet a User")
 async def greet(ctx, user: str = Option(discord.User, "The user, you want to greet")):
@@ -134,9 +115,9 @@ async def userinfo(
     await ctx.respond(embed=embed)
 #---------------------------------#
 
+
 #_________________________________#
 #BAN SYSTEM
-
 #---------------------------------#
 ##Ban
 
@@ -243,15 +224,44 @@ async def ban(
     except Exception as e:
         await ctx.respond(f"Unexpected error: {e}", ephemeral=True)
 
+#---------------------------------#
+#_________________________________#
 
 
+#---------------------------------#
+#Kick
 
+@bot.slash_command(name="kick", description="Kick a user from this Server")
+async def ban(
+    ctx,
+    user: Option(discord.User, description = "Select User", required=True), # type: ignore
+    reason: Option(str, description = "Reason for the ban", default="No reason provided") # type: ignore
+    
+):
+    if not ctx.author.guild_permissions.kick_members:
+        await ctx.respond("Error: You don't have the permission to kick Members!", ephemeral=True)
+        return
+    
+    if user == bot.user:
+        await ctx.respond("Error: I can't kick myself!", ephemeral=True)
+        return
+    if user == ctx.author:
+        await ctx.respond("Error: You can't kick yourself!", ephemeral=True)
+        return
+    
 
+    try:
+        await ctx.guild.kick(user, reason=reason)
+        await ctx.respond(f"User {user.mention} has been kick from this Server!", ephemeral=True)
 
+    except discord.Forbidden:
+        await ctx.respond("Error: I don't have permission to kick this user.", ephemeral=True)
+    except discord.HTTPException as e:
+        await ctx.respond(f"Error: Could not kick User {user.mention}. Reason: {e}", ephemeral=True)
+    except Exception as e:
+        await ctx.respond(f"Unexpected error: {e}", ephemeral=True)
 
-
-
-
+#---------------------------------#
 
 
 #---------------------------------#
