@@ -5,11 +5,18 @@ from discord.ext import commands
 from discord.commands import Option
 from discord.commands import slash_command
 from datetime import datetime
+import configparser
+
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True
+intents.guilds = True
+intents.reactions = True
 
 client = discord.Client(intents=intents)
+#------#
+#Load .env file
 
 load_dotenv()
 token = os.getenv("TOKEN")
@@ -21,10 +28,30 @@ server_token = os.getenv("SERVER").split(",")
 for i in range(len(server_token)):
     debug_guilds_up.append(int(server_token[i]))
 
-banlog_id = os.getenv("BANLOG")
-if banlog_id is None:
-    raise ValueError("BANLOG ID not found in .env file")
-    
+
+#------#
+#ConfigParser
+
+config = configparser.RawConfigParser()
+configFilePath = r'Pycord/VPD_BOT/config.cfg'
+config.read_file(open(configFilePath))
+
+title_rules = config.get('Reactionroles Rules', 'tile_rules')
+role_rules = config.get('Reactionroles Rules', 'rules_role')
+channel_rules = config.get('Reactionroles Rules', 'channel_rules')
+message_rules = config.get('Reactionroles Rules', 'message_rules')
+emoji_rules = config.get('Reactionroles Rules', 'rules_emoji')
+
+
+channel_log = config.get('Logs', 'channel_log')
+channel_banlog = config.get('Logs', 'ban_log')
+
+
+
+
+#------#
+#Initialize Bot
+
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or("!"),
     description="VicePD Bot",
@@ -43,15 +70,18 @@ class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
+#---------------------------------#
+#Bot Online Console
+
 @bot.event
 async def on_ready():
     print(f"{bot.user} ist online")
-
-@bot.listen()
-async def on_guild_join(guild):
-    print(f"LOG: guild {guild} joined")
-
-
+    if bot.guilds:
+        channel = discord.utils.get(bot.guilds[0].channels, id=int(channel_log))
+        if channel:
+            await channel.send(f"{bot.user} ist online")
+    await load_extensions()
 #---------------------------------------------------------------------------------------#
 #DONT Touch anything above this line, unless you know what you are doing!#
 #---------------------------------------------------------------------------------------#
@@ -118,9 +148,9 @@ async def userinfo(
 
 #_________________________________#
 #BAN SYSTEM
+
 #---------------------------------#
 ##Ban
-
 @bot.slash_command(name="ban", description="Ban a user from this Server")
 async def ban(
     ctx,
@@ -139,7 +169,7 @@ async def ban(
         await ctx.respond("Error: You can't ban yourself!", ephemeral=True)
         return
     
-    channel= discord.utils.get(ctx.guild.channels, id = int(banlog_id))
+    channel= discord.utils.get(ctx.guild.channels, id = int(channel_banlog))
 
     embed = discord.Embed(
         title=f"Ban of **{user.name}**",
@@ -170,9 +200,7 @@ async def ban(
         await ctx.respond(f"Unexpected error: {e}", ephemeral=True)
 
 #---------------------------------#
-
 #Unban
-
 @bot.slash_command(name="unban", description="Unban a user from this Server")
 async def ban(
     ctx,
@@ -194,7 +222,7 @@ async def ban(
         await ctx.respond("Error: This user is not banned!", ephemeral=True)
         return
     
-    channel= discord.utils.get(ctx.guild.channels, id = int(banlog_id))
+    channel= discord.utils.get(ctx.guild.channels, id = int(channel_banlog))
 
     embed = discord.Embed(
         title=f"Unban of **{user.name}**",
@@ -230,7 +258,6 @@ async def ban(
 
 #---------------------------------#
 #Kick
-
 @bot.slash_command(name="kick", description="Kick a user from this Server")
 async def ban(
     ctx,
@@ -262,7 +289,86 @@ async def ban(
         await ctx.respond(f"Unexpected error: {e}", ephemeral=True)
 
 #---------------------------------#
+#reaction role system
+"""@bot.slash_command(name="reaction_role", description="React to verify yourself and get the role")
+async def reaction_role(ctx):
+    role= discord.utils.get(ctx.guild.roles, id = int(role_rules))
+    embed = discord.Embed(
+        title= title_rules,
+        description=f"React to accept the rules and get the {role} role.",
+        color=discord.Color.red()
+    )
+    if not ctx.author.guild_permissions.administrator:
+        await ctx.respond("Error: You don't have the permission to do that!", ephemeral=True)
+        return
+    message = await ctx.channel.send(embed=embed)
+    await message.add_reaction("✅")
+    await ctx.respond("Message sent", ephemeral=True)"""
 
+#------------------------------------------------------------#
+@bot.event
+async def on_raw_reaction_add(payload):
+    """
+    Wird ausgeführt, wenn eine Reaktion hinzugefügt wird.
+    """
+    # 1. Prüfen, ob die Reaktion auf die richtige Nachricht gesetzt wurde
+    if payload.message_id != message_rules:
+        return
+
+    # 2. Prüfen, ob es das richtige Emoji ist
+    if str(payload.emoji) != emoji_rules:
+        return
+
+    # 4. Das Member (User) Objekt holen
+    # payload.member ist in 'on_raw_reaction_add' verfügbar
+    member = payload.member
+    if member is None:
+        return
+    
+    # Ignorieren, wenn der Bot selbst reagiert (optional, aber gute Praxis)
+    if member.bot:
+        return
+
+    # 5. Die Rolle holen
+    role = payload.guild.get_role(role_rules)
+    if role is None:
+        print(f"Fehler: Rolle mit ID {role_rules} wurde nicht gefunden.")
+        return
+
+    # 6. Rolle vergeben
+    try:
+        await member.add_roles(role)
+        print(f"Rolle '{role.name}' an {member.name} vergeben.")
+        
+        # Optional: User per DM benachrichtigen
+        # await member.send(f"Du hast die Rolle **{role.name}** erhalten!")
+        
+    except discord.Forbidden:
+        print("Fehler: Der Bot hat keine Berechtigung, Rollen zu verwalten (Manage Roles fehlt oder Rolle ist zu hoch).")
+    except Exception as e:
+        print(f"Ein Fehler ist aufgetreten: {e}")
+
+
+
+#---------------------------------#
+#rules message
+@bot.slash_command(name="message_rules", description = "DONT USE!!")
+async def message_rules(
+    ctx,
+):
+    
+    if not ctx.author.guild_permissions.administrator:
+        await ctx.respond("Error: You don't have the permission to do that!", ephemeral=True)
+        return
+    role= discord.utils.get(ctx.guild.roles, id = int(role_rules))
+    embed = discord.Embed(
+        title= title_rules,
+        description=f"React to accept the rules and get the {role} role.",
+        color=discord.Color.red()
+    )
+    channel= discord.utils.get(ctx.guild.channels, id = int(channel_rules))
+    await channel.send(embed=embed)
+    await ctx.respond("Message sent", ephemeral=True)
 
 #---------------------------------#
 #Run function
