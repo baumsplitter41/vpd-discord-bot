@@ -33,7 +33,7 @@ for i in range(len(server_token)):
 #ConfigParser
 
 config = configparser.RawConfigParser()
-configFilePath = r'Pycord/VPD_BOT/config.cfg'
+configFilePath = r'config.cfg'
 config.read_file(open(configFilePath))
 
 title_rules = config.get('Reactionroles Rules', 'tile_rules')
@@ -62,7 +62,7 @@ bot = commands.Bot(
 async def load_extensions():
     for filename in os.listdir("cogs"):
         if filename.endswith(".py"):
-            await bot.load_extension(f"cogs.{filename[:-3]}")   
+            bot.load_extension(f"cogs.{filename[:-3]}")   
 
 
 
