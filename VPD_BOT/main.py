@@ -36,11 +36,9 @@ config = configparser.RawConfigParser()
 configFilePath = r'config.cfg'
 config.read_file(open(configFilePath))
 
-title_rules = config.get('Reactionroles Rules', 'tile_rules')
+label_rules = config.get('Reactionroles Rules', 'label_rules')
 role_rules = config.get('Reactionroles Rules', 'rules_role')
-channel_rules = config.get('Reactionroles Rules', 'channel_rules')
-message_rules = config.get('Reactionroles Rules', 'message_rules')
-emoji_rules = config.get('Reactionroles Rules', 'rules_emoji')
+print(role_rules)
 
 
 channel_log = config.get('Logs', 'channel_log')
@@ -82,6 +80,7 @@ async def on_ready():
         if channel:
             await channel.send(f"{bot.user} ist online")
     await load_extensions()
+    bot.add_view(PersistentRoleView()) #loading reactionrole memory
 #---------------------------------------------------------------------------------------#
 #DONT Touch anything above this line, unless you know what you are doing!#
 #---------------------------------------------------------------------------------------#
@@ -290,85 +289,61 @@ async def ban(
 
 #---------------------------------#
 #reaction role system
-"""@bot.slash_command(name="reaction_role", description="React to verify yourself and get the role")
-async def reaction_role(ctx):
-    role= discord.utils.get(ctx.guild.roles, id = int(role_rules))
-    embed = discord.Embed(
-        title= title_rules,
-        description=f"React to accept the rules and get the {role} role.",
-        color=discord.Color.red()
+
+
+#reaction role verfiy
+
+class PersistentRoleView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    @discord.ui.button(
+        label=label_rules, 
+        style=discord.ButtonStyle.success, 
+        emoji="✅", 
+        custom_id="persistent_view:role_verify" 
     )
-    if not ctx.author.guild_permissions.administrator:
-        await ctx.respond("Error: You don't have the permission to do that!", ephemeral=True)
-        return
-    message = await ctx.channel.send(embed=embed)
-    await message.add_reaction("✅")
-    await ctx.respond("Message sent", ephemeral=True)"""
-
-#------------------------------------------------------------#
-@bot.event
-async def on_raw_reaction_add(payload):
-    """
-    Wird ausgeführt, wenn eine Reaktion hinzugefügt wird.
-    """
-    # 1. Prüfen, ob die Reaktion auf die richtige Nachricht gesetzt wurde
-    if payload.message_id != message_rules:
-        return
-
-    # 2. Prüfen, ob es das richtige Emoji ist
-    if str(payload.emoji) != emoji_rules:
-        return
-
-    # 4. Das Member (User) Objekt holen
-    # payload.member ist in 'on_raw_reaction_add' verfügbar
-    member = payload.member
-    if member is None:
-        return
-    
-    # Ignorieren, wenn der Bot selbst reagiert (optional, aber gute Praxis)
-    if member.bot:
-        return
-
-    # 5. Die Rolle holen
-    role = payload.guild.get_role(role_rules)
-    if role is None:
-        print(f"Fehler: Rolle mit ID {role_rules} wurde nicht gefunden.")
-        return
-
-    # 6. Rolle vergeben
-    try:
-        await member.add_roles(role)
-        print(f"Rolle '{role.name}' an {member.name} vergeben.")
+    async def verify_callback(self, button: discord.ui.Button, interaction: discord.Interaction):
+        role = interaction.guild.get_role(int(role_rules))
         
-        # Optional: User per DM benachrichtigen
-        # await member.send(f"Du hast die Rolle **{role.name}** erhalten!")
-        
-    except discord.Forbidden:
-        print("Fehler: Der Bot hat keine Berechtigung, Rollen zu verwalten (Manage Roles fehlt oder Rolle ist zu hoch).")
-    except Exception as e:
-        print(f"Ein Fehler ist aufgetreten: {e}")
+        if role is None:
+            await interaction.response.send_message("Fehler: Die konfigurierte Rolle wurde nicht gefunden.", ephemeral=True)
+            return
+
+        if role in interaction.user.roles:
+            await interaction.user.remove_roles(role)
+            await interaction.response.send_message(f"Rolle **{role.name}** wurde entfernt.", ephemeral=True)
+        else:
+            await interaction.user.add_roles(role)
+            await interaction.response.send_message(f"Du hast die Rolle **{role.name}** erhalten!", ephemeral=True)
 
 
 
-#---------------------------------#
-#rules message
-@bot.slash_command(name="message_rules", description = "DONT USE!!")
-async def message_rules(
-    ctx,
+@bot.slash_command(name="verify_message", description="Sendet die persistente Reaction-Role Nachricht")
+async def setup_rr(
+    ctx: discord.ApplicationContext,
+    channel: discord.TextChannel, 
+    title: str,
+    description: str
 ):
-    
+
     if not ctx.author.guild_permissions.administrator:
-        await ctx.respond("Error: You don't have the permission to do that!", ephemeral=True)
+        await ctx.respond("Keine Berechtigung.", ephemeral=True)
         return
-    role= discord.utils.get(ctx.guild.roles, id = int(role_rules))
+
     embed = discord.Embed(
-        title= title_rules,
-        description=f"React to accept the rules and get the {role} role.",
+        title=title,
+        description=description,
         color=discord.Color.red()
     )
-    channel= discord.utils.get(ctx.guild.channels, id = int(channel_rules))
-    await channel.send(embed=embed)
-    await ctx.respond("Message sent", ephemeral=True)
+
+    try:
+        await channel.send(embed=embed, view=PersistentRoleView())
+        await ctx.respond(f"Nachricht erfolgreich in {channel.mention} gesendet!", ephemeral=True)
+    except discord.Forbidden:
+        await ctx.respond("Ich darf in diesem Kanal nicht schreiben.", ephemeral=True)
+
+
 
 #---------------------------------#
 #Run function
