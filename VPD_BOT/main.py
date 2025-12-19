@@ -405,7 +405,7 @@ async def setup_rr(
         title=title,
         description=description,
         color=discord.Color.red(),
-        picture=discord.File("https://media.discordapp.net/attachments/1214203597815021598/1451676581582995526/Screenshot_2025-12-10_123615.png?ex=69470aab&is=6945b92b&hm=39d47097931f456ddaead91dc2919b5e420881c426fc9cf8d1502db3bb620bb6&=&format=webp&quality=lossless.png")
+        picture=discord.File("https://i.imgur.com/7zKLm0q.png")
 
     )
 
