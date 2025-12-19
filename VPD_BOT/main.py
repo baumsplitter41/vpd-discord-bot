@@ -68,9 +68,9 @@ conn.database = dbdb
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS User (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    discordid INTEGER(20)
+    discordid INT
     name VARCHAR(100),
-    roles INTEGER(250)
+    roles INT
 )
 """)
 
