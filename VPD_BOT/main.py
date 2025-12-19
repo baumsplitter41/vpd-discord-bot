@@ -412,7 +412,7 @@ async def setup_rr(
         description=f"{description}\n\nViel Spass auf dem Server!",
         color=discord.Color.red()
     )
-    embed.set_image(url="https://i.imgur.com/iu1VyKZ.png")
+    embed.set_image(url="https://i.imgur.com/FoF791J.png")
 
     try:
         await channel.send(embed=embed, view=PersistentRoleView())
