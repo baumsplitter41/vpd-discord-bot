@@ -328,31 +328,33 @@ async def kick(
 #---------------------------------#
 
 #---------------------------------#
-#Warn
 @bot.slash_command(name="warn", description="Warn a user from this Server")
 async def warn(
     ctx,
-    user: Option(discord.User, description = "Select User", required=True), # type: ignore
-    reason: Option(str, description = "Reason for the warn", default="No reason provided") # type: ignore
+    user: Option(discord.User, required=True), # type: ignore
+    reason: Option(str, default="No reason provided") # type: ignore
 ):
+    await ctx.defer(ephemeral=True)
+
     if not ctx.author.guild_permissions.kick_members:
-        await ctx.respond("Error: You don't have the permission to warn Members!", ephemeral=True)
-        return
-    
-    if user == bot.user:
-        await ctx.respond("Error: I can't warn myself!", ephemeral=True)
-        return
-    if user == ctx.author:
-        await ctx.respond("Error: You can't warn yourself!", ephemeral=True)
+        await ctx.followup.send("No permission.", ephemeral=True)
         return
 
-    cursor.execute("""
-    INSERT INTO Warns (userid, username, moderatorname, reason)
-    VALUES (%s, %s, %s, %s)
-    """, (user.id, str(user), str(ctx.author), reason))
+    if user in (bot.user, ctx.author):
+        await ctx.followup.send("Invalid target.", ephemeral=True)
+        return
+
+    cursor.execute(
+        "INSERT INTO Warns (userid, username, moderatorname, reason) VALUES (%s, %s, %s, %s)",
+        (user.id, str(user), str(ctx.author), reason)
+    )
     conn.commit()
 
-    await ctx.respond(f"User {user.mention} has been warned for: {reason}", ephemeral=True)
+    await ctx.followup.send(
+        f"User {user.mention} has been warned for: {reason}",
+        ephemeral=True
+    )
+
 
 
 #_________________________________#
