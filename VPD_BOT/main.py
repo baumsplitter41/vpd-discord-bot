@@ -409,9 +409,8 @@ async def setup_rr(
 
     embed = discord.Embed(
         title=title,
-        description=description,
-        color=discord.Color.red(),
-        description2= "\ Viel Spass auf dem Server!"
+        description=f"{description}\n\nViel Spass auf dem Server!",
+        color=discord.Color.red()
     )
     embed.set_image(url="https://i.imgur.com/iu1VyKZ.png")
 
