@@ -63,7 +63,7 @@ conn = mysql.connector.connect(
     password=dbpsswd
 )
 cursor = conn.cursor()
-conn.database = str(dbdb)
+conn.database = dbdb
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS User (
