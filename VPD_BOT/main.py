@@ -105,7 +105,13 @@ async def load_extensions():
 class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
+#------#
+#Print in Log if error occurs
+@bot.event
+async def on_command_error(ctx, error):
+    channel = discord.utils.get(bot.guilds[0].channels, id=int(channel_log))
+    if channel:
+        await channel.send(f"Error occurred: {str(error)}")
 
 #---------------------------------#
 #Bot Online Console
