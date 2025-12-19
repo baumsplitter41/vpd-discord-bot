@@ -6,6 +6,7 @@ from discord.commands import Option
 from discord.commands import slash_command
 from datetime import datetime
 import configparser
+import mysql.connector
 
 
 intents = discord.Intents.default()
@@ -28,6 +29,18 @@ server_token = os.getenv("SERVER").split(",")
 for i in range(len(server_token)):
     debug_guilds_up.append(int(server_token[i]))
 
+dbhost = os.getenv("HOST")
+if token is None:
+    raise ValueError("HOST not found in .env file")
+dbname = os.getenv("NAME")
+if token is None:
+    raise ValueError("NAME not found in .env file")
+dbpsswd = os.getenv("PASSWORD")
+if token is None:
+    raise ValueError("PASSWORD not found in .env file")
+dbdb = os.getenv("DATABASE")
+if token is None:
+    raise ValueError("DATABASE not found in .env file")
 
 #------#
 #ConfigParser
@@ -38,14 +51,39 @@ config.read_file(open(configFilePath))
 
 label_rules = config.get('Reactionroles Rules', 'label_rules')
 role_rules = config.get('Reactionroles Rules', 'rules_role')
-print(role_rules)
-
 
 channel_log = config.get('Logs', 'channel_log')
 channel_banlog = config.get('Logs', 'ban_log')
 
+#------#
+#SQL initialization
+conn = mysql.connector.connect(
+    host=dbhost,
+    user=dbname,
+    password=dbpsswd
+)
+cursor = conn.cursor()
+conn.database = str(dbdb)
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS User (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    discordid INTEGER(20)
+    name VARCHAR(100),
+    roles INTEGER(250)
+)
+""")
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Warns (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid INTEGER(20),
+    username VARCHAR(100),
+    moderatorname VARCHAR(100),
+    reason VARCHAR(250),
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+""")
 
 #------#
 #Initialize Bot
@@ -201,7 +239,7 @@ async def ban(
 #---------------------------------#
 #Unban
 @bot.slash_command(name="unban", description="Unban a user from this Server")
-async def ban(
+async def unban(
     ctx,
     user: Option(discord.User, description = "Insert User ID", required=True), # type: ignore
     reason: Option(str, description = "Reason for the unbanning", default="No reason provided") # type: ignore
@@ -258,7 +296,7 @@ async def ban(
 #---------------------------------#
 #Kick
 @bot.slash_command(name="kick", description="Kick a user from this Server")
-async def ban(
+async def kick(
     ctx,
     user: Option(discord.User, description = "Select User", required=True), # type: ignore
     reason: Option(str, description = "Reason for the ban", default="No reason provided") # type: ignore
@@ -288,9 +326,39 @@ async def ban(
         await ctx.respond(f"Unexpected error: {e}", ephemeral=True)
 
 #---------------------------------#
-#reaction role system
+
+#---------------------------------#
+#Warn
+@bot.slash_command(name="warn", description="Warn a user from this Server")
+async def warn(
+    ctx,
+    user: Option(discord.User, description = "Select User", required=True), # type: ignore
+    reason: Option(str, description = "Reason for the warn", default="No reason provided") # type: ignore
+):
+    if not ctx.author.guild_permissions.kick_members:
+        await ctx.respond("Error: You don't have the permission to warn Members!", ephemeral=True)
+        return
+    
+    if user == bot.user:
+        await ctx.respond("Error: I can't warn myself!", ephemeral=True)
+        return
+    if user == ctx.author:
+        await ctx.respond("Error: You can't warn yourself!", ephemeral=True)
+        return
+
+    cursor.execute("""
+    INSERT INTO Warns (userid, username, moderatorname, reason)
+    VALUES (%s, %s, %s, %s)
+    """, (user.id, str(user), str(ctx.author), reason))
+    conn.commit()
+
+    await ctx.respond(f"User {user.mention} has been warned for: {reason}", ephemeral=True)
 
 
+#_________________________________#
+## Reaction role system
+
+#---------------------------------#
 #reaction role verfiy
 
 class PersistentRoleView(discord.ui.View):
@@ -342,7 +410,81 @@ async def setup_rr(
         await ctx.respond(f"Nachricht erfolgreich in {channel.mention} gesendet!", ephemeral=True)
     except discord.Forbidden:
         await ctx.respond("Ich darf in diesem Kanal nicht schreiben.", ephemeral=True)
+#---------------------------------#
+#_________________________________#
 
+
+#_________________________________#
+## Help System
+
+#---------------------------------#
+#How to team
+
+@bot.slash_command(name="how_to_team", description= "Get Infos")
+async def how_to_team(
+    ctx,
+):
+    server = ctx.guild
+    embed = discord.Embed(
+        title=f"__How to join the Team on {server.name}__",
+        description=f"If you want to join the Serverteam open a ticket in #ticket.",
+        color=discord.Color.yellow()
+    )
+
+
+    embed.set_thumbnail(url=server.icon)
+    embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+    embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
+
+    await ctx.respond(embed=embed, ephemeral=True)
+
+#---------------------------------#
+#How to start
+@bot.slash_command(name="how_to_start", description= "Get Infos")
+async def how_to_start(
+    ctx,
+):
+    server = ctx.guild
+    embed = discord.Embed(
+        title=f"__How to start__",
+        description=f"Hallo {ctx.author.mention}, um auf unserem Server spielen zu können, ließ dir zuerst das Regelwerk in in #regelwerk durch. Um einem Department beizutreten wähle in #how-to-start eine Einweisungsrolle aus. Melde dich anschließend für eine Einweisung an. **Wichtig: gehe erst krz vor der Einweisung auf den Server!**",
+        color=discord.Color.yellow()
+    )
+
+
+    embed.set_thumbnail(url=server.icon)
+    embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+    embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
+
+    await ctx.respond(embed=embed, ephemeral=True)
+
+#---------------------------------#
+#Help_cache
+@bot.slash_command(name="help_cache", description= "Get Infos")
+async def help_cache(
+    ctx,
+):
+    server = ctx.guild
+    embed = discord.Embed(
+        title=f"__How to clear your game cache__",
+        description=f"Follow the follwing steps to clear your game cache:",
+        color=discord.Color.yellow()
+    )
+
+    embed.add_field(name="Close Game", value="Close FiveM completely", inline=False)
+    embed.add_field(name="Press keys", value="Win + R", inline=False)
+    embed.add_field(name="Go to the folder", value="\Local\FiveM\FiveM.app\data", inline=False)
+    embed.add_field(name="Delete the folders", value="cache, server-cache, server-cache-priv", inline=False)
+    embed.add_field(name="Restart Game", value="Restart the game and download the resources again.", inline=False)
+
+
+    embed.set_thumbnail(url=server.icon)
+    embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+    embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
+
+    await ctx.respond(embed=embed, ephemeral=True)
+#---------------------------------#
+#_________________________________#
 
 
 #---------------------------------#
