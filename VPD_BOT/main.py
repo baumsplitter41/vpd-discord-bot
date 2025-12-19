@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS User (
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS Warns (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userid INTEGER(20),
+    userid INT,
     username VARCHAR(100),
     moderatorname VARCHAR(100),
     reason VARCHAR(250),
