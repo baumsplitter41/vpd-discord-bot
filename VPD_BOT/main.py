@@ -404,10 +404,9 @@ async def setup_rr(
     embed = discord.Embed(
         title=title,
         description=description,
-        color=discord.Color.red(),
-        picture=discord.File("https://i.imgur.com/7zKLm0q.png")
-
+        color=discord.Color.red()
     )
+    embed.set_image(url="https://i.imgur.com/7zKLm0q.png")
 
     try:
         await channel.send(embed=embed, view=PersistentRoleView())
