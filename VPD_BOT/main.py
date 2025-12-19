@@ -69,7 +69,7 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS User (
     id INT AUTO_INCREMENT PRIMARY KEY,
     discordid INT
-    name VARCHAR(100),
+    discordname VARCHAR(100),
     roles INT
 )
 """)
