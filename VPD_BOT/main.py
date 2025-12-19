@@ -108,8 +108,8 @@ class Admin(commands.Cog):
 #------#
 #Print in Log if error occurs
 @bot.event
-async def on_command_error(ctx, error):
-    channel = discord.utils.get(bot.guilds[0].channels, id=int(channel_log))
+async def on_application_command_error(ctx, error):
+    channel = discord.utils.get(ctx.guild.channels, id=int(channel_log))
     if channel:
         await channel.send(f"Error occurred: {str(error)}")
 
