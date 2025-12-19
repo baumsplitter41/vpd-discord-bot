@@ -445,7 +445,7 @@ async def how_to_team(
     embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
     embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
-    await ctx.respond(embed=embed, ephemeral=True)
+    await ctx.respond(embed=embed)
 
 #---------------------------------#
 #How to start
@@ -465,7 +465,7 @@ async def how_to_start(
     embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
     embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
-    await ctx.respond(embed=embed, ephemeral=True)
+    await ctx.respond(embed=embed)
 
 #---------------------------------#
 #Help_cache
@@ -491,7 +491,7 @@ async def help_cache(
     embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
     embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
-    await ctx.respond(embed=embed, ephemeral=True)
+    await ctx.respond(embed=embed)
 #---------------------------------#
 #_________________________________#
 
