@@ -416,7 +416,7 @@ async def modinfo(
     ctx,
     user: Option(discord.User, required=True) # type: ignore
 ):
-    await ctx.defer(ephemeral=True)
+    await ctx.defer(ephemeral=False)
 
     if not ctx.author.guild_permissions.kick_members:
         await ctx.followup.send("No permission.", ephemeral=True)
@@ -487,7 +487,7 @@ async def modinfo(
     embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
     embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
-    await ctx.followup.send(embed=embed)
+    await ctx.followup.send(embed=embed, ephemeral=False)
 
 
 #_________________________________#
