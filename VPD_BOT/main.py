@@ -466,6 +466,19 @@ async def modinfo(
                 inline=False
             )
 
+    cursor.execute(
+        "SELECT moderatorname, reason, date FROM Unbans WHERE userid = %s",
+        (user.id,)
+    )
+    unbans = cursor.fetchall()
+    if unbans:
+        for moderatorname, reason, date in unbans:
+            embed.add_field(
+                name=f"Unbanned by {moderatorname} on {date.strftime('%Y-%m-%d %H:%M:%S')}",
+                value=f"Reason: {reason}",
+                inline=False
+            )
+
     if not warns and not kicks and not bans:
         await ctx.followup.send(f"User {user.mention} has no moderation history.", ephemeral=True)
         return
