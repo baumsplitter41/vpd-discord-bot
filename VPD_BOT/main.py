@@ -84,7 +84,39 @@ CREATE TABLE IF NOT EXISTS Warns (
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 """)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Bans (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid INT,
+    username VARCHAR(100),
+    moderatorname VARCHAR(100),
+    reason VARCHAR(250),
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+""")
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Unbans (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid INT,
+    username VARCHAR(100),
+    moderatorname VARCHAR(100),
+    reason VARCHAR(250),
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+"""
+)
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Kick (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid INT,
+    username VARCHAR(100),
+    moderatorname VARCHAR(100),
+    reason VARCHAR(250),
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+""")
 #------#
 #Initialize Bot
 
@@ -234,6 +266,11 @@ async def ban(
         await ctx.guild.ban(user, reason=reason)
         await ctx.respond(f"User {user.mention} has been banned from this Server!", ephemeral=True)
         await channel.send(embed=embed)
+        cursor.execute(
+            "INSERT INTO Bans (userid, username, moderatorname, reason) VALUES (%s, %s, %s, %s)",
+            (user.id, str(user), str(ctx.author), reason)
+        )
+        conn.commit()
 
     except discord.Forbidden:
         await ctx.respond("Error: I don't have permission to ban this user.", ephemeral=True)
@@ -287,6 +324,11 @@ async def unban(
         await ctx.guild.unban(user, reason=reason)
         await ctx.respond(f"User {user.mention} is now unbanned!", ephemeral=True)
         await channel.send(embed=embed)
+        cursor.execute(
+            "INSERT INTO Unbans (userid, username, moderatorname, reason) VALUES (%s, %s, %s, %s)",
+            (user.id, str(user), str(ctx.author), reason)
+        )
+        conn.commit()
 
     except discord.Forbidden:
         await ctx.respond("Error: I don't have permission to unban this user.", ephemeral=True)
@@ -323,6 +365,11 @@ async def kick(
     try:
         await ctx.guild.kick(user, reason=reason)
         await ctx.respond(f"User {user.mention} has been kick from this Server!", ephemeral=True)
+        cursor.execute(
+            "INSERT INTO Kick (userid, username, moderatorname, reason) VALUES (%s, %s, %s, %s)",
+            (user.id, str(user), str(ctx.author), reason)
+        )
+        conn.commit()
 
     except discord.Forbidden:
         await ctx.respond("Error: I don't have permission to kick this user.", ephemeral=True)
@@ -334,6 +381,7 @@ async def kick(
 #---------------------------------#
 
 #---------------------------------#
+#Warn
 @bot.slash_command(name="warn", description="Warn a user from this Server")
 async def warn(
     ctx,
@@ -361,6 +409,73 @@ async def warn(
         ephemeral=True
     )
 
+#---------------------------------#
+#Modinfo
+@bot.slash_command(name="modinfo", description="Shows the moderative history of a user from this Server")
+async def modinfo(
+    ctx,
+    user: Option(discord.User, required=True) # type: ignore
+):
+    await ctx.defer(ephemeral=True)
+
+    if not ctx.author.guild_permissions.kick_members:
+        await ctx.followup.send("No permission.", ephemeral=True)
+        return
+
+    embed = discord.Embed(
+        title=f"Moderation History for {user.name}",
+        color=discord.Color.orange()
+    )
+
+    cursor.execute(
+        "SELECT moderatorname, reason, date FROM Warns WHERE userid = %s",
+        (user.id,)
+    )
+    warns = cursor.fetchall()
+    if warns:
+        for moderatorname, reason, date in warns:
+            embed.add_field(
+                name=f"Warned by {moderatorname} on {date.strftime('%Y-%m-%d %H:%M:%S')}",
+                value=f"Reason: {reason}",
+                inline=False
+            )
+
+    cursor.execute(
+        "SELECT moderatorname, reason, date FROM Kick WHERE userid = %s",
+        (user.id,)
+    )
+    kicks = cursor.fetchall()
+    if kicks:
+        for moderatorname, reason, date in kicks:
+            embed.add_field(
+                name=f"Kicked by {moderatorname} on {date.strftime('%Y-%m-%d %H:%M:%S')}",
+                value=f"Reason: {reason}",
+                inline=False
+            )
+
+    cursor.execute(
+        "SELECT moderatorname, reason, date FROM Bans WHERE userid = %s",
+        (user.id,)
+    )
+    bans = cursor.fetchall()
+    if bans:
+        for moderatorname, reason, date in bans:
+            embed.add_field(
+                name=f"Banned by {moderatorname} on {date.strftime('%Y-%m-%d %H:%M:%S')}",
+                value=f"Reason: {reason}",
+                inline=False
+            )
+
+    if not warns and not kicks and bans:
+        await ctx.followup.send(f"User {user.mention} has no moderation history.", ephemeral=True)
+        return
+
+
+    embed.set_thumbnail(url=user.display_avatar.url)
+    embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+    embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
+
+    await ctx.followup.send(embed=embed, ephemeral=True)
 
 
 #_________________________________#
