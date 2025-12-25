@@ -364,10 +364,10 @@ async def kick(
 
     try:
         await ctx.guild.kick(user, reason=reason)
-        await ctx.respond(f"User {user.mention} has been kick from this Server!", ephemeral=True)
+        await ctx.respond(f"User {user.mention} has been kicked from this Server!", ephemeral=True)
         cursor.execute(
             "INSERT INTO Kick (userid, username, moderatorname, reason) VALUES (%s, %s, %s, %s)",
-            (user.id, str(user), str(ctx.author), reason)
+            (int(user.id), str(user), str(ctx.author), reason)
         )
         conn.commit()
 
