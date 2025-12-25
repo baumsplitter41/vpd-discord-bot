@@ -423,7 +423,7 @@ async def modinfo(
         return
 
     embed = discord.Embed(
-        title=f"Moderation History for {user.name}",
+        title=f"__Moderation History for {user.name}__",
         color=discord.Color.orange()
     )
 
@@ -488,7 +488,7 @@ async def modinfo(
     embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
     embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
-    await ctx.respond(embed=embed)
+    await ctx.followup.send(embed=embed)
 
 
 #_________________________________#
