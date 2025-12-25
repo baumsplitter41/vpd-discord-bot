@@ -30,16 +30,16 @@ for i in range(len(server_token)):
     debug_guilds_up.append(int(server_token[i]))
 
 dbhost = os.getenv("HOST")
-if token is None:
+if dbhost is None:
     raise ValueError("HOST not found in .env file")
 dbname = os.getenv("NAME")
-if token is None:
+if dbname is None:
     raise ValueError("NAME not found in .env file")
 dbpsswd = os.getenv("PASSWORD")
-if token is None:
+if dbpsswd is None:
     raise ValueError("PASSWORD not found in .env file")
 dbdb = os.getenv("DATABASE")
-if token is None:
+if dbdb is None:
     raise ValueError("DATABASE not found in .env file")
 
 #------#
@@ -487,7 +487,7 @@ async def modinfo(
     embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
     embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
-    await ctx.followup.send(embed=embed, ephemeral=True)
+    await ctx.followup.send(embed=embed)
 
 
 #_________________________________#
