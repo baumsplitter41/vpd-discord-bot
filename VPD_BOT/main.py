@@ -466,7 +466,7 @@ async def modinfo(
                 inline=False
             )
 
-    if not warns and not kicks and bans:
+    if not warns and not kicks and not bans:
         await ctx.followup.send(f"User {user.mention} has no moderation history.", ephemeral=True)
         return
 
