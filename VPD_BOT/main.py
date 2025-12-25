@@ -488,7 +488,7 @@ async def modinfo(
     embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
     embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
-    await ctx.followup.send(embed=embed, ephemeral=True)
+    await ctx.followup.send(embed=embed, ephemeral=False)
 
 
 #_________________________________#
