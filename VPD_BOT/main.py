@@ -68,7 +68,7 @@ conn.database = dbdb
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS User (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    discordid INT,
+    discordid BIGINT,
     discordname VARCHAR(100),
     roles INT
 )
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS User (
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS Warns (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userid INT,
+    userid BIGINT,
     username VARCHAR(100),
     moderatorname VARCHAR(100),
     reason VARCHAR(250),
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS Warns (
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS Bans (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userid INT,
+    userid BIGINT,
     username VARCHAR(100),
     moderatorname VARCHAR(100),
     reason VARCHAR(250),
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS Bans (
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS Unbans (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userid INT,
+    userid BIGINT,
     username VARCHAR(100),
     moderatorname VARCHAR(100),
     reason VARCHAR(250),
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS Unbans (
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS Kick (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userid INT,
+    userid BIGINT,
     username VARCHAR(100),
     moderatorname VARCHAR(100),
     reason VARCHAR(250),
