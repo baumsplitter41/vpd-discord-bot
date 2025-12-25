@@ -479,16 +479,15 @@ async def modinfo(
                 inline=False
             )
 
-    if not warns and not kicks and not bans:
+    if not warns and not kicks and not bans and not unbans:
         await ctx.followup.send(f"User {user.mention} has no moderation history.", ephemeral=True)
         return
-
 
     embed.set_thumbnail(url=user.display_avatar.url)
     embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
     embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
-    await ctx.followup.send(embed=embed)
+    await ctx.followup.send(embed=embed, ephemeral=True)
 
 
 #_________________________________#
