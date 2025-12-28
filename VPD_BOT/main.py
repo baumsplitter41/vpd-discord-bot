@@ -128,9 +128,13 @@ bot = commands.Bot(
 )
 
 async def load_extensions():
-    for filename in os.listdir("cogs"):
+    cogs_dir = "cogs"
+    if not os.path.exists(cogs_dir):
+        return
+    for filename in os.listdir(cogs_dir):
         if filename.endswith(".py"):
-            bot.load_extension(f"cogs.{filename[:-3]}")   
+            module_name = os.path.splitext(filename)[0]
+            bot.load_extension(f"cogs.{module_name}")   
 
 
 
