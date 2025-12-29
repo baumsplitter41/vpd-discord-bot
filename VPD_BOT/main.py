@@ -127,8 +127,8 @@ bot = commands.Bot(
     debug_guilds=debug_guilds_up if debug_guilds_up else None
 )
 
-async def load_extensions():
-    cogs_dir = "cogs"
+def load_extensions():
+    cogs_dir = "./cogs"
     if not os.path.exists(cogs_dir):
         print(f"Cogs directory '{cogs_dir}' not found!")
         return
@@ -635,5 +635,6 @@ async def help_cache(
 
 #---------------------------------#
 #Run function
+load_extensions()
 bot.run(token)
 #---------------------------------#
