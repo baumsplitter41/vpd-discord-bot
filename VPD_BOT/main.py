@@ -166,6 +166,9 @@ async def on_ready():
             await channel.send(f"{bot.user} ist online")
     await load_extensions()
     bot.add_view(PersistentRoleView()) #loading reactionrole memory
+    print("Registrierte Slash-Commands:")
+    for command in bot.pending_application_commands:
+        print(f" - {command.name}")
 
 #---------------------------------------------------------------------------------------#
 #DONT Touch anything above this line, unless you know what you are doing!#
