@@ -7,7 +7,7 @@ class Base(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
-    @slash_command(description="hello")
+    @slash_command(name="hallo", description="hello")
     async def hello(self, ctx: discord.ApplicationContext):
         await ctx.respond(f"Hey {ctx.author.mention}")
 
