@@ -4,7 +4,7 @@ from discord.commands import Option
 from discord.commands import slash_command
 
 
-class Base(commands.Cog):
+class Say(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
@@ -14,4 +14,4 @@ class Base(commands.Cog):
 
 
 def setup(bot: discord.Bot):
-    bot.add_cog(Base(bot))
+    bot.add_cog(Say(bot))

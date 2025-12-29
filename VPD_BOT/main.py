@@ -131,7 +131,6 @@ async def load_extensions():
     cogs_dir = "cogs"
     if not os.path.exists(cogs_dir):
         return
-    print(cogs_dir)
     for filename in os.listdir(cogs_dir):
         if filename.endswith(".py"):
             cog_list = os.path.splitext(filename)[0]
