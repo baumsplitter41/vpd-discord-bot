@@ -29,9 +29,6 @@ class Say(commands.Cog):
     )
 
 
-
-
-
 #Command initialization
     @slash_command(description="Let the bot send a message")
     async def say(
