@@ -156,7 +156,6 @@ async def on_application_command_error(ctx, error):
 
 #---------------------------------#
 #Bot Online Console
-
 @bot.event
 async def on_ready():
     print(f"{bot.user} ist online")
