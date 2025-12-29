@@ -368,6 +368,24 @@ async def kick(
             (int(user.id), str(user), str(ctx.author), reason)
         )
         conn.commit()
+    
+        channel= discord.utils.get(ctx.guild.channels, id = int(channel_banlog))
+
+        embed = discord.Embed(
+            title=f"Kick of **{user.name}**",
+            description=f"User {user.mention} has been kicked from the Server",
+            color=discord.Color.red()
+        )
+        time = discord.utils.format_dt(datetime.now(), "f")
+        embed.add_field(name="Kick Date", value=time, inline=False)
+        embed.add_field(name="Moderator", value=f"{ctx.author}", inline=False)
+        embed.add_field(name="Reason", value=reason, inline=False)
+
+        embed.add_field(name="User ID", value=user.id)
+
+        embed.set_thumbnail(url=user.display_avatar.url)
+        embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+        embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
     except discord.Forbidden:
         await ctx.respond("Error: I don't have permission to kick this user.", ephemeral=True)
