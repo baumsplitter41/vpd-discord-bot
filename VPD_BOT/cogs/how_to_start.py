@@ -9,28 +9,9 @@ class howtostart(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
-    intents = discord.Intents.default()
-    intents.message_content = True
-    intents.members = True
-    intents.guilds = True
-    intents.reactions = True
-
-    client = discord.Client(intents=intents)
-    debug_guilds_up = []
-    server_token = os.getenv("SERVER").split(",")
-    for i in range(len(server_token)):
-        debug_guilds_up.append(int(server_token[i]))
-    
-    bot = commands.Bot(
-    command_prefix=commands.when_mentioned_or("!"),
-    description="VicePD Bot",
-    intents=intents,
-    debug_guilds=debug_guilds_up if debug_guilds_up else None
-    )
-
 
 #Command initialization
-    @bot.slash_command(name="how_to_start", description= "Get Infos")
+    @slash_command(name="how_to_start", description= "Get Infos")
     async def how_to_start(
         self,
         ctx,
