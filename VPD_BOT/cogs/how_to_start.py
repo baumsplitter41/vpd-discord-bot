@@ -5,7 +5,7 @@ from discord.commands import slash_command
 import os
 from dotenv import load_dotenv
 
-class howtoteam(commands.Cog):
+class howtostart(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
@@ -30,15 +30,15 @@ class howtoteam(commands.Cog):
 
 
 #Command initialization
-    @bot.slash_command(name="how_to_team", description= "Get Infos on how to join the Team on this Server")
-    async def how_to_team(
+    @bot.slash_command(name="how_to_start", description= "Get Infos")
+    async def how_to_start(
         self,
         ctx,
     ):
         server = ctx.guild
         embed = discord.Embed(
-            title=f"__How to join the Team on {server.name}__",
-            description=f"If you want to join the Serverteam open a ticket in #ticket.",
+            title=f"__How to start__",
+            description=f"Hallo {ctx.author.mention}, um auf unserem Server spielen zu können, ließ dir zuerst das Regelwerk in in #regelwerk durch. Um einem Department beizutreten wähle in #how-to-start eine Einweisungsrolle aus. Melde dich anschließend für eine Einweisung an. **Wichtig: gehe erst krz vor der Einweisung auf den Server!**",
             color=discord.Color.yellow()
         )
 
@@ -50,5 +50,6 @@ class howtoteam(commands.Cog):
         await ctx.respond(embed=embed)
 
 
+
 def setup(bot: discord.Bot):
-    bot.add_cog(howtoteam(bot))
+    bot.add_cog(howtostart(bot))

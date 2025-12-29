@@ -552,47 +552,6 @@ async def setup_rr(
 ## Help System
 
 #---------------------------------#
-#How to team
-
-"""@bot.slash_command(name="how_to_team", description= "Get Infos")
-async def how_to_team(
-    ctx,
-):
-    server = ctx.guild
-    embed = discord.Embed(
-        title=f"__How to join the Team on {server.name}__",
-        description=f"If you want to join the Serverteam open a ticket in #ticket.",
-        color=discord.Color.yellow()
-    )
-
-
-    embed.set_thumbnail(url=server.icon)
-    embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
-    embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
-
-    await ctx.respond(embed=embed)"""
-
-#---------------------------------#
-#How to start
-@bot.slash_command(name="how_to_start", description= "Get Infos")
-async def how_to_start(
-    ctx,
-):
-    server = ctx.guild
-    embed = discord.Embed(
-        title=f"__How to start__",
-        description=f"Hallo {ctx.author.mention}, um auf unserem Server spielen zu können, ließ dir zuerst das Regelwerk in in #regelwerk durch. Um einem Department beizutreten wähle in #how-to-start eine Einweisungsrolle aus. Melde dich anschließend für eine Einweisung an. **Wichtig: gehe erst krz vor der Einweisung auf den Server!**",
-        color=discord.Color.yellow()
-    )
-
-
-    embed.set_thumbnail(url=server.icon)
-    embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
-    embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
-
-    await ctx.respond(embed=embed)
-
-#---------------------------------#
 #Help_cache
 @bot.slash_command(name="help_cache", description= "Get Infos")
 async def help_cache(
