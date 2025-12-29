@@ -136,6 +136,7 @@ async def load_extensions():
             cog_list = os.path.splitext(filename)[0]
             print(cog_list)
             bot.load_extension(f"cogs.{cog_list}")
+            bot.add_cog(f"cogs.{cog_list}")
 
 
 
