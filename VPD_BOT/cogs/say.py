@@ -35,6 +35,7 @@ class Say(commands.Cog):
 #Command initialization
     @slash_command(description="Let the bot send a message")
     async def say(
+            self,
             ctx,
             text: str = Option(description="Input the text you want to send"),
             channel_input: discord.TextChannel = Option(description="Select the channel,where you want to send the message.")
