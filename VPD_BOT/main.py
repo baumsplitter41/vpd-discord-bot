@@ -136,7 +136,7 @@ async def load_extensions():
         if filename.endswith(".py"):
             cog_list = os.path.splitext(filename)[0]
             try:
-                await bot.load_extension(f"cogs.{cog_list}")
+                bot.load_extension(f"cogs.{cog_list}")
                 print(f"Loaded cog: {cog_list}")
             except Exception as e:
                 print(f"Failed to load cog {cog_list}: {e}")
