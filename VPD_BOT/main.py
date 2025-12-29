@@ -180,11 +180,6 @@ async def greet(ctx, user: str = Option(discord.User, "The user, you want to gre
 #---------------------------------#
 
 #---------------------------------#
-## Say
-
-#---------------------------------#
-
-#---------------------------------#
 ## Userinfo
 @bot.slash_command(name="userinfo", description="Show informations of a user from this server")
 async def userinfo(
