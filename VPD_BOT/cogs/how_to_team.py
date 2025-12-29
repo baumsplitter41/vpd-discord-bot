@@ -5,7 +5,7 @@ from discord.commands import slash_command
 import os
 from dotenv import load_dotenv
 
-class how_to_team(commands.Cog):
+class howtteam(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
@@ -50,4 +50,4 @@ class how_to_team(commands.Cog):
 
 
 def setup(bot: discord.Bot):
-    bot.add_cog(how_to_team(bot))
+    bot.add_cog(howtteam(bot))
