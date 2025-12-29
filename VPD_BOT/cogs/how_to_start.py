@@ -30,7 +30,7 @@ class howtostart(commands.Cog):
 
 
 #Command initialization
-    @bot.slash_command(name="howtostart", description= "Get Infos")
+    @bot.slash_command(name="how_to_start", description= "Get Infos")
     async def how_to_start(
         self,
         ctx,
