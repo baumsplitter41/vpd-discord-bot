@@ -554,7 +554,7 @@ async def setup_rr(
 #---------------------------------#
 #How to team
 
-@bot.slash_command(name="how_to_team", description= "Get Infos")
+"""@bot.slash_command(name="how_to_team", description= "Get Infos")
 async def how_to_team(
     ctx,
 ):
@@ -570,7 +570,7 @@ async def how_to_team(
     embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
     embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
-    await ctx.respond(embed=embed)
+    await ctx.respond(embed=embed)"""
 
 #---------------------------------#
 #How to start
