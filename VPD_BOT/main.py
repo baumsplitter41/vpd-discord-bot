@@ -414,7 +414,7 @@ async def modinfo(
     ctx,
     user: Option(discord.User, required=True) # type: ignore
 ):
-    await ctx.defer(ephemeral=False)
+    #await ctx.defer(ephemeral=False)
 
     if not ctx.author.guild_permissions.kick_members:
         await ctx.followup.send("No permission.", ephemeral=True)
