@@ -9,7 +9,7 @@ class Say(commands.Cog):
         self.bot = bot
 
     @slash_command(description="Greet a User")
-    async def greet(ctx, user: str = Option(discord.User, "The user, you want to greet")):
+    async def greet(self, ctx, user: str = Option(discord.User, "The user, you want to greet")):
         await ctx.respond(f"Hello {user.mention}")
 
 
