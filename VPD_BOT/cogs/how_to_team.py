@@ -2,12 +2,11 @@ import discord
 from discord.ext import commands
 from discord.commands import slash_command
 
-class howtoteam(commands.Cog):
+class HowToTeam(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
-#Command initialsation
-    @slash_command(name="how_to_team", description="Get Infos on how to join the Team on this Server")
+    @slash_command(name="how_to_team", description="Get Infos on how to join the Team")
     async def how_to_team(self, ctx: discord.ApplicationContext):
         server = ctx.guild
         
@@ -16,7 +15,6 @@ class howtoteam(commands.Cog):
             description="If you want to join the Serverteam open a ticket in #ticket.",
             color=discord.Color.yellow()
         )
-
 
         if server.icon:
             embed.set_thumbnail(url=server.icon.url)
@@ -27,4 +25,4 @@ class howtoteam(commands.Cog):
         await ctx.respond(embed=embed)
 
 def setup(bot: discord.Bot):
-    bot.add_cog(howtoteam(bot))
+    bot.add_cog(HowToTeam(bot))
