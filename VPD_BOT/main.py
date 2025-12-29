@@ -56,7 +56,7 @@ channel_log = config.get('Logs', 'channel_log')
 channel_banlog = config.get('Logs', 'ban_log')
 
 #------#
-#SQL initialization
+#Database initialization
 conn = mysql.connector.connect(
     host=dbhost,
     user=dbname,
@@ -161,6 +161,7 @@ async def on_ready():
             await channel.send(f"{bot.user} ist online")
     await load_extensions()
     bot.add_view(PersistentRoleView()) #loading reactionrole memory
+
 #---------------------------------------------------------------------------------------#
 #DONT Touch anything above this line, unless you know what you are doing!#
 #---------------------------------------------------------------------------------------#
@@ -514,7 +515,7 @@ class PersistentRoleView(discord.ui.View):
         role = interaction.guild.get_role(int(role_rules))
         
         if role is None:
-            await interaction.response.send_message("Fehler: Die konfigurierte Rolle wurde nicht gefunden.", ephemeral=True)
+            await interaction.response.send_message("Error: The konfigured role was not found", ephemeral=True)
             return
 
         if role in interaction.user.roles:
@@ -526,7 +527,7 @@ class PersistentRoleView(discord.ui.View):
 
 
 
-@bot.slash_command(name="verify_message", description="Sendet die persistente Reaction-Role Nachricht")
+@bot.slash_command(name="verify_message", description="Send the reactionrole message")
 async def setup_rr(
     ctx: discord.ApplicationContext,
     channel: discord.TextChannel, 
@@ -535,7 +536,7 @@ async def setup_rr(
 ):
 
     if not ctx.author.guild_permissions.administrator:
-        await ctx.respond("Keine Berechtigung.", ephemeral=True)
+        await ctx.respond("You dont have the permissions to do that..", ephemeral=True)
         return
 
     embed = discord.Embed(
@@ -547,9 +548,9 @@ async def setup_rr(
 
     try:
         await channel.send(embed=embed, view=PersistentRoleView())
-        await ctx.respond(f"Nachricht erfolgreich in {channel.mention} gesendet!", ephemeral=True)
+        await ctx.respond(f"Message was succesfully sent in {channel.mention}!", ephemeral=True)
     except discord.Forbidden:
-        await ctx.respond("Ich darf in diesem Kanal nicht schreiben.", ephemeral=True)
+        await ctx.respond("I dont have permissions to write in this channel", ephemeral=True)
 #---------------------------------#
 #_________________________________#
 
