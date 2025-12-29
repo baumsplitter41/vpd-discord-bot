@@ -32,6 +32,7 @@ class howtteam(commands.Cog):
 #Command initialization
     @bot.slash_command(name="how_to_team", description= "Get Infos")
     async def how_to_team(
+        self,
         ctx,
     ):
         server = ctx.guild
