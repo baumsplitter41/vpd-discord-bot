@@ -2,8 +2,7 @@ import discord
 from discord.ext import commands
 from discord.commands import Option
 from discord.commands import slash_command
-import os
-from dotenv import load_dotenv
+
 
 class helpcache(commands.Cog):
     def __init__(self, bot: discord.Bot):
