@@ -130,13 +130,16 @@ bot = commands.Bot(
 async def load_extensions():
     cogs_dir = "cogs"
     if not os.path.exists(cogs_dir):
+        print(f"Cogs directory '{cogs_dir}' not found!")
         return
     for filename in os.listdir(cogs_dir):
         if filename.endswith(".py"):
             cog_list = os.path.splitext(filename)[0]
-            print(cog_list)
-            bot.load_extension(f"cogs.{cog_list}")
-            bot.add_cog(f"cogs.{cog_list}")
+            try:
+                await bot.load_extension(f"cogs.{cog_list}")
+                print(f"Loaded cog: {cog_list}")
+            except Exception as e:
+                print(f"Failed to load cog {cog_list}: {e}")
 
 
 
