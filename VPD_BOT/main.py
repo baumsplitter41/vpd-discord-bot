@@ -387,7 +387,7 @@ async def warn(
 
 #---------------------------------#
 #Modinfo
-"""@bot.slash_command(name="modinfo", description="Shows the moderative history of a user from this Server")
+@bot.slash_command(name="modinfo", description="Shows the moderative history of a user from this Server")
 async def modinfo(
     ctx,
     user: Option(discord.User, required=True) # type: ignore
@@ -464,7 +464,7 @@ async def modinfo(
     embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
     await ctx.followup.send(embed=embed, ephemeral=False)
-"""
+
 
 #_________________________________#
 ## Reaction role system
