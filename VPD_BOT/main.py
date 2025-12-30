@@ -7,6 +7,7 @@ from discord.commands import slash_command
 from datetime import datetime
 import configparser
 import mysql.connector
+import asyncio
 
 
 intents = discord.Intents.default()
@@ -171,7 +172,7 @@ async def on_ready():
     await channel.send("Registered Slash-Commands:")
     for command in bot.pending_application_commands:
         print(f" - {command.name}")
-        await channel.send(f"- {command.name}")
+        await channel.send(f"- /{command.name}")
         
 
 #---------------------------------------------------------------------------------------#
@@ -524,6 +525,36 @@ async def setup_rr(
         await ctx.respond("I dont have permissions to write in this channel", ephemeral=True)
 #---------------------------------#
 #_________________________________#
+
+#--------------------------------#
+#Get all Users in Database periodically
+@bot.event
+async def on_ready():
+    bot.loop.create_task(update_users_periodically())
+
+async def update_users_periodically():
+    await bot.wait_until_ready()
+    while not bot.is_closed():
+        try:
+            for guild in bot.guilds:
+                async for member in guild.fetch_members(limit=None):
+                    cursor.execute(
+                        "INSERT INTO User (userid, discordname, roles) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE discordname=%s, roles=%s",
+                        (member.id, str(member), len(member.roles), str(member), len(member.roles))
+                    )
+                conn.commit()
+        except Exception as e:
+            print(f"Error updating users: {e}")
+        
+        await asyncio.sleep(3600)  # Update every hour
+
+
+
+
+#_________________________________#
+## TXADMIN ROLE PERMISSIONS
+
+
 
 
 #---------------------------------#
