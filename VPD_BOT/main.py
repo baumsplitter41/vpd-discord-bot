@@ -540,7 +540,7 @@ async def update_users_periodically():
                 async for member in guild.fetch_members(limit=None):
                     cursor.execute(
                         "INSERT INTO User (userid, discordname, roles) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE discordname=%s, roles=%s",
-                        (member.id, str(member).encode('utf-8', 'ignore').decode('utf-8'), len(member.roles), str(member).encode('utf-8', 'ignore').decode('utf-8'), len(member.roles))
+                        (member.id, str(member).encode('utf-8', 'ignore').decode('utf-8'), len(member.roles), str(member).encode('utf-8', 'ignore').decode('utf-8').replace("'", "''"), len(member.roles))
                     )
                 conn.commit()
         except Exception as e:
