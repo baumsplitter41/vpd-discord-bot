@@ -539,7 +539,7 @@ async def update_users_periodically():
                         "INSERT INTO User (userid, discordname, roles) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE discordname=%s, roles=%s",
                         (member.id, str(member), len(member.roles), str(member), len(member.roles))
                     )
-                conn.commit()
+                    conn.commit()
         except Exception as e:
             print(f"Error updating users: {e}")
         
