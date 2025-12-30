@@ -144,7 +144,7 @@ async def load_extensions():
                 bot.load_extension(f"cogs.{cog_list}")
                 print(f"Loaded cog: {cog_list}")
                 if bot.guilds and channel:
-                    await channel.send(f"Loaded Cogs:{cog_list}")
+                    await channel.send(f"Loaded Cogs: {cog_list}")
             except Exception as e:
                 print(f"Failed to load cog {cog_list}: {e}")
                 if bot.guilds and channel:
@@ -174,10 +174,11 @@ async def on_ready():
             await channel.send(f"{bot.user} is online")
     bot.add_view(PersistentRoleView()) #loading reactionrole memory
     await load_extensions()
-    print("Registrierte Slash-Commands:")
+    print("Registered Slash-Commands:")
     for command in bot.pending_application_commands:
         print(f" - {command.name}")
         if bot.guilds and channel:
+            await channel.send("Registered Slash-Commands:")
             await channel.send(f"- {command.name}")
         
 #---------------------------------------------------------------------------------------#
