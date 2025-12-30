@@ -16,7 +16,7 @@ intents.guilds = True
 intents.reactions = True
 
 client = discord.Client(intents=intents)
-#------#
+#---------------------------------#
 #Load .env file
 
 load_dotenv()
@@ -42,7 +42,7 @@ dbdb = os.getenv("DATABASE")
 if dbdb is None:
     raise ValueError("DATABASE not found in .env file")
 
-#------#
+#---------------------------------#
 #ConfigParser
 
 config = configparser.RawConfigParser()
@@ -55,7 +55,7 @@ role_rules = config.get('Reactionroles Rules', 'rules_role')
 channel_log = config.get('Logs', 'channel_log')
 channel_banlog = config.get('Logs', 'ban_log')
 
-#------#
+#---------------------------------#
 #Database initialization
 conn = mysql.connector.connect(
     host=dbhost,
@@ -117,7 +117,9 @@ CREATE TABLE IF NOT EXISTS Kick (
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 """)
-#------#
+
+
+#---------------------------------#
 #Initialize Bot
 
 bot = commands.Bot(
@@ -127,6 +129,7 @@ bot = commands.Bot(
     debug_guilds=debug_guilds_up if debug_guilds_up else None
 )
 
+#Loading Cogs
 def load_extensions():
     cogs_dir = "./cogs"
     if not os.path.exists(cogs_dir):
@@ -141,12 +144,12 @@ def load_extensions():
             except Exception as e:
                 print(f"Failed to load cog {cog_list}: {e}")
 
-
-
 class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-#------#
+
+
+#---------------------------------#
 #Print in Log if error occurs
 @bot.event
 async def on_application_command_error(ctx, error):
@@ -158,15 +161,16 @@ async def on_application_command_error(ctx, error):
 #Bot Online Console
 @bot.event
 async def on_ready():
-    print(f"{bot.user} ist online")
+    print(f"{bot.user} is online")
     if bot.guilds:
         channel = discord.utils.get(bot.guilds[0].channels, id=int(channel_log))
         if channel:
-            await channel.send(f"{bot.user} ist online")
+            await channel.send(f"{bot.user} is online")
     bot.add_view(PersistentRoleView()) #loading reactionrole memory
     print("Registrierte Slash-Commands:")
     for command in bot.pending_application_commands:
         print(f" - {command.name}")
+        await channel.semd(f"- {command.name}")
 
 #---------------------------------------------------------------------------------------#
 #DONT Touch anything above this line, unless you know what you are doing!#
@@ -174,7 +178,6 @@ async def on_ready():
 
 #_________________________________#
 #BAN SYSTEM
-
 #---------------------------------#
 ##Ban
 @bot.slash_command(name="ban", description="Ban a user from this Server")
