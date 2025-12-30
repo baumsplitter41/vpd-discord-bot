@@ -170,7 +170,7 @@ async def on_ready():
     print("Registrierte Slash-Commands:")
     for command in bot.pending_application_commands:
         print(f" - {command.name}")
-        await channel.semd(f"- {command.name}")
+        await channel.send(f"- {command.name}")
 
 #---------------------------------------------------------------------------------------#
 #DONT Touch anything above this line, unless you know what you are doing!#
