@@ -552,7 +552,7 @@ async def update_users_periodically():
         except Exception as e:
             print(f"Error updating users: {e}")
         
-        await asyncio.sleep(3600)  # Update every hour
+        await asyncio.sleep(600)  # Update every 10 minutes
 
 
 
