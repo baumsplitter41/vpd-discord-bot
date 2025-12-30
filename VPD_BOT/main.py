@@ -535,5 +535,6 @@ async def setup_rr(
 
 #---------------------------------#
 #Run function
+load_extensions()
 bot.run(token)
 #---------------------------------#
