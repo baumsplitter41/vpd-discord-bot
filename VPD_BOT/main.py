@@ -61,7 +61,9 @@ channel_banlog = config.get('Logs', 'ban_log')
 conn = mysql.connector.connect(
     host=dbhost,
     user=dbname,
-    password=dbpsswd
+    password=dbpsswd,
+    charset='utf8mb4',
+    collation='utf8mb4_unicode_ci'
 )
 cursor = conn.cursor()
 conn.database = dbdb
