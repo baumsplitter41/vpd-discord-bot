@@ -456,7 +456,7 @@ async def modinfo(
             )
 
     if not warns and not kicks and not bans and not unbans:
-        await ctx.followup.send(f"User {user.mention} has no moderation history.", ephemeral=True)
+        await ctx.followup.send(f"User {user.name} has no moderation history.", ephemeral=True)
         return
 
     embed.set_thumbnail(url=user.display_avatar.url)
