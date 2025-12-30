@@ -132,6 +132,8 @@ bot = commands.Bot(
 #Loading Cogs
 def load_extensions():
     cogs_dir = "./cogs"
+    if bot.guilds:
+        channel = discord.utils.get(bot.guilds[0].channels, id=int(channel_log))
     if not os.path.exists(cogs_dir):
         print(f"Cogs directory '{cogs_dir}' not found!")
         return
@@ -141,8 +143,10 @@ def load_extensions():
             try:
                 bot.load_extension(f"cogs.{cog_list}")
                 print(f"Loaded cog: {cog_list}")
+                channel.send(f"Loaded Cogs:{cog_list}")
             except Exception as e:
                 print(f"Failed to load cog {cog_list}: {e}")
+                channel.send(f"Failed to load cog {cog_list}: {e}")
 
 class Admin(commands.Cog):
     def __init__(self, bot):
@@ -171,7 +175,7 @@ async def on_ready():
     for command in bot.pending_application_commands:
         print(f" - {command.name}")
         await channel.send(f"- {command.name}")
-
+        
 #---------------------------------------------------------------------------------------#
 #DONT Touch anything above this line, unless you know what you are doing!#
 #---------------------------------------------------------------------------------------#
