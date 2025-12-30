@@ -71,9 +71,10 @@ conn.database = dbdb
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS User (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userid BIGINT,
+    userid BIGINT UNIQUE,
     discordname VARCHAR(100),
-    roles INT
+    rolesnumber INT,
+    Roles TEXT
 )
 """)
 
@@ -536,11 +537,17 @@ async def update_users_periodically():
     while not bot.is_closed():
         try:
             for guild in bot.guilds:
+                batch_count = 0
                 async for member in guild.fetch_members(limit=None):
                     cursor.execute(
-                        "INSERT INTO User (userid, discordname, roles) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE discordname=%s, roles=%s",
-                        (member.id, str(member), len(member.roles), str(member), len(member.roles))
+                        "INSERT INTO User (userid, discordname, rolesnumber, roles) VALUES (%s, %s, %s, %s) ON DUPLICATE KEY UPDATE discordname=%s, rolesnumber=%s, roles=%s",
+                        (member.id, str(member), len(member.roles), str(member.roles), str(member), len(member.roles), str(member.roles))
                     )
+                    batch_count += 1
+                    if batch_count >= 100:
+                        conn.commit()
+                        batch_count = 0
+                if batch_count > 0:
                     conn.commit()
         except Exception as e:
             print(f"Error updating users: {e}")
