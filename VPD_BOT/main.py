@@ -173,6 +173,7 @@ async def on_ready():
     for command in bot.pending_application_commands:
         print(f" - {command.name}")
         await channel.send(f"- /{command.name}")
+    bot.loop.create_task(update_users_periodically())
         
 
 #---------------------------------------------------------------------------------------#
@@ -528,10 +529,6 @@ async def setup_rr(
 
 #--------------------------------#
 #Get all Users in Database periodically
-@bot.event
-async def on_ready():
-    bot.loop.create_task(update_users_periodically())
-
 async def update_users_periodically():
     await bot.wait_until_ready()
     while not bot.is_closed():
