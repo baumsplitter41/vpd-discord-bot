@@ -9,7 +9,7 @@ import configparser
 
 
 #Bot initialization
-class greet(commands.Cog):
+class modinfo(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
@@ -123,4 +123,4 @@ class greet(commands.Cog):
 
 
 def setup(bot: discord.Bot):
-    bot.add_cog(greet(bot))
+    bot.add_cog(modinfo(bot))
