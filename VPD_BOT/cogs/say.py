@@ -5,7 +5,7 @@ from discord.commands import slash_command
 import os
 from dotenv import load_dotenv
 
-class Say(commands.Cog):
+class say(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
@@ -25,4 +25,4 @@ class Say(commands.Cog):
 
 
 def setup(bot: discord.Bot):
-    bot.add_cog(Say(bot))
+    bot.add_cog(say(bot))

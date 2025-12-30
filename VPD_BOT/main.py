@@ -172,13 +172,6 @@ async def on_ready():
 #DONT Touch anything above this line, unless you know what you are doing!#
 #---------------------------------------------------------------------------------------#
 
-#---------------------------------#
-## Greet
-@bot.slash_command(description="Greet a User")
-async def greet(ctx, user: str = Option(discord.User, "The user, you want to greet")):
-    await ctx.respond(f"Hello {user.mention}")
-#---------------------------------#
-
 #_________________________________#
 #BAN SYSTEM
 
