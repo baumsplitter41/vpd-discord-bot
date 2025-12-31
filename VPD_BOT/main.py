@@ -83,7 +83,8 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS Team (
     userid BIGINT UNIQUE PRIMARY KEY,
     discordname VARCHAR(100),
-    Roles TEXT
+    Roles TEXT,
+    Permissions TEXT
 )
 """)
 
@@ -560,9 +561,21 @@ async def update_users_periodically():
                     conn.commit()
         except Exception as e:
             print(f"Error updating users: {e}")
+        
+        await asyncio.sleep(600)  # Update every 10 minutes
 
 
-    #Get Team Members
+
+
+
+#_________________________________#
+## TXADMIN ROLE PERMISSIONS
+
+#Get Team Members periodically
+async def update_team_periodically():
+    await bot.wait_until_ready()
+    await asyncio.sleep(10)  # Wait a bit to ensure bot is fully ready
+    while not bot.is_closed():
         if team_role_id:
             for guild in bot.guilds:
                 team_role = guild.get_role(int(team_role_id))
@@ -581,19 +594,7 @@ async def update_users_periodically():
                             batch_count = 0
                 if batch_count > 0:
                     conn.commit()
-
-        
-        await asyncio.sleep(600)  # Update every 10 minutes
-
-
-
-
-
-#_________________________________#
-## TXADMIN ROLE PERMISSIONS
-
-
-
+            await asyncio.sleep(600)  # Update every 10 minutes
 
 #---------------------------------#
 #Run function
