@@ -56,6 +56,8 @@ role_rules = config.get('Reactionroles Rules', 'rules_role')
 channel_log = config.get('Logs', 'channel_log')
 channel_banlog = config.get('Logs', 'ban_log')
 
+team_role_id = config.get('Team Roles', 'team_role_id')
+
 #---------------------------------#
 #Database initialization
 conn = mysql.connector.connect(
@@ -70,10 +72,17 @@ conn.database = dbdb
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS User (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    userid BIGINT UNIQUE,
+    userid BIGINT UNIQUE PRIMARY KEY,
     discordname VARCHAR(100),
     rolesnumber INT,
+    Roles TEXT
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Team (
+    userid BIGINT UNIQUE PRIMARY KEY,
+    discordname VARCHAR(100),
     Roles TEXT
 )
 """)
@@ -551,8 +560,31 @@ async def update_users_periodically():
                     conn.commit()
         except Exception as e:
             print(f"Error updating users: {e}")
+
+
+    #Get Team Members
+        if team_role_id:
+            for guild in bot.guilds:
+                team_role = guild.get_role(int(team_role_id))
+                if team_role is None:
+                    continue
+                batch_count = 0
+                async for member in guild.fetch_members(limit=None):
+                    if team_role in member.roles:
+                        cursor.execute(
+                            "INSERT INTO Team (userid, discordname, roles) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE discordname=%s, roles=%s",
+                            (member.id, str(member), str(member.roles), str(member), str(member.roles))
+                        )
+                        batch_count += 1
+                        if batch_count >= 100:
+                            conn.commit()
+                            batch_count = 0
+                if batch_count > 0:
+                    conn.commit()
+
         
         await asyncio.sleep(600)  # Update every 10 minutes
+
 
 
 
