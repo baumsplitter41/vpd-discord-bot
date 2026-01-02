@@ -182,10 +182,11 @@ async def on_ready():
             await channel.send(f"{bot.user} is online")
     bot.add_view(PersistentRoleView()) #loading reactionrole memory
     print("Registrierte Slash-Commands:")
-    await channel.send("Registered Slash-Commands:")
+    command_list = "\n".join([f"- /{command.name}" for command in bot.pending_application_commands])
     for command in bot.pending_application_commands:
         print(f" - {command.name}")
-        await channel.send(f"- /{command.name}")
+    if channel and command_list:
+        await channel.send(f"Registered Slash-Commands:\n{command_list}")
     bot.loop.create_task(update_users_periodically())
         
 
