@@ -2,12 +2,12 @@ import discord
 from discord.ext import commands
 from discord.commands import slash_command
 
-class howtoteam(commands.Cog):
+class helpteam(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
-    @slash_command(name="how_to_team", description="Get Infos on how to join the Team")
-    async def how_to_team(self, ctx: discord.ApplicationContext):
+    @slash_command(name="help_how_to_team", description="Get Infos on how to join the Team")
+    async def help_how_to_team(self, ctx: discord.ApplicationContext):
         server = ctx.guild
         
         embed = discord.Embed(
@@ -25,4 +25,4 @@ class howtoteam(commands.Cog):
         await ctx.respond(embed=embed)
 
 def setup(bot: discord.Bot):
-    bot.add_cog(howtoteam(bot))
+    bot.add_cog(helpteam(bot))

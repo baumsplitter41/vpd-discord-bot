@@ -3,14 +3,14 @@ from discord.ext import commands
 from discord.commands import Option
 from discord.commands import slash_command
 
-class howtostart(commands.Cog):
+class helpstart(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
 
 #Command initialization
-    @slash_command(name="how_to_start", description= "Get Infos")
-    async def how_to_start(
+    @slash_command(name="help_how_to_start", description= "Get Infos")
+    async def help_how_to_start(
         self,
         ctx,
     ):
@@ -31,4 +31,4 @@ class howtostart(commands.Cog):
 
 
 def setup(bot: discord.Bot):
-    bot.add_cog(howtostart(bot))
+    bot.add_cog(helpstart(bot))
