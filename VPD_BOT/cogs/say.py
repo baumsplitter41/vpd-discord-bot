@@ -19,6 +19,8 @@ class say(commands.Cog):
             text: str = Option(description="Input the text you want to send"),
             channel_input: discord.TextChannel = Option(description="Select the channel,where you want to send the message.")
     ):  
+        if channel_input is None:
+            channel = ctx.channel
         channel= discord.utils.get(ctx.guild.channels, id = int(channel_input[2:-1]))
         await channel.send(text)
         await ctx.respond("Message sent", ephemeral=True)
