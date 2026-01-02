@@ -514,7 +514,7 @@ class PersistentRoleView(discord.ui.View):
 
 
 
-@bot.slash_command(name="verify_message", description="Send the reactionrole message")
+@bot.slash_command(name="verify_message", description="Send the reactionrole message| This is for setup only!")
 async def setup_rr(
     ctx: discord.ApplicationContext,
     channel: discord.TextChannel, 

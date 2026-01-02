@@ -17,7 +17,7 @@ class say(commands.Cog):
             self,
             ctx,
             text: str = Option(description="Input the text you want to send"),
-            channel_input: discord.TextChannel = Option(description="Select the channel,where you want to send the message.")
+            channel_input: discord.TextChannel = Option(description="Select the channel,where you want to send the message.", required=False)
     ):  
         if channel_input is None:
             channel = ctx.channel
