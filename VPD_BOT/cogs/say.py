@@ -21,7 +21,8 @@ class say(commands.Cog):
     ):  
         if channel_input is None:
             channel = ctx.channel
-        channel= discord.utils.get(ctx.guild.channels, id = int(channel_input[2:-1]))
+        else:
+            channel = discord.utils.get(ctx.guild.channels, id = int(channel_input[2:-1]))
         await channel.send(text)
         await ctx.respond("Message sent", ephemeral=True)
 
