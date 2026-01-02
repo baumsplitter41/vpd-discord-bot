@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 from discord.commands import Option
 from discord.commands import slash_command
-from datetime import datetime
+from datetime import datetime, time
 import configparser
 import mysql.connector
 import asyncio
@@ -545,44 +545,64 @@ async def setup_rr(
 #Get all Users in Database periodically
 async def update_users_periodically():
     await bot.wait_until_ready()
+    
     while not bot.is_closed():
         try:
             for guild in bot.guilds:
                 batch_count = 0
                 async for member in guild.fetch_members(limit=None):
+                    role_ids_string = ",".join([str(role.id) for role in member.roles])
+                    
                     cursor.execute(
-                        "INSERT INTO User (userid, discordname, rolesnumber, roles) VALUES (%s, %s, %s, %s) ON DUPLICATE KEY UPDATE discordname=%s, rolesnumber=%s, roles=%s",
-                        (member.id, str(member), len(member.roles), str(member.roles), str(member), len(member.roles), str(member.roles))
+                        """INSERT INTO User (userid, discordname, rolesnumber, roles) 
+                           VALUES (%s, %s, %s, %s) 
+                           ON DUPLICATE KEY UPDATE discordname=%s, rolesnumber=%s, roles=%s""",
+                        (member.id, str(member), len(member.roles), role_ids_string, 
+                         str(member), len(member.roles), role_ids_string)
                     )
+                    
                     batch_count += 1
                     if batch_count >= 100:
                         conn.commit()
                         batch_count = 0
+                
                 if batch_count > 0:
                     conn.commit()
-        except Exception as e:
-            print(f"Error updating users: {e}")
 
-        if team_role_id:
-            for guild in bot.guilds:
-                team_role = guild.get_role(int(team_role_id))
-                if team_role is None:
-                    continue
-                batch_count = 0
-                async for member in guild.fetch_members(limit=None):
-                    if team_role in member.roles:
-                        cursor.execute(
-                            "INSERT INTO Team (userid, discordname, roles) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE discordname=%s, roles=%s",
-                            (member.id, str(member), str(member.roles), str(member), str(member.roles))
-                        )
-                        batch_count += 1
-                        if batch_count >= 100:
-                            conn.commit()
-                            batch_count = 0
-                if batch_count > 0:
-                    conn.commit()
+
+            if team_role_id:
+                for guild in bot.guilds:
+                    team_role = guild.get_role(int(team_role_id))
+                    if team_role is None:
+                        continue
+                        
+                    batch_count = 0
+                    async for member in guild.fetch_members(limit=None):
+                        if team_role in member.roles:
+                            role_ids_string = ",".join([str(role.id) for role in member.roles])
+                            
+                            cursor.execute(
+                                """INSERT INTO Team (userid, discordname, Roles) 
+                                   VALUES (%s, %s, %s) 
+                                   ON DUPLICATE KEY UPDATE discordname=%s, Roles=%s""",
+                                (member.id, str(member), role_ids_string, 
+                                 str(member), role_ids_string)
+                            )
+                            
+                            batch_count += 1
+                            if batch_count >= 100:
+                                conn.commit()
+                                batch_count = 0
+                    
+                    if batch_count > 0:
+                        conn.commit()
+            
+            print(f"[✓] {time.strftime('%H:%M:%S')} - Datenbank mit Discord-Rollen synchronisiert.")
+
+        except Exception as e:
+            print(f"[!] Fehler beim Update der User: {e}")
         
-        await asyncio.sleep(60)  # Update every 1 minutes
+        await asyncio.sleep(60)  # Update every minute
 
 
 
