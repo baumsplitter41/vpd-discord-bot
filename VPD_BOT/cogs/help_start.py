@@ -11,8 +11,8 @@ class helpstart(commands.Cog):
 
 
 #Command initialization
-    @slash_command(name="help_how_to_start", description= "Get Infos how to start playing on the server")
-    async def help_how_to_start(self,ctx: discord.ApplicationContext,
+    @slash_command(name="help_start", description= "Get Infos how to start playing on the server")
+    async def help_start(self,ctx: discord.ApplicationContext,
     ):
         server = ctx.guild
 
