@@ -9,12 +9,12 @@ class helpteam(commands.Cog):
         self.bot = bot
 
 
-    @slash_command(name="help__team", description="Get Infos on how to join the Team")
-    async def help_how_to_team(self, ctx: discord.ApplicationContext):
+    @slash_command(name="help_team", description="Get Infos on how to join the Team")
+    async def help_team(self, ctx: discord.ApplicationContext):
         server = ctx.guild
 
         #Loading the JSON file
-        JSON_FILE_PATH = 'cogs/json_files/help_team.json'
+        JSON_FILE_PATH = '.cogs/json_files/help_team.json'
         if not os.path.exists(JSON_FILE_PATH):
             await ctx.respond("The help_team.json file is missing.")
             return
