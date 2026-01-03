@@ -9,7 +9,7 @@ class helpstart(commands.Cog):
 
 
 #Command initialization
-    @slash_command(name="help_how_to_start", description= "Get Infos")
+    @slash_command(name="help_how_to_start", description= "Get Infos how to start playing on the server")
     async def help_how_to_start(
         self,
         ctx,

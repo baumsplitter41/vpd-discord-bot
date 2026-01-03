@@ -9,7 +9,7 @@ class helpteam(commands.Cog):
         self.bot = bot
 
 
-    @slash_command(name="help_how_to_team", description="Get Infos on how to join the Team")
+    @slash_command(name="help__team", description="Get Infos on how to join the Team")
     async def help_how_to_team(self, ctx: discord.ApplicationContext):
         server = ctx.guild
 
