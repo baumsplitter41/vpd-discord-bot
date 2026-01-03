@@ -1,3 +1,5 @@
+import json
+import os
 import discord
 from discord.ext import commands
 from discord.commands import slash_command
@@ -6,13 +8,29 @@ class helpteam(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
+
     @slash_command(name="help_how_to_team", description="Get Infos on how to join the Team")
     async def help_how_to_team(self, ctx: discord.ApplicationContext):
         server = ctx.guild
+
+        #Loading the JSON file
+        JSON_FILE_PATH = '.json_files/help_team.json'
+        if not os.path.exists(JSON_FILE_PATH):
+            await ctx.respond("The help_team.json file is missing.")
+            return
+        with open(JSON_FILE_PATH, 'r', encoding='utf-8') as f:
+            json_data = json.load(f)
+
+        for entry in json_data:
+            jstitle = entry.get("title", "")
+            jsdesc = entry.get("desc", "")
+
+
+
         
         embed = discord.Embed(
-            title=f"__How to join the Team on {server.name}__",
-            description="If you want to join the Serverteam open a ticket in #ticket.",
+            title=f"{jstitle}",
+            description=f"{jsdesc}",
             color=discord.Color.yellow()
         )
 
