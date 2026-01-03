@@ -14,7 +14,7 @@ class helpteam(commands.Cog):
         server = ctx.guild
 
         #Loading the JSON file
-        JSON_FILE_PATH = '.cogs/json_files/help_team.json'
+        JSON_FILE_PATH = 'cogs/json_files/help_team.json'
         if not os.path.exists(JSON_FILE_PATH):
             await ctx.respond("The help_team.json file is missing.")
             return
