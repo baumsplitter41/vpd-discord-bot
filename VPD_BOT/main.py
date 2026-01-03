@@ -597,7 +597,7 @@ async def update_users_periodically():
                     if batch_count > 0:
                         conn.commit()
             
-            print(f"[✓] {datetime.now().strftime('%H:%M:%S')} - Datenbank mit Discord-Rollen synchronisiert.")
+            #print(f"[✓] {datetime.now().strftime('%H:%M:%S')} - Datenbank mit Discord-Rollen synchronisiert.")
 
         except Exception as e:
             print(f"[!] Fehler beim Update der User: {e}")
