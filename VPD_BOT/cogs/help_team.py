@@ -15,14 +15,14 @@ class helpteam(commands.Cog):
 
         json_path = Path(__file__).resolve().parent / "json_files" / "help_team.json"
         if not json_path.exists():
-            await ctx.respond("The help_team.json file is missing.")
+            await ctx.respond("The .json file is missing.")
             return
 
         try:
             with json_path.open("r", encoding="utf-8") as f:
                 json_data = json.load(f)
         except json.JSONDecodeError:
-            await ctx.respond("The help_team.json file is not valid JSON.")
+            await ctx.respond("The .json file is not valid JSON.")
             return
 
         if isinstance(json_data, dict):
@@ -30,19 +30,19 @@ class helpteam(commands.Cog):
         elif isinstance(json_data, list):
             entries = json_data
         else:
-            await ctx.respond("The help_team.json file has an unexpected structure.")
+            await ctx.respond("The .json file has an unexpected structure.")
             return
 
         if not entries or not isinstance(entries[0], dict):
-            await ctx.respond("The help_team.json file has an unexpected structure.")
+            await ctx.respond("The .json file has an unexpected structure.")
             return
 
         if not entries:
-            await ctx.respond("The help_team.json file is empty.")
+            await ctx.respond("The .json file is empty.")
             return
 
         entry = entries[0]
-        jstitle = entry.get("title", "Help Team")
+        jstitle = entry.get("title", "Help")
         jsdesc = entry.get("desc", "No description provided.")
         
         embed = discord.Embed(
