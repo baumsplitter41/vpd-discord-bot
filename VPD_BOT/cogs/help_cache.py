@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 from discord.commands import Option
 from discord.commands import slash_command
+import json
+from pathlib import Path
 
 
 class helpcache(commands.Cog):
@@ -16,18 +18,43 @@ class helpcache(commands.Cog):
         ctx,
     ):
         server = ctx.guild
+        json_path = Path(__file__).resolve().parent / "json_files" / "help_cache.json"
+        if not json_path.exists():
+            await ctx.respond("The .json file is missing.")
+            return
+
+        try:
+            with json_path.open("r", encoding="utf-8") as f:
+                json_data = json.load(f)
+        except json.JSONDecodeError:
+            await ctx.respond("The .json file is not valid JSON.")
+            return
+
+        if isinstance(json_data, dict):
+            entries = [json_data]
+        elif isinstance(json_data, list):
+            entries = json_data
+        else:
+            await ctx.respond("The .json file has an unexpected structure.")
+            return
+
+        if not entries or not isinstance(entries[0], dict):
+            await ctx.respond("The .json file has an unexpected structure.")
+            return
+
+        if not entries:
+            await ctx.respond("The .json file is empty.")
+            return
+
+        entry = entries[0]
+        jstitle = entry.get("title", "Help")
+        jsdesc = entry.get("desc", "No description provided.")
+        
         embed = discord.Embed(
-            title=f"__How to clear your game cache__",
-            description=f"Follow the follwing steps to clear your game cache:",
+            title=f"{jstitle}",
+            description=f"{jsdesc}",
             color=discord.Color.yellow()
         )
-
-        embed.add_field(name="Close Game", value="Close FiveM completely", inline=False)
-        embed.add_field(name="Press keys", value="Win + R", inline=False)
-        embed.add_field(name="Go to the folder", value="\Local\FiveM\FiveM.app\data", inline=False)
-        embed.add_field(name="Delete the folders", value="cache, server-cache, server-cache-priv", inline=False)
-        embed.add_field(name="Restart Game", value="Restart the game and download the resources again.", inline=False)
-
 
         embed.set_thumbnail(url=server.icon)
         embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")

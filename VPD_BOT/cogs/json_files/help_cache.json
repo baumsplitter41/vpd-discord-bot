@@ -1,4 +1,4 @@
 { 
-     "title": "__How to join the Team on VicePD__",
-     "desc": "Um **dich** im team zu bewerben, muss du dich \n im support melden"  
+     "title": "__How to clear your game cache__",
+     "desc": "Follow the follwing steps to clear your game cache: \n **Close Game** \n Close FiveM completely \n **Press keys** \n Win + R \n Go to the folder \n ```/Local/FiveM/FiveM.app/data```\n **Delete the folders** \n cache, server-cache, server-cache-priv \n **Restart Game** \n Restart the game and download the resources again."  
  }
