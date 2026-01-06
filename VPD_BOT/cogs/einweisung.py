@@ -44,6 +44,10 @@ class einweisung(commands.Cog):
         department2_role = server.get_role(department2_role_id)
         department2_supervisor = server.get_role(department2_supervisor_id)
 
+        if einweisung_role is None or department1_role is None or department2_role is None or department1_supervisor is None or department2_supervisor is None:
+            await ctx.respond("One or more roles are not configured properly!", ephemeral=True)
+            return
+
         if department1_supervisor in ctx.author.roles:
             n = 1
         elif department2_supervisor in ctx.author.roles:
