@@ -175,7 +175,9 @@ async def on_application_command_error(ctx, error):
 #Bot Online Console
 @bot.event
 async def on_ready():
+    print("------------------------")
     print(f"{bot.user} is online")
+    print("------------------------")
     if bot.guilds:
         channel = discord.utils.get(bot.guilds[0].channels, id=int(channel_log))
         if channel:
