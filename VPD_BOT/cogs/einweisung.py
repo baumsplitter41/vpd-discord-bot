@@ -52,10 +52,14 @@ class einweisung(commands.Cog):
             await ctx.respond("You don't have permission to use this command!", ephemeral=True)
             return
 
-        if n == 1:
-            await user.add_roles(einweisung_role, department1_role)
-        elif n == 2:
-            await user.add_roles(einweisung_role, department2_role)
+        try:
+            if n == 1:
+                await user.add_roles(einweisung_role, department1_role)
+            elif n == 2:
+                await user.add_roles(einweisung_role, department2_role)
+        except discord.Forbidden:
+            await ctx.respond("I don't have permission to assign roles!", ephemeral=True)
+            return
         
         embed = discord.Embed(title="Einweisung abgeschlossen", color=0x00ff00)
         embed.add_field(name="User Freigeschaltet:", value=f"{user.mention} wurde erfolgreich freigeschaltet.", inline=False)
