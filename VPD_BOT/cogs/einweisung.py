@@ -35,7 +35,7 @@ class einweisung(commands.Cog):
         einweisung_role_id = int(config.get('Einweisung', 'einweisung_role_id'))
         einweisung_role = server.get_role(einweisung_role_id)
 
-        department_lable_role_id = int(config.get('Einweisung', 'department_lable_role_id'))
+        department_lable_role_id = int(config.get('Einweisung', 'department_label_role_id'))
         department_lable_role = server.get_role(department_lable_role_id)
 
         department1_supervisor_id = int(config.get('Einweisung', 'department1_supervisor_id'))
