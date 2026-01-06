@@ -44,9 +44,8 @@ class einweisung(commands.Cog):
         department2_role_id = int(config.get('Einweisung', 'department2_role_id'))
 
         if department2_supervisor_id == None or department2_role_id == None:
-            department2_role = None
-            department2_supervisor = None
-            return
+            department2_role = 1111111111
+            department2_supervisor = 1111111111
         else:
             department2_role = server.get_role(department2_role_id)
             department2_supervisor = server.get_role(department2_supervisor_id)
