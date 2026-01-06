@@ -34,16 +34,19 @@ class einweisung(commands.Cog):
 #Role Configuration
         einweisung_role_id = int(config.get('Einweisung', 'einweisung_role_id'))
         einweisung_role = server.get_role(einweisung_role_id)
+
         department1_supervisor_id = int(config.get('Einweisung', 'department1_supervisor_id'))
         department1_role_id = int(config.get('Einweisung', 'department1_role_id'))
         department1_role = server.get_role(department1_role_id)
-        department2_supervisor_id = config.get('Einweisung', 'department2_supervisor_id')
-        department2_role_id = config.get('Einweisung', 'department2_role_id')
+        department1_supervisor = server.get_role(department1_supervisor_id)
+        department2_supervisor_id = int(config.get('Einweisung', 'department2_supervisor_id'))
+        department2_role_id = int(config.get('Einweisung', 'department2_role_id'))
         department2_role = server.get_role(department2_role_id)
+        department2_supervisor = server.get_role(department2_supervisor_id)
 
-        if department1_supervisor_id in ctx.author.roles:
+        if department1_supervisor in ctx.author.roles:
             n = 1
-        elif department2_supervisor_id  in ctx.author.roles:
+        elif department2_supervisor in ctx.author.roles:
             n = 2
         else: 
             await ctx.respond("You don't have permission to use this command!", ephemeral=True)
