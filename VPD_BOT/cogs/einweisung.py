@@ -40,24 +40,20 @@ class einweisung(commands.Cog):
         department1_role = server.get_role(department1_role_id)
         department1_supervisor = server.get_role(department1_supervisor_id)
 
-        department2_supervisor_id = int(config.get('Einweisung', 'department2_supervisor_id'))
-        department2_role_id = int(config.get('Einweisung', 'department2_role_id'))
+        #department2_supervisor_id = int(config.get('Einweisung', 'department2_supervisor_id'))
+        #department2_role_id = int(config.get('Einweisung', 'department2_role_id'))
+        #department2_role = server.get_role(department2_role_id)
+        #department2_supervisor = server.get_role(department2_supervisor_id)
 
-        if department2_supervisor_id == None or department2_role_id == None:
-            department2_role = 1111111111
-            department2_supervisor = 1111111111
-        else:
-            department2_role = server.get_role(department2_role_id)
-            department2_supervisor = server.get_role(department2_supervisor_id)
-
+#Command implemetation
         if einweisung_role is None or department1_role is None or department1_supervisor is None:
             await ctx.respond("One or more roles are not configured properly!", ephemeral=True)
             return
         
         if department1_supervisor in ctx.author.roles:
             n = 1
-        elif department2_supervisor in ctx.author.roles:
-            n = 2
+        #elif department2_supervisor in ctx.author.roles:
+            #n = 2
         else: 
             await ctx.respond("You don't have permission to use this command!", ephemeral=True)
             return
@@ -65,8 +61,8 @@ class einweisung(commands.Cog):
         try:
             if n == 1:
                 await user.add_roles(einweisung_role, department1_role)
-            elif n == 2:
-                await user.add_roles(einweisung_role, department2_role)
+            #elif n == 2:
+               # await user.add_roles(einweisung_role, department2_role)
         except discord.Forbidden:
             await ctx.respond("I don't have permission to assign roles!", ephemeral=True)
             return
