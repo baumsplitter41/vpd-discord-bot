@@ -32,17 +32,10 @@ class einweisung(commands.Cog):
         config.read_file(open(configFilePath))
 
 #Role Configuration
-        einweisung_role_id = int(config.get('Einweisung', 'einweisung_role_id'))
-        einweisung_role = server.get_role(einweisung_role_id)
-
         acces_role_id = int(config.get('Einweisung', 'acces_role_id'))
         acces_role = server.get_role(acces_role_id)
 
-        department_label_role_id = int(config.get('Einweisung', 'department_label_role_id'))
-        department_label_role = server.get_role(department_label_role_id)
 
-        department1_label_id = int(config.get('Einweisung', 'department1_label_id'))
-        department1_label = server.get_role(department1_label_id)
         department1_supervisor_id = int(config.get('Einweisung', 'department1_supervisor_id'))
         department1_role_id = int(config.get('Einweisung', 'department1_role_id'))
         department1_role = server.get_role(department1_role_id)
@@ -58,7 +51,7 @@ class einweisung(commands.Cog):
         #department2_deputy = server.get_role(department2_deputy_id)
 
 #Command implemetation
-        if einweisung_role is None or department1_role is None or department1_supervisor is None or acces_role is None or department1_label is None or department1_deputy is None or department_label_role is None:
+        if department1_role is None or department1_supervisor is None or acces_role is None or department1_deputy is None:
             await ctx.respond("One or more roles are not configured properly!", ephemeral=True)
             return
         
@@ -72,9 +65,9 @@ class einweisung(commands.Cog):
 
         try:
             if n == 1:
-                await user.add_roles(einweisung_role, department_label_role, department1_role, department1_deputy, department1_label, acces_role)
+                await user.add_roles(department1_role, department1_deputy, acces_role)
             #elif n == 2:
-               # await user.add_roles(einweisung_role, department2_role, department2_deputy, department_label_role, acces_role)
+               # await user.add_roles(department2_role, department2_deputy, acces_role)
         except discord.Forbidden:
             await ctx.respond("I don't have permission to assign roles!", ephemeral=True)
             return
