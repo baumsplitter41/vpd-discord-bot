@@ -1,4 +1,4 @@
 {
   "title": "__So löscht du deinen Cache__",
-  "desc": "Folge diesen Schritten, um deinen Cache zu löschen:\n\n• Schließe dein Spiel\n• Schließe FiveM\n• Drücke Windows Taste + R\n• Gebe folgendes ein: %temp%\n• Nun kannst du alles in dem Ordner löschen\n• Jetzt kannst du FiveM neustarten\n• Die Dateien vom Server werden neu installiert"
+  "desc": "Folge diesen Schritten, um deinen Cache zu löschen:\n\n• Schließe dein Spiel\n• Schließe FiveM\n• Drücke Windows Taste + R\n• Gebe folgendes ein: %localappdata%\n• Dann suchst du den FiveM Ordner und öffnest diesen\n• Dann gehst du auf FiveM Application Data\n• Dort kannst du jetzt den data Ordner löschen\n• Jetzt kannst du FiveM neustarten\n• Die Dateien vom Server werden neu installiert"
 }
