@@ -1,4 +1,4 @@
-{ 
-     "title": "__How to clear your game cache__",
-     "desc": "Follow the follwing steps to clear your game cache: \n **Close Game** \n Close FiveM completely \n **Press keys** \n Win + R \n Go to the folder \n ```/Local/FiveM/FiveM.app/data```\n **Delete the folders** \n cache, server-cache, server-cache-priv \n **Restart Game** \n Restart the game and download the resources again."  
- }
+{
+  "title": "__So löscht du deinen Cache__",
+  "desc": "Folge diesen Schritten, um deinen Cache zu löschen:\n\n• Schließe dein Spiel\n• Schließe FiveM\n• Drücke Windows Taste + R\n• Gebe folgendes ein: %temp%\n• Nun kannst du alles in dem Ordner löschen\n• Jetzt kannst du FiveM neustarten\n• Die Dateien vom Server werden neu installiert"
+}
