@@ -408,7 +408,7 @@ async def warn(
 @bot.slash_command(name="modinfo", description="Shows the moderative history of a user from this Server")
 async def modinfo(
     ctx,
-    user: Option(discord.User, required=True) # type: ignore
+    user: Option(discord.User, required=True)  # type: ignore
 ):
     await ctx.defer(ephemeral=False)
 
@@ -421,61 +421,39 @@ async def modinfo(
         color=discord.Color.orange()
     )
 
-    cursor.execute(
-        "SELECT moderatorname, reason, date FROM Warns WHERE userid = %s",
-        (user.id,)
-    )
-    warns = cursor.fetchall()
-    if warns:
-        for moderatorname, reason, date in warns:
-            embed.add_field(
-                name=f"Warned by {moderatorname} on {date.strftime('%Y-%m-%d %H:%M:%S')}",
-                value=f"Reason: {reason}",
-                inline=False
-            )
+    # Collect all events with timestamps
+    events = []
 
-    cursor.execute(
-        "SELECT moderatorname, reason, date FROM Kick WHERE userid = %s",
-        (user.id,)
-    )
-    kicks = cursor.fetchall()
-    if kicks:
-        for moderatorname, reason, date in kicks:
-            embed.add_field(
-                name=f"Kicked by {moderatorname} on {date.strftime('%Y-%m-%d %H:%M:%S')}",
-                value=f"Reason: {reason}",
-                inline=False
-            )
+    cursor.execute("SELECT moderatorname, reason, date FROM Warns WHERE userid = %s", (user.id,))
+    for moderatorname, reason, date in cursor.fetchall():
+        events.append(("Warned", moderatorname, reason, date))
 
-    cursor.execute(
-        "SELECT moderatorname, reason, date FROM Bans WHERE userid = %s",
-        (user.id,)
-    )
-    bans = cursor.fetchall()
-    if bans:
-        for moderatorname, reason, date in bans:
-            embed.add_field(
-                name=f"Banned by {moderatorname} on {date.strftime('%Y-%m-%d %H:%M:%S')}",
-                value=f"Reason: {reason}",
-                inline=False
-            )
+    cursor.execute("SELECT moderatorname, reason, date FROM Kick WHERE userid = %s", (user.id,))
+    for moderatorname, reason, date in cursor.fetchall():
+        events.append(("Kicked", moderatorname, reason, date))
 
-    cursor.execute(
-        "SELECT moderatorname, reason, date FROM Unbans WHERE userid = %s",
-        (user.id,)
-    )
-    unbans = cursor.fetchall()
-    if unbans:
-        for moderatorname, reason, date in unbans:
-            embed.add_field(
-                name=f"Unbanned by {moderatorname} on {date.strftime('%Y-%m-%d %H:%M:%S')}",
-                value=f"Reason: {reason}",
-                inline=False
-            )
+    cursor.execute("SELECT moderatorname, reason, date FROM Bans WHERE userid = %s", (user.id,))
+    for moderatorname, reason, date in cursor.fetchall():
+        events.append(("Banned", moderatorname, reason, date))
 
-    if not warns and not kicks and not bans and not unbans:
+    cursor.execute("SELECT moderatorname, reason, date FROM Unbans WHERE userid = %s", (user.id,))
+    for moderatorname, reason, date in cursor.fetchall():
+        events.append(("Unbanned", moderatorname, reason, date))
+
+    if not events:
         await ctx.followup.send(f"User `{user.name}` has no moderation history.", ephemeral=True)
         return
+
+    # Sort chronologically: oldest -> newest
+    events.sort(key=lambda e: e[3])
+
+    # Add fields in chronological order
+    for action, moderatorname, reason, date in events:
+        embed.add_field(
+            name=f"{action} by {moderatorname} on {date.strftime('%Y-%m-%d %H:%M:%S')}",
+            value=f"Reason: {reason}",
+            inline=False
+        )
 
     embed.set_thumbnail(url=user.display_avatar.url)
     embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
