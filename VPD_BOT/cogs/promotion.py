@@ -69,5 +69,5 @@ class promotion(commands.Cog):
         await user.add_roles(new_rank)
         await ctx.respond(f"{user.mention} has been promoted to {new_rank.name}!", ephemeral=True)
 
-    def setup(bot: discord.Bot):
-        bot.add_cog(promotion(bot))
+def setup(bot: discord.Bot):
+    bot.add_cog(promotion(bot))
