@@ -5,14 +5,14 @@ from discord.commands import slash_command
 import configparser
 
 
-class helpcache(commands.Cog):
+class demotion(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
 
 #Command initialization
-    @slash_command(name="promotion", description= "Promote a department member   to the next rank")
-    async def promotion(
+    @slash_command(name="demotion", description= "Demote a department member to the previous rank")
+    async def demotion(
         self,
         ctx,
         user: str = Option(discord.User, "Select User", required=True),
@@ -68,3 +68,7 @@ class helpcache(commands.Cog):
     await user.remove_roles(user_rank)
     await user.add_roles(new_rank)
     await ctx.respond(f"{user.mention} has been demoted to {new_rank.name}!", ephemeral=True)
+
+
+def setup(bot: discord.Bot):
+    bot.add_cog(demotion(bot))

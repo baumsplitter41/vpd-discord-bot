@@ -5,7 +5,7 @@ from discord.commands import slash_command
 import configparser
 
 
-class helpcache(commands.Cog):
+class promotion(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
@@ -68,3 +68,6 @@ class helpcache(commands.Cog):
     await user.remove_roles(user_rank)
     await user.add_roles(new_rank)
     await ctx.respond(f"{user.mention} has been promoted to {new_rank.name}!", ephemeral=True)
+
+def setup(bot: discord.Bot):
+    bot.add_cog(promotion(bot))
