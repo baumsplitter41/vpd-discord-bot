@@ -36,17 +36,25 @@ class demotion(commands.Cog):
         department1_ranks = [ctx.guild.get_role(int(role_id)) for role_id in department1_ranks_ids]
         department1_command_id = int(config.get('Role Management', 'department1_command'))
         department1_command_role = server.get_role(department1_command_id)
+        department1_supervisor_role_id = int(config.get('Einweisung', 'department1_supervisor_id'))
+        department1_supervisor_role = server.get_role(department1_supervisor_role_id)
 
         #department2_ranks_ids = config.get('Role Management', 'department2_ranks').split(', ')
         #department2_ranks = [ctx.guild.get_role(int(role_id)) for role_id in department2_ranks_ids]
         #department2_command_id = int(config.get('Role Management', 'department2_command'))
         #department2_command_role = server.get_role(department2_command_id)
+        #department2_supervisor_role_id = int(config.get('Einweisung', 'department2_supervisor_id'))
+        #department2_supervisor_role = server.get_role(department2_supervisor_role_id)
 
         #Command implementation
         if department1_command_role in ctx.author.roles:
             ranks = department1_ranks
+            supervisor_role = department1_supervisor_role
+            command_role = department1_command_role
         #elif department2_command_role in ctx.author.roles:
             #ranks = department2_ranks
+            #supervisor_role = department2_supervisor_role
+            #command_role = department2_command_role
         else:
             await ctx.respond("You do not have permission to use this command!", ephemeral=True)
             return
@@ -65,6 +73,10 @@ class demotion(commands.Cog):
             await ctx.respond("The selected user is already at the lowest rank!", ephemeral=True)
             return
         new_rank = ranks[current_rank_index - 1]
+        if new_rank == ranks[5]:
+            await user.remove_roles(command_role)
+        elif new_rank == ranks[3]:
+            await user.remove_roles(supervisor_role)
         await user.remove_roles(user_rank)
         await user.add_roles(new_rank)
         await ctx.respond(f"{user.mention} has been demoted to {new_rank.name}!", ephemeral=True)
