@@ -43,9 +43,9 @@ class promotion(commands.Cog):
         #department2_supervisor_role = server.get_role(department2_supervisor_role_id)
 
         #Command implementation
-        if ctx.author.roles.contains(department1_supervisor_role):
+        if department1_supervisor_role in ctx.author.roles:
             ranks = department1_ranks
-        #elif ctx.author.roles.contains(department2_supervisor_role):
+        #elif department2_supervisor_role in ctx.author.roles:
             #ranks = department2_ranks
         else:
             await ctx.respond("You do not have permission to use this command!", ephemeral=True)
