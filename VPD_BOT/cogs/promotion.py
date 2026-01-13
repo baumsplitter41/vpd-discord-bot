@@ -34,18 +34,18 @@ class promotion(commands.Cog):
         #Role Configuration
         department1_ranks_ids = config.get('Role Management', 'department1_ranks').split(', ')
         department1_ranks = [ctx.guild.get_role(int(role_id)) for role_id in department1_ranks_ids]
-        department1_supervisor_role_id = int(config.get('Einweisung', 'department1_supervisor_id'))
-        department1_supervisor_role = server.get_role(department1_supervisor_role_id)
+        department1_command_id = int(config.get('Role Management', 'department1_command'))
+        department1_command_role = server.get_role(department1_command_id)
 
         #department2_ranks_ids = config.get('Role Management', 'department2_ranks').split(', ')
         #department2_ranks = [ctx.guild.get_role(int(role_id)) for role_id in department2_ranks_ids]
-        #department2_supervisor_role_id = int(config.get('Einweisung', 'department2_supervisor_id'))
-        #department2_supervisor_role = server.get_role(department2_supervisor_role_id)
+        #department2_command_id = int(config.get('Role Management', 'department2_command'))
+        #department2_command_role = server.get_role(department2_command_id)
 
         #Command implementation
-        if department1_supervisor_role in ctx.author.roles:
+        if department1_command_role in ctx.author.roles:
             ranks = department1_ranks
-        #elif department2_supervisor_role in ctx.author.roles:
+        #elif department2_command_role in ctx.author.roles:
             #ranks = department2_ranks
         else:
             await ctx.respond("You do not have permission to use this command!", ephemeral=True)
