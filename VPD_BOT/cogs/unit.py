@@ -73,8 +73,13 @@ class unit(commands.Cog):
             unit_role = units[2]
         elif unit == "Air Support":
             unit_role = units[3]
+        elif unit == "Help":
+            unit_role = None
+            help_text = "Available Units:\n- Detective\n- SWAT\n- Canine\n- Air Support"
+            await ctx.respond(help_text, ephemeral=True)
+            return
         else:
-            await ctx.respond("The selected unit does not exist!", ephemeral=True)
+            await ctx.respond("The selected unit does not exist! Use Help for a list of available units.", ephemeral=True)
             return
         if supervisor_role in ctx.author.roles or head_unit_role in ctx.author.roles:
             if unit_role in user.roles:
