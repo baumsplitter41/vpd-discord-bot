@@ -66,19 +66,16 @@ class unit(commands.Cog):
 
 #Command implementation
         if unit == "Detective":
-            unit_role = int(units[0])
+            unit_role = units[0]
         elif unit == "SWAT":
-            unit_role = int(units[1])
+            unit_role = units[1]
         elif unit == "Canine":
-            unit_role = int(units[2])
+            unit_role = units[2]
         elif unit == "Air Support":
-            unit_role = int(units[3])
+            unit_role = units[3]
         else:
             await ctx.respond("The selected unit does not exist!", ephemeral=True)
             return
-        
-
-        unit_role = server.get_role(unit_role)
         if ctx.author == supervisor_role or ctx.author == head_unit_role:
             if unit_role in user.roles:
                 await user.remove_roles(unit_role)
