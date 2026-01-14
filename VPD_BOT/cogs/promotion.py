@@ -11,7 +11,7 @@ class promotion(commands.Cog):
 
 
 #Command initialization
-    @slash_command(name="promotion", description= "Promote a department member   to the next rank")
+    @slash_command(name="promotion", description= "Promote a department member to the next rank")
     async def promotion(
         self,
         ctx,
