@@ -76,7 +76,7 @@ class unit(commands.Cog):
         else:
             await ctx.respond("The selected unit does not exist!", ephemeral=True)
             return
-        if ctx.author == supervisor_role or ctx.author == head_unit_role:
+        if supervisor_role in ctx.author.roles or head_unit_role in ctx.author.roles:
             if unit_role in user.roles:
                 await user.remove_roles(unit_role)
                 await ctx.respond(f"The user {user.mention} has been removed from the unit successfully!", ephemeral=True)
