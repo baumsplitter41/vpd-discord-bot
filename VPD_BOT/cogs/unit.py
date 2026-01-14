@@ -90,12 +90,5 @@ class unit(commands.Cog):
             await ctx.respond("You do not have permission to use this command!", ephemeral=True)
             return
         
-
-
-
-
-
-
-
 def setup(bot: discord.Bot):
     bot.add_cog(unit(bot))
