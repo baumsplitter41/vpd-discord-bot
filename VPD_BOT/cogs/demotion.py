@@ -24,7 +24,7 @@ class demotion(commands.Cog):
             await ctx.respond(f"This is me - the {self.bot.user}", ephemeral=True)
             return
         elif user == ctx.author:
-            await ctx.respond("You cannot promote yourself!", ephemeral=True)
+            await ctx.respond("You cannot demote yourself!", ephemeral=True)
             return
         server = ctx.guild
         config = configparser.RawConfigParser()
