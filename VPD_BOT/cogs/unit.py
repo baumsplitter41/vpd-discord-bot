@@ -16,8 +16,8 @@ class unit(commands.Cog):
         self,
         ctx,
         user: str = Option(discord.User, "Select User", required=True),
-        unit: str = Option(str, "Select Unit", required=True)
-    , choices=["Detective", "SWAT", "Canine", "Air Support"]
+        #unit: str = Option(str, "Select Unit", required=True),
+        unit=["Detective", "SWAT", "Canine", "Air Support"]
     ):
         if user not in ctx.guild.members:
             await ctx.respond("The selected user is not a member on this Server!", ephemeral=True)
@@ -55,13 +55,13 @@ class unit(commands.Cog):
 
 #Command implementation
         if unit == "Detective":
-            unit_role = department1_units[0]
+            unit_role = int(department1_units[0])
         elif unit == "SWAT":
-            unit_role = department1_units[1]
+            unit_role = int(department1_units[1])
         elif unit == "Canine":
-            unit_role = department1_units[2]
+            unit_role = int(department1_units[2])
         elif unit == "Air Support":
-            unit_role = department1_units[3]
+            unit_role = int(department1_units[3])
         else:
             await ctx.respond("The selected unit does not exist!", ephemeral=True)
             return
