@@ -11,7 +11,7 @@ class unit(commands.Cog):
 
 
 #Command initialization
-    @slash_command(name="unit", description= "Add or remove a department member to/from a unit")
+    @slash_command(name="unit", description= "Add or remove a department member to/from a unit. Set Unit to Help to get a list of available units.")
     async def unit(
         self,
         ctx,
