@@ -74,6 +74,9 @@ class demotion(commands.Cog):
         if user_rank is None:
             await ctx.respond("The selected user does not have a rank that can be demoted!", ephemeral=True)
             return
+        if author_rank is None:
+            await ctx.respond("You do not have a rank to promote others!", ephemeral=True)
+            return
         current_rank_index = ranks.index(user_rank)
         author_rank_index = ranks.index(author_rank)
         if current_rank_index == 0:
