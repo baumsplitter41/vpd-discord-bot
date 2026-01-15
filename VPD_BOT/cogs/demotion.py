@@ -65,12 +65,22 @@ class demotion(commands.Cog):
             if rank in user_roles:
                 user_rank = rank
                 break
+        author_roles = ctx.author.roles
+        author_rank = None
+        for rank in ranks:
+            if rank in author_roles:
+                author_rank = rank
+                break
         if user_rank is None:
             await ctx.respond("The selected user does not have a rank that can be demoted!", ephemeral=True)
             return
         current_rank_index = ranks.index(user_rank)
+        author_rank_index = ranks.index(author_rank)
         if current_rank_index == 0:
             await ctx.respond("The selected user is already at the lowest rank!", ephemeral=True)
+            return
+        elif current_rank_index >= author_rank_index:
+            await ctx.respond("You cannot demote a user with an equal or higher rank than yourself!", ephemeral=True)
             return
         new_rank = ranks[current_rank_index - 1]
         if new_rank == ranks[5]:
