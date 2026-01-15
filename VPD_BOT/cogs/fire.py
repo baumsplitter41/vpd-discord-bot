@@ -33,7 +33,7 @@ class fire(commands.Cog):
 
 #Role Configuration
         department1_role_id = config.get('Einweisung', 'department1_role_id')
-        department1_role = ctx.guild.get_role(int(department1_role_id))
+        department1_role = server.get_role(int(department1_role_id))
         department1_ranks_ids = config.get('Role Management', 'department1_ranks').split(', ')
         department1_ranks = [ctx.guild.get_role(int(role_id)) for role_id in department1_ranks_ids]
         department1_command_id = int(config.get('Role Management', 'department1_command'))
@@ -43,7 +43,7 @@ class fire(commands.Cog):
         department1_units_id = config.get('Role Management', 'department1_units').split(', ')
         department1_units = [ctx.guild.get_role(int(role_id)) for role_id in department1_units_id]
         #department2_role_id = config.get('Role Management', 'department2_role_id')
-        #department2_role = ctx.guild.get_role(int(department2_role_id))
+        #department2_role = server.get_role(int(department2_role_id))
         #department2_ranks_ids = config.get('Role Management', 'department2_ranks').split(', ')
         #department2_ranks = [ctx.guild.get_role(int(role_id)) for role_id in department2_ranks_ids]
         #department2_command_id = int(config.get('Role Management', 'department2_command'))
@@ -59,7 +59,7 @@ class fire(commands.Cog):
         remove_access_role_on_fire = str(remove_access_role_on_fire).lower()
         if remove_access_role_on_fire == "true":
             access_role_id = config.get('Einweisung', 'access_role_id')
-            access_role = ctx.guild.get_role(int(access_role_id))
+            access_role = server.get_role(int(access_role_id))
 
         if department1_command_role in ctx.author.roles:
             ranks = department1_ranks
