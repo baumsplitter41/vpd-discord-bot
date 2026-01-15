@@ -32,6 +32,8 @@ class fire(commands.Cog):
         config.read_file(open(configFilePath))
 
 #Role Configuration
+        department1_role_id = config.get('Einweisung', 'department1_role_id')
+        department1_role = ctx.guild.get_role(int(department1_role_id))
         department1_ranks_ids = config.get('Role Management', 'department1_ranks').split(', ')
         department1_ranks = [ctx.guild.get_role(int(role_id)) for role_id in department1_ranks_ids]
         department1_command_id = int(config.get('Role Management', 'department1_command'))
@@ -40,6 +42,8 @@ class fire(commands.Cog):
         department1_supervisor_role = server.get_role(department1_supervisor_role_id)
         department1_units_id = config.get('Role Management', 'department1_units').split(', ')
         department1_units = [ctx.guild.get_role(int(role_id)) for role_id in department1_units_id]
+        #department2_role_id = config.get('Role Management', 'department2_role_id')
+        #department2_role = ctx.guild.get_role(int(department2_role_id))
         #department2_ranks_ids = config.get('Role Management', 'department2_ranks').split(', ')
         #department2_ranks = [ctx.guild.get_role(int(role_id)) for role_id in department2_ranks_ids]
         #department2_command_id = int(config.get('Role Management', 'department2_command'))
@@ -51,22 +55,33 @@ class fire(commands.Cog):
 
 
 #Command implementation
+        remove_access_role_on_fire = config.get('Role Management', 'remove_access_role_on_fire')
+        remove_access_role_on_fire = str(remove_access_role_on_fire).lower()
+        if remove_access_role_on_fire == "true":
+            access_role_id = config.get('Einweisung', 'access_role_id')
+            access_role = ctx.guild.get_role(int(access_role_id))
+
         if department1_command_role in ctx.author.roles:
             ranks = department1_ranks
             supervisor_role = department1_supervisor_role
             command_role = department1_command_role
             units = department1_units
+            department = department1_role
         #elif department2_command_role in ctx.author.roles:
             #ranks = department2_ranks
             #supervisor_role = department2_supervisor_role
             #command_role = department2_command_role
             #units = department2_units
+            #department = department2_role
         else:
             await ctx.respond("The User is not Part of your Department", ephemeral=True)
             return
         
         if command_role in ctx.author.roles:
             user_roles = user.roles
+            if remove_access_role_on_fire == "true":
+                await user.remove_roles(access_role)
+            await user.remove_roles(department)
             for rank in ranks:
                 if rank in user_roles:
                     await user.remove_roles(rank)
