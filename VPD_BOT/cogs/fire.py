@@ -57,9 +57,6 @@ class fire(commands.Cog):
 #Command implementation
         remove_access_role_on_fire = config.get('Role Management', 'remove_access_role_on_fire')
         remove_access_role_on_fire = str(remove_access_role_on_fire).lower()
-        if remove_access_role_on_fire == "true":
-            access_role_id = config.get('Einweisung', 'access_role_id')
-            access_role = server.get_role(int(access_role_id))
 
         if department1_command_role in ctx.author.roles:
             ranks = department1_ranks
@@ -80,6 +77,8 @@ class fire(commands.Cog):
         if command_role in ctx.author.roles:
             user_roles = user.roles
             if remove_access_role_on_fire == "true":
+                access_role_id = config.get('Einweisung', 'acces_role_id')
+                access_role = server.get_role(int(access_role_id))
                 await user.remove_roles(access_role)
             await user.remove_roles(department)
             for rank in ranks:
