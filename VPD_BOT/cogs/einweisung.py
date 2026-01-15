@@ -42,6 +42,8 @@ class einweisung(commands.Cog):
         department1_supervisor = server.get_role(department1_supervisor_id)
         department1_deputy_id = int(config.get('Einweisung', 'department1_deputy_id'))
         department1_deputy = server.get_role(department1_deputy_id)
+        department1_unit_role_id = int(config.get('Einweisung', 'department1_unit_role_id'))
+        department1_unit_role = server.get_role(department1_unit_role_id)
 
         #department2_supervisor_id = int(config.get('Einweisung', 'department2_supervisor_id'))
         #department2_role_id = int(config.get('Einweisung', 'department2_role_id'))
@@ -49,6 +51,8 @@ class einweisung(commands.Cog):
         #department2_supervisor = server.get_role(department2_supervisor_id)
         #department2_deputy_id = int(config.get('Einweisung', 'department2_deputy_id'))
         #department2_deputy = server.get_role(department2_deputy_id)
+        #department2_unit_role_id = int(config.get('Einweisung', 'department2_unit_role_id'))
+        #department2_unit_role = server.get_role(department2_unit_role_id)
 
 #Command implemetation
         if department1_role is None or department1_supervisor is None or acces_role is None or department1_deputy is None:
@@ -65,7 +69,7 @@ class einweisung(commands.Cog):
 
         try:
             if n == 1:
-                await user.add_roles(department1_role, department1_deputy, acces_role)
+                await user.add_roles(department1_role, department1_deputy, acces_role, department1_unit_role)
             #elif n == 2:
                # await user.add_roles(department2_role, department2_deputy, acces_role)
         except discord.Forbidden:

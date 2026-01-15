@@ -42,6 +42,8 @@ class fire(commands.Cog):
         department1_supervisor_role = server.get_role(department1_supervisor_role_id)
         department1_units_id = config.get('Role Management', 'department1_units').split(', ')
         department1_units = [ctx.guild.get_role(int(role_id)) for role_id in department1_units_id]
+        department1_unit_label_id = int(config.get('Einweisung', 'department1_unit_role_id'))
+        department1_unit_label = server.get_role(department1_unit_label_id)
         #department2_role_id = config.get('Role Management', 'department2_role_id')
         #department2_role = server.get_role(int(department2_role_id))
         #department2_ranks_ids = config.get('Role Management', 'department2_ranks').split(', ')
@@ -80,7 +82,10 @@ class fire(commands.Cog):
                 access_role_id = config.get('Einweisung', 'acces_role_id')
                 access_role = server.get_role(int(access_role_id))
                 await user.remove_roles(access_role)
-            await user.remove_roles(department)
+            if department in user_roles:
+                await user.remove_roles(department)
+            if department1_unit_label in user_roles:
+                await user.remove_roles(department1_unit_label)
             for rank in ranks:
                 if rank in user_roles:
                     await user.remove_roles(rank)
