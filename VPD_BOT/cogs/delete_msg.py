@@ -14,9 +14,9 @@ class delete(commands.Cog):
     async def delete(
             self,
             ctx,
-            amount: int = Option(int, "Select Number of the message to delete"),
+            amount: int = Option(int, "Select Number of the message to delete", required=True),
         ):
-        if amount is None or amount < 1:
+        if amount is None or amount <= 0:
             await ctx.respond("Please provide a valid number greater than 0.", ephemeral=True)
             return
         if not ctx.author.guild_permissions.manage_messages:
