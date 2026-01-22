@@ -16,7 +16,7 @@ class helpstart(commands.Cog):
     ):
         server = ctx.guild
 
-        json_path = Path(__file__).resolve().parent / "json_files" / "help_start.json"
+        json_path = Path(__file__).resolve().parent.parent.joinpath("json_files", "help_start.json")
         if not json_path.exists():
             await ctx.respond("The .json file is missing.")
             return
