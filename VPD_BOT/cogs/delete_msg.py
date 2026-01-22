@@ -16,6 +16,7 @@ class delete(commands.Cog):
             ctx,
             amount: int = Option(int, "Select Number of the message to delete"),
         ):
+        amount = int(amount)
         if amount < 1:
             await ctx.respond("Please provide a valid number greater than 0.", ephemeral=True)
             return
