@@ -14,9 +14,9 @@ class delete(commands.Cog):
     async def delete(
             self,
             ctx,
-            numbermsg: int = Option(int, "Select Number of the message to delete"),
+            amount: int = Option(int, "Select Number of the message to delete"),
         ):
-        if numbermsg < 1:
+        if amount < 1:
             await ctx.respond("Please provide a valid number greater than 0.", ephemeral=True)
             return
         if auth := ctx.author.guild_permissions.manage_messages:
@@ -25,8 +25,9 @@ class delete(commands.Cog):
             await ctx.respond("You don't have the permission to use this command!", ephemeral=True)
             return
         deleted_messages = []
-        async for msg in ctx.channel.history(limit=numbermsg + 1):
+        async for msg in ctx.channel.history(limit=amount + 1):
             deleted_messages.append(msg)
+            print(deleted_messages)
         if len(deleted_messages) <= 1:
             await ctx.respond("No messages found to delete.", ephemeral=True)
             return
