@@ -19,9 +19,7 @@ class delete(commands.Cog):
         if amount < 1:
             await ctx.respond("Please provide a valid number greater than 0.", ephemeral=True)
             return
-        if auth := ctx.author.guild_permissions.manage_messages:
-            pass
-        else:
+        if not ctx.author.guild_permissions.manage_messages:
             await ctx.respond("You don't have the permission to use this command!", ephemeral=True)
             return
         deleted_messages = []
