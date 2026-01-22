@@ -18,7 +18,7 @@ class helpcache(commands.Cog):
         ctx,
     ):
         server = ctx.guild
-        json_path = Path(__file__).resolve().parent / "json_files" / "help_cache.json"
+        json_path = Path(__file__).resolve().parent.parent.joinpath("json_files", "help_cache.json")
         if not json_path.exists():
             await ctx.respond("The .json file is missing.")
             return
