@@ -17,7 +17,7 @@ class antispam(commands.Cog):
             return
 
         config = configparser.ConfigParser()
-        config.read('config.ini')
+        config.read('config.cfg')
         spamindex = int(config.get('Moderation', 'Spam_Sensitivity_Index'))
         message_content = message.content.lower()
         team_role_ids = [int(role_id) for role_id in config.get('Moderation', 'Mod_role_IDs').split(',') if role_id.strip().isdigit()]

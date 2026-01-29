@@ -16,7 +16,7 @@ class blacklist_words(commands.Cog):
             return
 
         config = configparser.ConfigParser()
-        config.read('config.ini')
+        config.read('config.cfg')
         blacklist_words_words = config.get('Moderation', 'Blacklist_Words_List').split(',')
         blacklist_words_words = [word.strip().lower() for word in blacklist_words_words]
         team_role_ids = [int(role_id) for role_id in config.get('Moderation', 'Mod_role_IDs').split(',') if role_id.strip().isdigit()]
