@@ -53,8 +53,8 @@ config.read_file(open(configFilePath))
 label_rules = config.get('Reactionroles Rules', 'label_rules')
 role_rules = config.get('Reactionroles Rules', 'rules_role')
 
-channel_log = config.get('Logs', 'channel_log')
-channel_banlog = config.get('Logs', 'ban_log')
+channel_status_log = config.get('Logs', 'status_log')
+channel_mod_log = config.get('Logs', 'mod_log')
 
 team_role_id = config.get('Team Roles', 'team_role_id')
 
@@ -167,7 +167,7 @@ class Admin(commands.Cog):
 #Print in Log if error occurs
 @bot.event
 async def on_application_command_error(ctx, error):
-    channel = discord.utils.get(ctx.guild.channels, id=int(channel_log))
+    channel = discord.utils.get(ctx.guild.channels, id=int(channel_status_log))
     if channel:
         await channel.send(f"Error occurred: {str(error)}")
 
@@ -179,7 +179,7 @@ async def on_ready():
     print(f"{bot.user} is online")
     print("------------------------")
     if bot.guilds:
-        channel = discord.utils.get(bot.guilds[0].channels, id=int(channel_log))
+        channel = discord.utils.get(bot.guilds[0].channels, id=int(channel_status_log))
         if channel:
             await channel.send(f"{bot.user} is online")
     bot.add_view(PersistentRoleView()) #loading reactionrole memory
@@ -218,7 +218,7 @@ async def ban(
         await ctx.respond("Error: You can't ban yourself!", ephemeral=True)
         return
     
-    channel= discord.utils.get(ctx.guild.channels, id = int(channel_banlog))
+    channel= discord.utils.get(ctx.guild.channels, id = int(channel_mod_log))
 
     embed = discord.Embed(
         title=f"Ban of **{user.name}**",
@@ -276,7 +276,7 @@ async def unban(
         await ctx.respond("Error: This user is not banned!", ephemeral=True)
         return
     
-    channel= discord.utils.get(ctx.guild.channels, id = int(channel_banlog))
+    channel= discord.utils.get(ctx.guild.channels, id = int(channel_mod_log))
 
     embed = discord.Embed(
         title=f"Unban of **{user.name}**",
@@ -335,7 +335,7 @@ async def kick(
         await ctx.respond("Error: You can't kick yourself!", ephemeral=True)
         return
     
-    channel= discord.utils.get(ctx.guild.channels, id = int(channel_banlog))
+    channel= discord.utils.get(ctx.guild.channels, id = int(channel_mod_log))
 
     embed = discord.Embed(
         title=f"Kick of **{user.name}**",
