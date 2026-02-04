@@ -16,10 +16,10 @@ class actionlog(commands.Cog):
 
         config = configparser.ConfigParser()
         config.read("config.ini")
-        enable_log = config.getboolean("LOGS","enable_action_log")
+        enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
-        log_channel_id = int(config["LOGS"]["action_log_channel_id"])
+        log_channel_id = int(config["Logs"]["action_log"])
         log_channel = self.bot.get_channel(log_channel_id)
         if message.author.bot:
             return
@@ -40,10 +40,10 @@ class actionlog(commands.Cog):
 
         config = configparser.ConfigParser()
         config.read("config.ini")
-        enable_log = config.getboolean("LOGS","enable_action_log")
+        enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
-        log_channel_id = int(config["LOGS"]["action_log_channel_id"])
+        log_channel_id = int(config["Logs"]["action_log"])
         log_channel = self.bot.get_channel(log_channel_id)
         if before.author.bot:
             return
@@ -65,10 +65,10 @@ class actionlog(commands.Cog):
 
         config = configparser.ConfigParser()
         config.read("config.ini")
-        enable_log = config.getboolean("LOGS","enable_action_log")
+        enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
-        log_channel_id = int(config["LOGS"]["action_log_channel_id"])
+        log_channel_id = int(config["Logs"]["action_log"])
         log_channel = self.bot.get_channel(log_channel_id)
 
         embed = discord.Embed(
@@ -86,10 +86,10 @@ class actionlog(commands.Cog):
 
         config = configparser.ConfigParser()
         config.read("config.ini")
-        enable_log = config.getboolean("LOGS","enable_action_log")
+        enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
-        log_channel_id = int(config["LOGS"]["action_log_channel_id"])
+        log_channel_id = int(config["Logs"]["action_log"])
         log_channel = self.bot.get_channel(log_channel_id)
 
         embed = discord.Embed(
@@ -108,10 +108,10 @@ class actionlog(commands.Cog):
 
         config = configparser.ConfigParser()
         config.read("config.ini")
-        enable_log = config.getboolean("LOGS","enable_action_log")
+        enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
-        log_channel_id = int(config["LOGS"]["action_log_channel_id"])
+        log_channel_id = int(config["Logs"]["action_log"])
         log_channel = self.bot.get_channel(log_channel_id)
 
         embed = discord.Embed(
@@ -132,10 +132,10 @@ class actionlog(commands.Cog):
 
         config = configparser.ConfigParser()
         config.read("config.ini")
-        enable_log = config.getboolean("LOGS","enable_action_log")
+        enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
-        log_channel_id = int(config["LOGS"]["action_log_channel_id"])
+        log_channel_id = int(config["Logs"]["action_log"])
         log_channel = self.bot.get_channel(log_channel_id)
 
         embed = discord.Embed(
@@ -154,10 +154,10 @@ class actionlog(commands.Cog):
 
         config = configparser.ConfigParser()
         config.read("config.ini")
-        enable_log = config.getboolean("LOGS","enable_action_log")
+        enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
-        log_channel_id = int(config["LOGS"]["action_log_channel_id"])
+        log_channel_id = int(config["Logs"]["action_log"])
         log_channel = self.bot.get_channel(log_channel_id)
 
         embed = discord.Embed(
@@ -173,13 +173,13 @@ class actionlog(commands.Cog):
 #User Role update log
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
-        
+
         config = configparser.ConfigParser()
         config.read("config.ini")
-        enable_log = config.getboolean("LOGS","enable_action_log")
+        enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
-        log_channel_id = int(config["LOGS"]["action_log_channel_id"])
+        log_channel_id = int(config["Logs"]["action_log"])
         log_channel = self.bot.get_channel(log_channel_id)
 
         before_roles = set(before.roles)
