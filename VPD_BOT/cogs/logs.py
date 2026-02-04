@@ -15,7 +15,8 @@ class actionlog(commands.Cog):
     async def on_message_delete(self, message):
 
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        configFilePath = r'config.cfg'
+        config.read_file(open(configFilePath))
         enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
@@ -39,7 +40,8 @@ class actionlog(commands.Cog):
     async def on_message_edit(self, before, after):
 
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        configFilePath = r'config.cfg'
+        config.read_file(open(configFilePath))
         enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
@@ -64,7 +66,8 @@ class actionlog(commands.Cog):
     async def on_member_join(self, member):
 
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        configFilePath = r'config.cfg'
+        config.read_file(open(configFilePath))
         enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
@@ -85,7 +88,8 @@ class actionlog(commands.Cog):
     async def on_member_remove(self, member):
 
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        configFilePath = r'config.cfg'
+        config.read_file(open(configFilePath))
         enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
@@ -107,7 +111,8 @@ class actionlog(commands.Cog):
     async def on_guild_role_update(self, before, after):
 
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        configFilePath = r'config.cfg'
+        config.read_file(open(configFilePath))
         enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
@@ -131,7 +136,8 @@ class actionlog(commands.Cog):
     async def on_guild_role_create(self, role):
 
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        configFilePath = r'config.cfg'
+        config.read_file(open(configFilePath))
         enable_log = config.getboolean("Logs","enable_action_log")
         if enable_log == "false":
             return
@@ -175,8 +181,9 @@ class actionlog(commands.Cog):
     async def on_member_update(self, before, after):
 
         config = configparser.ConfigParser()
-        config.read("config.ini")
-        enable_log = config.getboolean("Logs","enable_action_log")
+        configFilePath = r'config.cfg'
+        config.read_file(open(configFilePath))
+        enable_log = config.getboolean("Logs","enable_action_log")  
         if enable_log == "false":
             return
         log_channel_id = int(config["Logs"]["action_log"])
