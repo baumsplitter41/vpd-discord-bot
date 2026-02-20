@@ -18,7 +18,7 @@ class actionlog(commands.Cog):
     
 #Delted Message Log
     @commands.Cog.listener()
-    async def on_message_delete(self, message):
+    async def on_message_delete(self, message: discord.Message):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")
