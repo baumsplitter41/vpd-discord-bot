@@ -24,32 +24,12 @@ class actionlog(commands.Cog):
             return None
         return log_channel
     
-#Delted Message Log
-    @bot.event
-    async def on_message_delete(self, message: discord.Message):
-
-        config = self._load_config()
-        enable_log = config.getboolean("Logs","enable_action_log")
-        if not enable_log:
-            return
-        log_channel = self._get_log_channel()
-        if log_channel is None:
-            return
-        if message.author.bot:
-            return
-        else:
-            embed = discord.Embed(
-                title="Message Deleted",
-                description=f"A message by {message.author.mention} was deleted in {message.channel.mention}.",
-                color=discord.Color.red(),
-                timestamp=message.created_at
-            )
-            embed.add_field(name="Message Content", value=message.content or "No content", inline=False)
-            embed.set_footer(text=f"User ID: {message.author.id} | Message ID: {message.id}")
-            await log_channel.send(embed=embed)
+#Deleted Message Log
     @commands.Cog.listener()
     async def on_message_delete(self, message: discord.Message):
 
+        if message.author.bot:
+            return
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")
         if not enable_log:
@@ -57,16 +37,16 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        if message.author.bot:
-            return
+        
         else:
+            content = message.content if message.content else "Content not available"
             embed = discord.Embed(
                 title="Message Deleted",
                 description=f"A message by {message.author.mention} was deleted in {message.channel.mention}.",
                 color=discord.Color.red(),
                 timestamp=message.created_at
             )
-            embed.add_field(name="Message Content", value=message.content or "No content", inline=False)
+            embed.add_field(name="Message Content", value=content[:1024], inline=False)
             embed.set_footer(text=f"User ID: {message.author.id} | Message ID: {message.id}")
             await log_channel.send(embed=embed)
 
