@@ -15,6 +15,14 @@ class actionlog(commands.Cog):
         configFilePath = r'config.cfg'
         config.read(configFilePath)
         return config
+    def _get_log_channel(self):
+        config = self._load_config()
+        log_channel_id = int(config["Logs"]["action_log"])
+        log_channel = self.bot.get_channel(log_channel_id)
+        if log_channel is None:
+            print(f"Log channel with ID {log_channel_id} not found.")
+            return None
+        return log_channel
     
 #Delted Message Log
     @commands.Cog.listener()
@@ -24,8 +32,9 @@ class actionlog(commands.Cog):
         enable_log = config.getboolean("Logs","enable_action_log")
         if not enable_log:
             return
-        log_channel_id = int(config["Logs"]["action_log"])
-        log_channel = self.bot.get_channel(log_channel_id)
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
         if message.author.bot:
             return
         else:
@@ -47,8 +56,9 @@ class actionlog(commands.Cog):
         enable_log = config.getboolean("Logs","enable_action_log")
         if not enable_log:
             return
-        log_channel_id = int(config["Logs"]["action_log"])
-        log_channel = self.bot.get_channel(log_channel_id)
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
         if before.author.bot:
             return
         else:
@@ -71,9 +81,9 @@ class actionlog(commands.Cog):
         enable_log = config.getboolean("Logs","enable_action_log")
         if not enable_log:
             return
-        log_channel_id = int(config["Logs"]["action_log"])
-        log_channel = self.bot.get_channel(log_channel_id)
-
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
         embed = discord.Embed(
             title="Member Joined",
             description=f"{member.mention} has joined the server.",
@@ -91,8 +101,9 @@ class actionlog(commands.Cog):
         enable_log = config.getboolean("Logs","enable_action_log")
         if not enable_log:
             return
-        log_channel_id = int(config["Logs"]["action_log"])
-        log_channel = self.bot.get_channel(log_channel_id)
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
 
         embed = discord.Embed(
             title="Member Left",
@@ -112,8 +123,9 @@ class actionlog(commands.Cog):
         enable_log = config.getboolean("Logs","enable_action_log")
         if not enable_log:
             return
-        log_channel_id = int(config["Logs"]["action_log"])
-        log_channel = self.bot.get_channel(log_channel_id)
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
 
         embed = discord.Embed(
             title="Role Updated",
@@ -135,8 +147,9 @@ class actionlog(commands.Cog):
         enable_log = config.getboolean("Logs","enable_action_log")
         if not enable_log:
             return
-        log_channel_id = int(config["Logs"]["action_log"])
-        log_channel = self.bot.get_channel(log_channel_id)
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
 
         embed = discord.Embed(
             title="Role Created",
@@ -156,8 +169,9 @@ class actionlog(commands.Cog):
         enable_log = config.getboolean("Logs","enable_action_log")
         if not enable_log:
             return
-        log_channel_id = int(config["Logs"]["action_log"])
-        log_channel = self.bot.get_channel(log_channel_id)
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
 
         embed = discord.Embed(
             title="Role Deleted",
@@ -177,8 +191,9 @@ class actionlog(commands.Cog):
         enable_log = config.getboolean("Logs","enable_action_log")  
         if not enable_log:
             return
-        log_channel_id = int(config["Logs"]["action_log"])
-        log_channel = self.bot.get_channel(log_channel_id)
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
 
         before_roles = set(before.roles)
         after_roles = set(after.roles)
