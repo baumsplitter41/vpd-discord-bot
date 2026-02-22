@@ -39,7 +39,12 @@ class actionlog(commands.Cog):
             return
         
         else:
-            content = message.content if message.content else "Content not available"
+            if message.content is None and not message.attachments:
+                content = "No content available"
+            elif message.content is None:
+                content = "Content not available, but there are attachments."
+            else:
+                content = message.content
             embed = discord.Embed(
                 title="Message Deleted",
                 description=f"A message by {message.author.mention} was deleted in {message.channel.mention}.",
@@ -140,8 +145,8 @@ class actionlog(commands.Cog):
         embed.set_footer(text=f"Role ID: {before.id}")
         await log_channel.send(embed=embed)
 
-#Role added log
 
+#Role added log
     @commands.Cog.listener()
     async def on_guild_role_create(self, role):
 
@@ -162,8 +167,8 @@ class actionlog(commands.Cog):
         embed.set_footer(text=f"Role ID: {role.id}")
         await log_channel.send(embed=embed)
 
-#Role deleted log
 
+#Role deleted log
     @commands.Cog.listener()
     async def on_guild_role_delete(self, role):
 
@@ -223,7 +228,29 @@ class actionlog(commands.Cog):
             embed.set_footer(text=f"User ID: {after.id} | Role ID: {role.id}")
             await log_channel.send(embed=embed)
 
+    #Server Changes Log
+    @commands.Cog.listener()
+    async def on_guild_update(self, before, after, user):
 
+        config = self._load_config()
+        enable_log = config.getboolean("Logs","enable_action_log")  
+        if not enable_log:
+            return
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
+
+        embed = discord.Embed(
+            title="Server Updated",
+            description=f"The server has been updated.",
+            color=discord.Color.blue(),
+            timestamp=discord.utils.utcnow()
+        )
+        embed.add_field(name="Before", value=f"Name: {before.name}\nDescription: {before.description}\nOwner: {before.owner}", inline=False)
+        embed.add_field(name="After", value=f"Name: {after.name}\nDescription: {after.description}\nOwner: {after.owner}", inline=False)
+        embed.set_footer(text=f"Updated by: {user.mention} | Server ID: {before.id}")
+        embed.set_footer(text=f"Server ID: {before.id}")
+        await log_channel.send(embed=embed)
 
 def setup(bot: discord.Bot):
     bot.add_cog(actionlog(bot))
