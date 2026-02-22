@@ -17,8 +17,8 @@ class welcome_msg(commands.Cog):
             return config
         
     @commands.Cog.listener()
-    async def on_member_join(self, member):
-        config = self._load_config(self)
+    async def on_member_join(self, member: discord.Member):
+        config = self._load_config()
         enable_welcome_message = config.getboolean("Welcome Message","enable_welcome_message")
         if not enable_welcome_message:
             return
