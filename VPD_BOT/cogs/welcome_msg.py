@@ -38,8 +38,8 @@ class welcome_msg(commands.Cog):
         embed.set_image(url="https://i.imgur.com/iu1VyKZ.png")
         embed.set_footer(text=f"Member ID: {member.id}")
         
-        #self.bot.loop.create_task(welcome_channel.send(embed=embed))
-        await welcome_channel.send(embed=embed)
+        self.bot.loop.create_task(welcome_channel.send(embed=embed))
+        #await welcome_channel.send(embed=embed)
 
 
 
