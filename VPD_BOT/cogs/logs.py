@@ -230,7 +230,7 @@ class actionlog(commands.Cog):
 
     #Server Changes Log
     @commands.Cog.listener()
-    async def on_guild_update(self, before, after, user):
+    async def on_guild_update(self, before, after, member):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")  
@@ -248,8 +248,42 @@ class actionlog(commands.Cog):
         )
         embed.add_field(name="Before", value=f"Name: {before.name}\nDescription: {before.description}\nOwner: {before.owner}", inline=False)
         embed.add_field(name="After", value=f"Name: {after.name}\nDescription: {after.description}\nOwner: {after.owner}", inline=False)
-        embed.set_footer(text=f"Updated by: {user.mention} | Server ID: {before.id}")
+        embed.set_footer(text=f"Updated by: {member.mention} | Server ID: {before.id}")
         embed.set_footer(text=f"Server ID: {before.id}")
+        await log_channel.send(embed=embed)
+
+    
+    #Voice channel log
+    @commands.Cog.listener()
+    async def on_voice_state_update(self, member, before, after):
+
+        config = self._load_config()
+        enable_log = config.getboolean("Logs","enable_action_log")  
+        if not enable_log:
+            return
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
+
+        if before.channel is None and after.channel is not None:
+            action = "joined"
+            channel = after.channel
+        elif before.channel is not None and after.channel is None:
+            action = "left"
+            channel = before.channel
+        elif before.channel is not None and after.channel is not None and before.channel != after.channel:
+            action = "moved from"
+            channel = before.channel
+        else:
+            return
+
+        embed = discord.Embed(
+            title="Voice State Updated",
+            description=f"{member.mention} has {action} the voice channel {channel.mention}.",
+            color=discord.Color.purple(),
+            timestamp=discord.utils.utcnow()
+        )
+        embed.set_footer(text=f"User ID: {member.id}")
         await log_channel.send(embed=embed)
 
 
