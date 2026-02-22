@@ -114,7 +114,7 @@ class actionlog(commands.Cog):
 
         embed = discord.Embed(
             title="Member Left",
-            description=f"{member.mention} has left the server.",
+            description=f"{member.mention} has left the server. Joined at: {member.joined_at}",
             color=discord.Color.dark_red(),
             timestamp=discord.utils.utcnow()
         )
@@ -251,6 +251,8 @@ class actionlog(commands.Cog):
         embed.set_footer(text=f"Updated by: {user.mention} | Server ID: {before.id}")
         embed.set_footer(text=f"Server ID: {before.id}")
         await log_channel.send(embed=embed)
+
+
 
 def setup(bot: discord.Bot):
     bot.add_cog(actionlog(bot))
