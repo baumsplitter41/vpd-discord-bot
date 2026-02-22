@@ -1,4 +1,4 @@
-"""import discord
+import discord
 from discord.ext import commands
 from discord.commands import Option
 from discord.commands import slash_command
@@ -44,4 +44,4 @@ class welcome_msg(commands.Cog):
 
 
 def setup(bot: discord.Bot):
-    bot.add_cog(welcome_msg(bot))"""
+    bot.add_cog(welcome_msg(bot))
