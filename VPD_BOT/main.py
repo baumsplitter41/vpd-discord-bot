@@ -587,7 +587,7 @@ async def update_users_periodically():
 
 #_________________________________#
 #Welcome Message
-
+"""
 @commands.Cog.listener()
 async def on_member_join(self, member: discord.Member):
     config = configparser.ConfigParser()
@@ -613,7 +613,8 @@ async def on_member_join(self, member: discord.Member):
     embed.set_footer(text=f"Member ID: {member.id}")
     
     self.bot.loop.create_task(welcome_channel.send(embed=embed))
-    #await welcome_channel.send(embed=embed) 
+    #await welcome_channel.send(embed=embed)
+    """
 
 
 
