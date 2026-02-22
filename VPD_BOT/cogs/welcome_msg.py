@@ -32,7 +32,7 @@ class welcome_msg(commands.Cog):
         embed = discord.Embed(
             title="VicePD",
             description=f"Willkommen {member.mention}, auf **VicePD**! \n\n Bitte lese dir das <#1442279753707946215> durch. Die Einhaltung der Regeln stellt sicher, dass der Server ein freundlicher und unterhaltsamer Ort für alle ist und bleibt. \n\n Viel Spaß auf VicePD!",
-            color=discord.Color.grey(),
+            color=discord.Color.black(),
             timestamp=discord.utils.utcnow()
         )
         embed.set_image(url="https://i.imgur.com/iu1VyKZ.png")
