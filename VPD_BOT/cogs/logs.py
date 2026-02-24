@@ -125,7 +125,7 @@ class actionlog(commands.Cog):
 
 #Role Update Log
     @commands.Cog.listener()
-    async def on_guild_role_update(self, before, after):
+    async def on_guild_role_update(self, before, after, moderator: discord.Member):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")
@@ -139,13 +139,12 @@ class actionlog(commands.Cog):
 
         embed = discord.Embed(
             title="Role Updated",
-            description=f"The role **{before.name}** has been updated.",
+            description=f"The role **{before.name}** has been updated by {moderator.mention if moderator else 'Unknown'}.",
             color=discord.Color.blue(),
             timestamp=discord.utils.utcnow()
         )
         embed.add_field(name="Before", value=f"Name: {before.name}\nColor: {before.color}\nPermissions: {before.permissions}", inline=False)
         embed.add_field(name="After", value=f"Name: {after.name}\nColor: {after.color}\nPermissions: {after.permissions}", inline=False)
-        embed.add_field(name="Made by", value=moderator.mention if moderator else "Unknown", inline=False)
         embed.set_footer(text=f"Role ID: {before.id}")
         await log_channel.send(embed=embed)
 
