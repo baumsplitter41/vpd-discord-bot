@@ -288,7 +288,7 @@ class actionlog(commands.Cog):
             except discord.Forbidden:
                 pass
             return None
-        moderator = await get_audit_log_user(after.guild, discord.AuditLogAction.guild_update, after.id)
+        moderator = await get_audit_log_user(after, discord.AuditLogAction.guild_update, after.id)
 
 
         embed = discord.Embed(
