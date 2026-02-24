@@ -134,7 +134,7 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        async def get_audit_log_user(self, guild, action, target_id):
+        async def get_audit_log_user(guild, action, target_id):
             try:
                 async for entry in guild.audit_logs(limit=10, action=action):
                     if entry.target.id == target_id:
@@ -168,7 +168,7 @@ class actionlog(commands.Cog):
         if log_channel is None:
             return
         
-        async def get_audit_log_user(self, guild, action, target_id):
+        async def get_audit_log_user(guild, action, target_id):
             try:
                 async for entry in guild.audit_logs(limit=10, action=action):
                     if entry.target.id == target_id:
@@ -200,7 +200,7 @@ class actionlog(commands.Cog):
         if log_channel is None:
             return
         
-        async def get_audit_log_user(self, guild, action, target_id):
+        async def get_audit_log_user(guild, action, target_id):
             try:
                 async for entry in guild.audit_logs(limit=10, action=action):
                     if entry.target.id == target_id:
@@ -238,7 +238,7 @@ class actionlog(commands.Cog):
         added_roles = after_roles - before_roles
         removed_roles = before_roles - after_roles
 
-        async def get_audit_log_user(self, guild, action, target_id):
+        async def get_audit_log_user(guild, action, target_id):
             try:
                 async for entry in guild.audit_logs(limit=10, action=action):
                     if entry.target.id == target_id:
@@ -280,7 +280,7 @@ class actionlog(commands.Cog):
         if log_channel is None:
             return
 
-        async def get_audit_log_user(self, guild, action, target_id):
+        async def get_audit_log_user(guild, action, target_id):
             try:
                 async for entry in guild.audit_logs(limit=10, action=action):
                     if entry.target.id == target_id:
