@@ -1,4 +1,14 @@
-{ 
-     "title": "__How to start on VicePD__",
-     "desc": "1. Lies dir zuerst das Regelwerk durch \n \n 2. Hol dir deine Einweisungsrolle \n \n 3. Melde dich für eine Einweisung an."  
- }
+{
+    "title": "How to Start auf VicePD",
+    "steps": [
+        "Als Erstes liest du dir bitte die Anleitung im Kanal #einweisung sorgfältig durch.",
+        "Anschließend kannst du dort die Vorlage kopieren, vollständig ausfüllen und abschicken.",
+        "Sobald du das erledigt hast, wartest du auf eine Rückmeldung von einem Teammitglied.",
+        "In dieser Rückmeldung findest du ein Datum sowie eine Uhrzeit für deine Einweisung.",
+        "Zum angegebenen Zeitpunkt begibst du dich bitte in den Einweisungs-Warteraum.",
+        "Dort wirst du von einem Teammitglied in einen Channel gezogen und führst ein kurzes persönliches Gespräch.",
+        "Dieses Gespräch dient dazu, deinen Charakter kennenzulernen und festzustellen, ob du gut auf den Server passt.",
+        "Solltest du das Gespräch erfolgreich absolviert haben, folgt anschließend deine Einweisung.",
+        "Wir wünschen dir viel Spaß auf VicePD!"
+    ]
+}
