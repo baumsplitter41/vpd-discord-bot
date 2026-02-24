@@ -337,6 +337,102 @@ class actionlog(commands.Cog):
         await log_channel.send(embed=embed)
 
 
+    #Channel Update Log
+    @commands.Cog.listener()
+    async def on_guild_channel_update(self, before, after):
+
+        config = self._load_config()
+        enable_log = config.getboolean("Logs","enable_action_log")  
+        if not enable_log:
+            return
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
+
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+        moderator = await get_audit_log_user(after.guild, discord.AuditLogAction.channel_update, after.id)
+
+        embed = discord.Embed(
+            title="Channel Updated",
+            description=f"The channel **{before.name}** has been updated by {moderator.mention if moderator else 'Unknown'}.",
+            color=discord.Color.blue(),
+            timestamp=discord.utils.utcnow()
+        )
+        embed.add_field(name="Before", value=f"Name: {before.name}\nType: {before.type}\nPosition: {before.position}", inline=False)
+        embed.add_field(name="After", value=f"Name: {after.name}\nType: {after.type}\nPosition: {after.position}", inline=False)
+        embed.set_footer(text=f"Channel ID: {before.id}")
+        await log_channel.send(embed=embed)
+
+    #Channel Create Log
+    @commands.Cog.listener()
+    async def on_guild_channel_create(self, channel):
+
+        config = self._load_config()
+        enable_log = config.getboolean("Logs","enable_action_log")  
+        if not enable_log:
+            return
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
+
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+        moderator = await get_audit_log_user(channel.guild, discord.AuditLogAction.channel_create, channel.id)
+
+        embed = discord.Embed(
+            title="Channel Created",
+            description=f"The channel **{channel.name}** has been created by {moderator.mention if moderator else 'Unknown'}.",
+            color=discord.Color.green(),
+            timestamp=discord.utils.utcnow()
+        )
+        embed.set_footer(text=f"Channel ID: {channel.id}")
+        await log_channel.send(embed=embed)
+
+
+    #Channel Delete Log
+    @commands.Cog.listener()
+    async def on_guild_channel_delete(self, channel):
+
+        config = self._load_config()
+        enable_log = config.getboolean("Logs","enable_action_log")  
+        if not enable_log:
+            return
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
+
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+        moderator = await get_audit_log_user(channel.guild, discord.AuditLogAction.channel_delete, channel.id)
+
+        embed = discord.Embed(
+            title="Channel Deleted",
+            description=f"The channel **{channel.name}** has been deleted by {moderator.mention if moderator else 'Unknown'}.",
+            color=discord.Color.red(),
+            timestamp=discord.utils.utcnow()
+        )
+        embed.set_footer(text=f"Channel ID: {channel.id}")
+        await log_channel.send(embed=embed)
+
 
 def setup(bot: discord.Bot):
     bot.add_cog(actionlog(bot))
