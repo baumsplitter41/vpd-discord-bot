@@ -125,7 +125,7 @@ class actionlog(commands.Cog):
 
 #Role Update Log
     @commands.Cog.listener()
-    async def on_guild_role_update(self, before, after, moderator: discord.Member):
+    async def on_guild_role_update(self, before, after):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")
@@ -134,8 +134,16 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        member = after.guild.get_member(after.id) if after.guild else None
-        moderator = await self.bot.fetch_user(member.id) if member else None
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+
+        moderator = await get_audit_log_user(after.guild, discord.AuditLogAction.role_update, after.id)
 
         embed = discord.Embed(
             title="Role Updated",
