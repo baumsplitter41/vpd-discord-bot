@@ -125,7 +125,7 @@ class actionlog(commands.Cog):
 
 #Role Update Log
     @commands.Cog.listener()
-    async def on_guild_role_update(self, before, after, moderator: discord.Member):
+    async def on_guild_role_update(self, before, after):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")
@@ -134,23 +134,24 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        moderator = self.bot.get_user(moderator)
+        moderator = await self.bot.fetch_user(after.guild.get_member(after.id).id) if after.guild else None
 
         embed = discord.Embed(
             title="Role Updated",
-            description=f"The role **{before.name}** has been updated by {moderator.mention}.",
+            description=f"The role **{before.name}** has been updated.",
             color=discord.Color.blue(),
             timestamp=discord.utils.utcnow()
         )
         embed.add_field(name="Before", value=f"Name: {before.name}\nColor: {before.color}\nPermissions: {before.permissions}", inline=False)
         embed.add_field(name="After", value=f"Name: {after.name}\nColor: {after.color}\nPermissions: {after.permissions}", inline=False)
+        embed.add_field(name="Made by", value=moderator.mention if moderator else "Unknown", inline=False)
         embed.set_footer(text=f"Role ID: {before.id}")
         await log_channel.send(embed=embed)
 
 
 #Role added log
     @commands.Cog.listener()
-    async def on_guild_role_create(self, role, moderator: discord.Member):
+    async def on_guild_role_create(self, role):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")
@@ -159,11 +160,10 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        moderator = self.bot.get_user(moderator)
 
         embed = discord.Embed(
             title="Role Created",
-            description=f"The role **{role.name}** has been created by {moderator.mention}.",
+            description=f"The role **{role.name}** has been created by {role.guild.get_member(role.id).mention if role.guild else 'Unknown'}.",
             color=discord.Color.green(),
             timestamp=discord.utils.utcnow()
         )
@@ -173,20 +173,19 @@ class actionlog(commands.Cog):
 
 #Role deleted log
     @commands.Cog.listener()
-    async def on_guild_role_delete(self, role, moderator: discord.Member):
+    async def on_guild_role_delete(self, role):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")
         if not enable_log:
             return
-        moderator = self.bot.get_user(moderator)
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
 
         embed = discord.Embed(
             title="Role Deleted",
-            description=f"The role **{role.name}** has been deleted by {moderator.mention}.",
+            description=f"The role **{role.name}** has been deleted by {role.guild.get_member(role.id).mention if role.guild else 'Unknown'}.",
             color=discord.Color.red(),
             timestamp=discord.utils.utcnow()
         )
@@ -196,7 +195,7 @@ class actionlog(commands.Cog):
 
 #User Role update log
     @commands.Cog.listener()
-    async def on_member_update(self, before, after, moderator: discord.Member):
+    async def on_member_update(self, before, after):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")  
@@ -215,7 +214,7 @@ class actionlog(commands.Cog):
         for role in added_roles:
             embed = discord.Embed(
                 title="Role Added",
-                description=f"The role **{role.name}** has been added to {after.mention} by {moderator.mention}.",
+                description=f"The role **{role.name}** has been added to {after.mention} by {after.guild.get_member(after.id).mention if after.guild else 'Unknown'}.",
                 color=discord.Color.green(),
                 timestamp=discord.utils.utcnow()
             )
@@ -225,7 +224,7 @@ class actionlog(commands.Cog):
         for role in removed_roles:
             embed = discord.Embed(
                 title="Role Removed",
-                description=f"The role **{role.name}** has been removed from {after.mention} by {moderator.mention}.",
+                description=f"The role **{role.name}** has been removed from {after.mention} by {after.guild.get_member(after.id).mention if after.guild else 'Unknown'}.",
                 color=discord.Color.red(),
                 timestamp=discord.utils.utcnow()
             )
@@ -234,7 +233,7 @@ class actionlog(commands.Cog):
 
     #Server Changes Log
     @commands.Cog.listener()
-    async def on_guild_update(self, before, after, moderator: discord.Member):
+    async def on_guild_update(self, before, after):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")  
@@ -243,17 +242,15 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        moderator = self.bot.get_user(moderator)
 
         embed = discord.Embed(
             title="Server Updated",
-            description=f"The server has been updated.",
+            description=f"The server has been updated by {after.guild.get_member(after.id).mention if after.guild else 'Unknown'}.",
             color=discord.Color.blue(),
             timestamp=discord.utils.utcnow()
         )
         embed.add_field(name="Before", value=f"Name: {before.name}\nDescription: {before.description}\nOwner: {before.owner}", inline=False)
         embed.add_field(name="After", value=f"Name: {after.name}\nDescription: {after.description}\nOwner: {after.owner}", inline=False)
-        embed.set_footer(text=f"Updated by: {moderator.mention} | Server ID: {before.id}")
         embed.set_footer(text=f"Server ID: {before.id}")
         await log_channel.send(embed=embed)
 
