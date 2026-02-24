@@ -192,7 +192,7 @@ class actionlog(commands.Cog):
 
 #User Role update log
     @commands.Cog.listener()
-    async def on_member_update(self, before, after):
+    async def on_member_update(self, before, after, member):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")  
@@ -211,7 +211,7 @@ class actionlog(commands.Cog):
         for role in added_roles:
             embed = discord.Embed(
                 title="Role Added",
-                description=f"The role **{role.name}** has been added to {after.mention}.",
+                description=f"The role **{role.name}** has been added to {after.mention} by {member.mention}.",
                 color=discord.Color.green(),
                 timestamp=discord.utils.utcnow()
             )
@@ -221,7 +221,7 @@ class actionlog(commands.Cog):
         for role in removed_roles:
             embed = discord.Embed(
                 title="Role Removed",
-                description=f"The role **{role.name}** has been removed from {after.mention}.",
+                description=f"The role **{role.name}** has been removed from {after.mention} by {member.mention}.",
                 color=discord.Color.red(),
                 timestamp=discord.utils.utcnow()
             )
