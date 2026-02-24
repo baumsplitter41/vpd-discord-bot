@@ -134,7 +134,8 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        moderator = await self.bot.fetch_user(after.guild.get_member(after.id).id) if after.guild else None
+        member = after.guild.get_member(after.id) if after.guild else None
+        moderator = await self.bot.fetch_user(member.id) if member else None
 
         embed = discord.Embed(
             title="Role Updated",
