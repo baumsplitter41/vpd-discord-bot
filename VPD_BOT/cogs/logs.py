@@ -297,8 +297,8 @@ class actionlog(commands.Cog):
             color=discord.Color.blue(),
             timestamp=discord.utils.utcnow()
         )
-        embed.add_field(name="Before", value=f"Name: {before.name}\nDescription: {before.description}\nOwner: {before.owner}", inline=False)
-        embed.add_field(name="After", value=f"Name: {after.name}\nDescription: {after.description}\nOwner: {after.owner}", inline=False)
+        embed.add_field(name="Before", value=f"Name: {before.name}\nDescription: {before.description}", inline=False)
+        embed.add_field(name="After", value=f"Name: {after.name}\nDescription: {after.description}", inline=False)
         embed.set_footer(text=f"Server ID: {before.id}")
         await log_channel.send(embed=embed)
 
@@ -365,8 +365,8 @@ class actionlog(commands.Cog):
             color=discord.Color.blue(),
             timestamp=discord.utils.utcnow()
         )
-        embed.add_field(name="Before", value=f"Name: {before.name}\nType: {before.type}\nPosition: {before.position}", inline=False)
-        embed.add_field(name="After", value=f"Name: {after.name}\nType: {after.type}\nPosition: {after.position}", inline=False)
+        embed.add_field(name="Before", value=f"Name: {before.name}\nType: {before.type}", inline=False)
+        embed.add_field(name="After", value=f"Name: {after.name}\nType: {after.type}", inline=False)
         embed.set_footer(text=f"Channel ID: {before.id}")
         await log_channel.send(embed=embed)
 
