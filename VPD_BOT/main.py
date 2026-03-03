@@ -236,7 +236,18 @@ async def ban(
     embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
     embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
+    embed_dm = discord.Embed(
+        title=f"You have been banned from {ctx.guild.name}",
+        description=f"Reason: {reason}\n\nIf you believe this was a mistake, please contact the moderators.",
+        color=discord.Color.red()
+    )
+    embed_dm.add_field(name="Ban Date", value=time, inline=False)
+    embed_dm.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+    embed_dm.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
+
+
     try:
+        await user.send(embed=embed_dm)
         await ctx.guild.ban(user, reason=reason)
         await ctx.respond(f"User {user.mention} has been banned from this Server!", ephemeral=True)
         await channel.send(embed=embed)
@@ -353,8 +364,19 @@ async def kick(
     embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
     embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
+    #DM to user
+    embed_dm = discord.Embed(
+        title=f"You have been kicked from {ctx.guild.name}",
+        description=f"Reason: {reason}\n\nIf you believe this was a mistake, please contact the moderators.",
+        color=discord.Color.red()
+    )
+    embed_dm.add_field(name="Kick Date", value=time, inline=False)
+    embed_dm.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+    embed_dm.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
+
 
     try:
+        await user.send(embed=embed_dm)
         await ctx.guild.kick(user, reason=reason)
         await ctx.respond(f"User {user.mention} has been kicked from this Server!", ephemeral=True)
         cursor.execute(
@@ -391,13 +413,50 @@ async def warn(
     if user in (bot.user, ctx.author):
         await ctx.followup.send("Invalid target.", ephemeral=True)
         return
+    
 
+    channel= discord.utils.get(ctx.guild.channels, id = int(channel_mod_log))
+
+    embed = discord.Embed(
+        title=f"Warn of **{user.name}**",
+        description=f"User {user.mention} has been warned.",
+        color=discord.Color.red()
+    )
+    time = discord.utils.format_dt(datetime.now(), "f")
+    embed.add_field(name="Warn Date", value=time, inline=False)
+    embed.add_field(name="Moderator", value=f"{ctx.author}", inline=False)
+    embed.add_field(name="Reason", value=reason, inline=False)
+
+    embed.add_field(name="User ID", value=user.id)
+
+    embed.set_thumbnail(url=user.display_avatar.url)
+    embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+    embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
+    
+
+    #DM to user
+    embed_dm = discord.Embed(
+        title=f"You have been warned on {ctx.guild.name}",
+        description=f"Reason: {reason}\n\nIf you believe this was a mistake, please contact the moderators.",
+        color=discord.Color.red()
+    )
+    embed_dm.add_field(name="Warn Date", value=time, inline=False)
+    embed_dm.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+    embed_dm.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
+
+
+    try:
+        await user.send(embed=embed_dm)
+    except discord.Forbidden:
+        await ctx.respond("Error: I can't send a DM to this user. The user was warned without a information.", ephemeral=True)
+        pass  # User has DMs closed or blocked the bot
     cursor.execute(
         "INSERT INTO Warns (userid, username, moderatorname, reason) VALUES (%s, %s, %s, %s)",
         (user.id, str(user), str(ctx.author), reason)
     )
     conn.commit()
-
+    
+    await channel.send(embed=embed)
     await ctx.followup.send(
         f"User {user.mention} has been warned for: {reason}",
         ephemeral=True

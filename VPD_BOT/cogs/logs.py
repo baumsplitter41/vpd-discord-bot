@@ -125,7 +125,7 @@ class actionlog(commands.Cog):
 
 #Role Update Log
     @commands.Cog.listener()
-    async def on_guild_role_update(self, before, after, moderator: discord.Member):
+    async def on_guild_role_update(self, before, after):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")
@@ -134,11 +134,19 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        moderator = self.bot.get_user(moderator)
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+        moderator = await get_audit_log_user(after.guild, discord.AuditLogAction.role_update, after.id)
 
         embed = discord.Embed(
             title="Role Updated",
-            description=f"The role **{before.name}** has been updated by {moderator.mention}.",
+            description=f"The role **{before.name}** has been updated by {moderator.mention if moderator else 'Unknown'}.",
             color=discord.Color.blue(),
             timestamp=discord.utils.utcnow()
         )
@@ -150,7 +158,7 @@ class actionlog(commands.Cog):
 
 #Role added log
     @commands.Cog.listener()
-    async def on_guild_role_create(self, role, moderator: discord.Member):
+    async def on_guild_role_create(self, role):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")
@@ -159,11 +167,20 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        moderator = self.bot.get_user(moderator)
+        
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+        moderator = await get_audit_log_user(role.guild, discord.AuditLogAction.role_create, role.id)
 
         embed = discord.Embed(
             title="Role Created",
-            description=f"The role **{role.name}** has been created by {moderator.mention}.",
+            description=f"The role **{role.name}** has been created by {moderator.mention if moderator else 'Unknown'}.",
             color=discord.Color.green(),
             timestamp=discord.utils.utcnow()
         )
@@ -173,20 +190,29 @@ class actionlog(commands.Cog):
 
 #Role deleted log
     @commands.Cog.listener()
-    async def on_guild_role_delete(self, role, moderator: discord.Member):
+    async def on_guild_role_delete(self, role):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")
         if not enable_log:
             return
-        moderator = self.bot.get_user(moderator)
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
+        
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+        moderator = await get_audit_log_user(role.guild, discord.AuditLogAction.role_delete, role.id)
 
         embed = discord.Embed(
             title="Role Deleted",
-            description=f"The role **{role.name}** has been deleted by {moderator.mention}.",
+            description=f"The role **{role.name}** has been deleted by {moderator.mention if moderator else 'Unknown'}.",
             color=discord.Color.red(),
             timestamp=discord.utils.utcnow()
         )
@@ -196,7 +222,7 @@ class actionlog(commands.Cog):
 
 #User Role update log
     @commands.Cog.listener()
-    async def on_member_update(self, before, after, moderator: discord.Member):
+    async def on_member_update(self, before, after):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")  
@@ -212,10 +238,20 @@ class actionlog(commands.Cog):
         added_roles = after_roles - before_roles
         removed_roles = before_roles - after_roles
 
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+        moderator = await get_audit_log_user(after.guild, discord.AuditLogAction.member_role_update, after.id)
+
         for role in added_roles:
             embed = discord.Embed(
                 title="Role Added",
-                description=f"The role **{role.name}** has been added to {after.mention} by {moderator.mention}.",
+                description=f"The role **{role.name}** has been added to {after.mention} by {moderator.mention if moderator else 'Unknown'}.",
                 color=discord.Color.green(),
                 timestamp=discord.utils.utcnow()
             )
@@ -225,7 +261,7 @@ class actionlog(commands.Cog):
         for role in removed_roles:
             embed = discord.Embed(
                 title="Role Removed",
-                description=f"The role **{role.name}** has been removed from {after.mention} by {moderator.mention}.",
+                description=f"The role **{role.name}** has been removed from {after.mention} by {moderator.mention if moderator else 'Unknown'}.",
                 color=discord.Color.red(),
                 timestamp=discord.utils.utcnow()
             )
@@ -234,7 +270,7 @@ class actionlog(commands.Cog):
 
     #Server Changes Log
     @commands.Cog.listener()
-    async def on_guild_update(self, before, after, moderator: discord.Member):
+    async def on_guild_update(self, before, after):
 
         config = self._load_config()
         enable_log = config.getboolean("Logs","enable_action_log")  
@@ -243,17 +279,26 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        moderator = self.bot.get_user(moderator)
+
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+        moderator = await get_audit_log_user(after, discord.AuditLogAction.guild_update, after.id)
+
 
         embed = discord.Embed(
             title="Server Updated",
-            description=f"The server has been updated.",
+            description=f"The server has been updated by {moderator.mention if moderator else 'Unknown'}.",
             color=discord.Color.blue(),
             timestamp=discord.utils.utcnow()
         )
-        embed.add_field(name="Before", value=f"Name: {before.name}\nDescription: {before.description}\nOwner: {before.owner}", inline=False)
-        embed.add_field(name="After", value=f"Name: {after.name}\nDescription: {after.description}\nOwner: {after.owner}", inline=False)
-        embed.set_footer(text=f"Updated by: {moderator.mention} | Server ID: {before.id}")
+        embed.add_field(name="Before", value=f"Name: {before.name}\nDescription: {before.description}", inline=False)
+        embed.add_field(name="After", value=f"Name: {after.name}\nDescription: {after.description}", inline=False)
         embed.set_footer(text=f"Server ID: {before.id}")
         await log_channel.send(embed=embed)
 
@@ -291,6 +336,102 @@ class actionlog(commands.Cog):
         embed.set_footer(text=f"User ID: {member.id}")
         await log_channel.send(embed=embed)
 
+
+    #Channel Update Log
+    @commands.Cog.listener()
+    async def on_guild_channel_update(self, before, after):
+
+        config = self._load_config()
+        enable_log = config.getboolean("Logs","enable_action_log")  
+        if not enable_log:
+            return
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
+
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+        moderator = await get_audit_log_user(after.guild, discord.AuditLogAction.channel_update, after.id)
+
+        embed = discord.Embed(
+            title="Channel Updated",
+            description=f"The channel **{before.name}** has been updated by {moderator.mention if moderator else 'Unknown'}.",
+            color=discord.Color.blue(),
+            timestamp=discord.utils.utcnow()
+        )
+        embed.add_field(name="Before", value=f"Name: {before.name}\nType: {before.type}", inline=False)
+        embed.add_field(name="After", value=f"Name: {after.name}\nType: {after.type}", inline=False)
+        embed.set_footer(text=f"Channel ID: {before.id}")
+        await log_channel.send(embed=embed)
+
+    #Channel Create Log
+    @commands.Cog.listener()
+    async def on_guild_channel_create(self, channel):
+
+        config = self._load_config()
+        enable_log = config.getboolean("Logs","enable_action_log")  
+        if not enable_log:
+            return
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
+
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+        moderator = await get_audit_log_user(channel.guild, discord.AuditLogAction.channel_create, channel.id)
+
+        embed = discord.Embed(
+            title="Channel Created",
+            description=f"The channel **{channel.name}** has been created by {moderator.mention if moderator else 'Unknown'}.",
+            color=discord.Color.green(),
+            timestamp=discord.utils.utcnow()
+        )
+        embed.set_footer(text=f"Channel ID: {channel.id}")
+        await log_channel.send(embed=embed)
+
+
+    #Channel Delete Log
+    @commands.Cog.listener()
+    async def on_guild_channel_delete(self, channel):
+
+        config = self._load_config()
+        enable_log = config.getboolean("Logs","enable_action_log")  
+        if not enable_log:
+            return
+        log_channel = self._get_log_channel()
+        if log_channel is None:
+            return
+
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+        moderator = await get_audit_log_user(channel.guild, discord.AuditLogAction.channel_delete, channel.id)
+
+        embed = discord.Embed(
+            title="Channel Deleted",
+            description=f"The channel **{channel.name}** has been deleted by {moderator.mention if moderator else 'Unknown'}.",
+            color=discord.Color.red(),
+            timestamp=discord.utils.utcnow()
+        )
+        embed.set_footer(text=f"Channel ID: {channel.id}")
+        await log_channel.send(embed=embed)
 
 
 def setup(bot: discord.Bot):
