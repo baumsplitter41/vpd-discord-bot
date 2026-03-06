@@ -445,7 +445,7 @@ async def warn(
     embed_dm.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
 
 
-    try:
+    try: 
         await user.send(embed=embed_dm)
     except discord.Forbidden:
         await ctx.respond("Error: I can't send a DM to this user. The user was warned without a information.", ephemeral=True)

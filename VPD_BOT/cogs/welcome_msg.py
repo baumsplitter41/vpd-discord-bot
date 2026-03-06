@@ -19,11 +19,11 @@ class welcome_msg(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
         config = self._load_config()
-        enable_welcome_message = config.getboolean("Welcome Message","enable_welcome_message")
+        enable_welcome_message = config.getboolean("Welcome","enable_welcome_message")
         if not enable_welcome_message:
             return
         
-        welcome_channel_id = config.getint("Welcome Message","welcome_channel_id")
+        welcome_channel_id = config.getint("Welcome","welcome_channel_id")
         welcome_channel = self.bot.get_channel(welcome_channel_id)
         if welcome_channel is None:
             print(f"Welcome channel with ID {welcome_channel_id} not found.")
