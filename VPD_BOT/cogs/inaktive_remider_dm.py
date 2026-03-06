@@ -34,7 +34,7 @@ class remiderinactive(commands.Cog):
         if not enable_inavtive_reminder_dm:
             return # Exit the function if the feature is disabled in the config
 
-        log_channel_id = config.getint("Logs","log_channel_id")
+        log_channel_id = config.getint("Logs","action_log")
         log_channel = self.bot.get_channel(log_channel_id)
     
     #Load .env file for the gameserver database
