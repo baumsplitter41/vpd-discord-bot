@@ -167,6 +167,9 @@ class Admin(commands.Cog):
 #Print in Log if error occurs
 @bot.event
 async def on_application_command_error(ctx, error):
+    print(f"[!] Error in command {ctx.command}: {error}")
+    if ctx.guild is None:
+        return
     channel = discord.utils.get(ctx.guild.channels, id=int(channel_status_log))
     if channel:
         await channel.send(f"Error occurred: {str(error)}")
