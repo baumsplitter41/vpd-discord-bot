@@ -51,10 +51,11 @@ class changedcname(commands.Cog):
         if dbdb is None:
             raise ValueError("DATABASE2 not found in .env file")
         
+        #Get guild ID
         load_dotenv()
-        guild_id = os.getenv("GUILD_ID")
+        guild_id = os.getenv("SERVER")
         if guild_id is None:
-            raise ValueError("GUILD_ID not found in .env file")
+            raise ValueError("SERVER not found in .env file")
         
 
         #Database initialization
