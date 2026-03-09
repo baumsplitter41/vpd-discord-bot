@@ -95,6 +95,7 @@ class changedcname(commands.Cog):
         """)
         for char_info in cursor.fetchall():
             charinfo.append(char_info[0])
+        print(charinfo)
         
         cursor.execute("""
         SELECT users.discord FROM ny_groups_meta, 
@@ -159,6 +160,7 @@ class changedcname(commands.Cog):
         print(firstname)
         print(lastname)
         print(badgenr)
+        print("ignored", ignored_duplicates)
 
 
         #change username        
