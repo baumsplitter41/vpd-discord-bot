@@ -129,8 +129,8 @@ class changedcname(commands.Cog):
             if user.id in seen_user_ids:
                 print(f"Duplicate user found: {user.name} (ID: {user.id})")
                 ignored_duplicates.add(user.id)  # Add to ignored duplicates
-                ignored_duplicates.add(user.badge)
-                ignored_duplicates.add(user.cinfo)
+                ignored_duplicates.add(badge)
+                ignored_duplicates.add(cinfo)
                 continue
 
             seen_user_ids.add(user.id)
