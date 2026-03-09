@@ -7,6 +7,7 @@ from discord.commands import slash_command
 import configparser
 import time
 import mysql.connector
+import json
 
 
 ## Note: to use this script on a other server you need to change the SQL querys. It is deactivatable in the config.cfg file.
@@ -78,7 +79,7 @@ class changedcname(commands.Cog):
         players.userId=users.userId
         """)
         for internal_identifier in cursor.fetchall():
-            badgenr.append((internal_identifier))
+            badgenr.append(internal_identifier[0])
         
         cursor.execute("""
         SELECT players.charinfo FROM ny_groups_meta, 
@@ -86,7 +87,7 @@ class changedcname(commands.Cog):
         players.userId=users.userId
         """)
         for char_info in cursor.fetchall():
-            charinfo.append((char_info))
+            charinfo.append(char_info[0])
         
         cursor.execute("""
         SELECT users.discord FROM ny_groups_meta, 
@@ -131,12 +132,13 @@ class changedcname(commands.Cog):
 
         #get charname
         for char_data in charinfo:
-            charinfo_split = char_data[0].split(",")
-            for i in range(len(charinfo_split)):
-                if '"firstname"' in charinfo_split[i]:
-                    firstname.append(charinfo_split[i+1])
-                if '"lastname"' in charinfo_split[i]:
-                    lastname.append(charinfo_split[i+1])
+            try:
+                char_dict = json.loads(char_data)
+                firstname.append(char_dict.get("firstname", ""))
+                lastname.append(char_dict.get("lastname", ""))
+            except (json.JSONDecodeError, KeyError, TypeError):
+                firstname.append("")
+                lastname.append("")
 
 
         #change username (zip verhindert index out of range)
