@@ -122,7 +122,7 @@ class changedcname(commands.Cog):
         unique_badgenr = []
         unique_charinfo = []
         seen_user_ids = set()
-        ignored_duplicates = set()  # To track and ignore duplicate users
+        ignored_duplicates = []  # To track and ignore duplicate users
 
         for user, badge, cinfo in zip(users, badgenr, charinfo):
             if user is None:
@@ -130,10 +130,10 @@ class changedcname(commands.Cog):
 
             if user.id in seen_user_ids:
                 print(f"Duplicate user found: {user.name} (ID: {user.id})")
-                ignored_duplicates.add(user.id)  # Add to ignored duplicates
-                ignored_duplicates.add(badge)
-                ignored_duplicates.add(cinfo)
-                
+                ignored_duplicates.append(user.id)  # Add to ignored duplicates
+                ignored_duplicates.append(badge)
+                ignored_duplicates.append(cinfo)
+
                 continue
             print("ignored", ignored_duplicates)
 
@@ -156,8 +156,8 @@ class changedcname(commands.Cog):
             except (json.JSONDecodeError, KeyError, TypeError):
                 firstname.append("")
                 lastname.append("")
-            print(firstname)
-            print(lastname)
+        print(firstname)
+        print(lastname)
 
 
         #change username        
