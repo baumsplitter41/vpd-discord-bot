@@ -86,7 +86,7 @@ class changedcname(commands.Cog):
         """)
         for internal_identifier in cursor.fetchall():
             badgenr.append(internal_identifier[0])
-            print(badgenr)
+        print(badgenr)
         
         cursor.execute("""
         SELECT players.charinfo FROM ny_groups_meta, 
@@ -103,7 +103,7 @@ class changedcname(commands.Cog):
         """)
         for discord in cursor.fetchall():
             discord_raw.append((discord))
-            print(discord_raw)
+        print(discord_raw)
         
 
         #get users to the discordIDs
@@ -135,7 +135,7 @@ class changedcname(commands.Cog):
                 ignored_duplicates.add(cinfo)
                 
                 continue
-            print(ignored_duplicates)
+            print("ignored", ignored_duplicates)
 
 
             seen_user_ids.add(user.id)
