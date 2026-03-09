@@ -112,6 +112,7 @@ class changedcname(commands.Cog):
                     user_id = int(discord_id[i])
                     user = self.bot.get_user(user_id)
                     users.append(user)
+                    break
         
 
         # check on duplicates
@@ -126,9 +127,6 @@ class changedcname(commands.Cog):
 
             if user.id in seen_user_ids:
                 print(f"Duplicate user found: {user.name} (ID: {user.id})")
-                badgenr.pop(users.index(user))
-                charinfo.pop(users.index(user))
-                users.pop(users.index(user))
                 continue
 
             seen_user_ids.add(user.id)
