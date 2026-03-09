@@ -74,8 +74,6 @@ class changedcname(commands.Cog):
         badgenr = []
         charinfo = []
         discord_raw = []
-        user_id = []
-        users = []
         firstname = []
         lastname = []
         
@@ -113,8 +111,9 @@ class changedcname(commands.Cog):
                     user_id = int(discord_id[i])
                     user = self.bot.get_user(user_id)
                     users.append(user)
+        
 
-        # check on duplicates (safe, no index mutation while iterating)
+        # check on duplicates
         unique_users = []
         unique_badgenr = []
         unique_charinfo = []
@@ -122,10 +121,12 @@ class changedcname(commands.Cog):
 
         for user, badge, cinfo in zip(users, badgenr, charinfo):
             if user is None:
-                continue  # get_user kann None liefern, wenn User nicht im Cache ist
+                continue 
 
             if user.id in seen_user_ids:
                 print(f"Duplicate user found: {user.name} (ID: {user.id})")
+                badgenr.pop(users.index(user))
+                charinfo.pop(users.index(user))
                 continue
 
             seen_user_ids.add(user.id)
