@@ -99,12 +99,12 @@ class changedcname(commands.Cog):
 
         #get users to the discordIDs
         for discord in discord_raw:
-            discord_id = discord_raw.split(":")
-        for i in range(len(discord_raw)):
-            if discord_raw[i].isdigit():
-                user_id = int(discord_raw[i])
-                user = self.bot.get_user(user_id)
-                users.append(user)
+            discord_id = discord[0].split(":")
+            for i in range(len(discord_id)):
+                if discord_id[i].isdigit():
+                    user_id = int(discord_id[i])
+                    user = self.bot.get_user(user_id)
+                    users.append(user)
 
         #check on dublicates
         for i in range(len(users)):
