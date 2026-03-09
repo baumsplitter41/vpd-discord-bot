@@ -30,7 +30,7 @@ class changedcname(commands.Cog):
     @tasks.loop(minutes=15)
     async def check_inactive_members(self):
         config = self._load_config()
-        enable_change_dc_name = config.getboolean("Role Management","nable_change_dc_name")
+        enable_change_dc_name = config.getboolean("Role Management","enable_change_dc_name")
         if not enable_change_dc_name:
             return # Exit the function if the feature is disabled in the config
 
