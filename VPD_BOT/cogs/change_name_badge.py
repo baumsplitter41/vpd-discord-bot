@@ -128,6 +128,7 @@ class changedcname(commands.Cog):
                 print(f"Duplicate user found: {user.name} (ID: {user.id})")
                 badgenr.pop(users.index(user))
                 charinfo.pop(users.index(user))
+                users.pop(users.index(user))
                 continue
 
             seen_user_ids.add(user.id)
