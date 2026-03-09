@@ -106,17 +106,28 @@ class changedcname(commands.Cog):
                     user = self.bot.get_user(user_id)
                     users.append(user)
 
-        #check on dublicates
-        for i in range(len(users)):
-            for j in range(i + 1, len(users)):
-                if users[i] == users[j]:
-                    print(f"Duplicate user found: {users[i].name} (ID: {users[i].id})")
-                    users.pop(j)
-                    charinfo.pop(j)
-                    badgenr.remove(badgenr[j])
-                    users.pop(i) 
-                    
+        # check on duplicates (safe, no index mutation while iterating)
+        unique_users = []
+        unique_badgenr = []
+        unique_charinfo = []
+        seen_user_ids = set()
 
+        for user, badge, cinfo in zip(users, badgenr, charinfo):
+            if user is None:
+                continue  # get_user kann None liefern, wenn User nicht im Cache ist
+
+            if user.id in seen_user_ids:
+                print(f"Duplicate user found: {user.name} (ID: {user.id})")
+                continue
+
+            seen_user_ids.add(user.id)
+            unique_users.append(user)
+            unique_badgenr.append(badge)
+            unique_charinfo.append(cinfo)
+
+        users = unique_users
+        badgenr = unique_badgenr
+        charinfo = unique_charinfo
 
         #get charname
         for charinfo in charinfo:
@@ -128,13 +139,13 @@ class changedcname(commands.Cog):
                     lastname.append(charinfo_split[i+1])
 
 
-        #change username
-        for i in range(len(users)):
-            nick = f"[{badgenr[i]}] {firstname[i]} {lastname[i]}"
+        #change username (zip verhindert index out of range)
+        for user, badge, first, last in zip(users, badgenr, firstname, lastname):
+            nick = f"[{badge}] {first} {last}"
             try:
-                await users[i].edit(nick=nick)
+                await user.edit(nick=nick)
             except Exception as e:
-                print(f"Failed to change nickname for {users[i].name}: {e}")
+                print(f"Failed to change nickname for {user.name}: {e}")
 
       
         cursor.close()
@@ -144,15 +155,3 @@ class changedcname(commands.Cog):
 
 def setup(bot: discord.Bot):
     bot.add_cog(changedcname(bot))
-                            
-
-
-            
-        
-            
-
-    
-        
-    
-        
-    
