@@ -10,6 +10,7 @@ import mysql.connector
 import json
 
 
+
 ## Note: to use this script on a other server you need to change the SQL querys. It is deactivatable in the config.cfg file.
 
 
@@ -49,6 +50,11 @@ class changedcname(commands.Cog):
         dbdb = os.getenv("DATABASE2")
         if dbdb is None:
             raise ValueError("DATABASE2 not found in .env file")
+        
+        load_dotenv()
+        guild_id = os.getenv("GUILD_ID")
+        if guild_id is None:
+            raise ValueError("GUILD_ID not found in .env file")
         
 
         #Database initialization
@@ -141,11 +147,11 @@ class changedcname(commands.Cog):
                 lastname.append("")
 
 
-        #change username (zip verhindert index out of range)
+        #change username        
         for user, badge, first, last in zip(users, badgenr, firstname, lastname):
             nick = f"[{badge}] {first} {last}"
             try:
-                guild = self.bot.get_guild(int(os.getenv("GUILD_ID")))
+                guild = self.bot.get_guild(int(guild_id))
                 member = guild.get_member(user.id)
                 if member:
                     await member.edit(nick=nick)
