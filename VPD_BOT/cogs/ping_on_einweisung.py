@@ -30,7 +30,7 @@ class einweisungping(commands.Cog):
             return
         
         ping_role_ids = [int(role_id.strip()) for role_id in config.get("Einweisung", "ping_role_id").split(",")]
-        ping_roles = [self.bot.get_role(role_id) for role_id in ping_role_ids]
+        ping_roles = [member.guild.get_role(role_id) for role_id in ping_role_ids]
         if any(role is None for role in ping_roles):
             print(f"One or more roles with IDs {ping_role_ids} not found.")
             return
