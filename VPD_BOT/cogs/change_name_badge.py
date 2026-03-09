@@ -130,8 +130,8 @@ class changedcname(commands.Cog):
         charinfo = unique_charinfo
 
         #get charname
-        for charinfo in charinfo:
-            charinfo_split = charinfo.split(",")
+        for char_data in charinfo:
+            charinfo_split = char_data[0].split(",")
             for i in range(len(charinfo_split)):
                 if '"firstname"' in charinfo_split[i]:
                     firstname.append(charinfo_split[i+1])
