@@ -145,7 +145,10 @@ class changedcname(commands.Cog):
         for user, badge, first, last in zip(users, badgenr, firstname, lastname):
             nick = f"[{badge}] {first} {last}"
             try:
-                await user.edit(nick=nick)
+                guild = self.bot.get_guild(int(os.getenv("GUILD_ID")))
+                member = guild.get_member(user.id)
+                if member:
+                    await member.edit(nick=nick)
             except Exception as e:
                 print(f"Failed to change nickname for {user.name}: {e}")
 
