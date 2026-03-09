@@ -82,7 +82,7 @@ class changedcname(commands.Cog):
         cursor.execute("""
         SELECT ny_groups_meta.internal_identifier FROM ny_groups_meta, 
         users, players WHERE ny_groups_meta.character_identifier=players.citizenid AND 
-        players.userId=users.userId
+        players.userId=users.userId ORDER BY ny_groups_meta.internal_identifier
         """)
         for internal_identifier in cursor.fetchall():
             badgenr.append(internal_identifier[0])
@@ -91,7 +91,7 @@ class changedcname(commands.Cog):
         cursor.execute("""
         SELECT players.charinfo FROM ny_groups_meta, 
         users, players WHERE ny_groups_meta.character_identifier=players.citizenid AND 
-        players.userId=users.userId
+        players.userId=users.userId ORDER BY ny_groups_meta.internal_identifier
         """)
         for char_info in cursor.fetchall():
             charinfo.append(char_info[0])
@@ -100,7 +100,7 @@ class changedcname(commands.Cog):
         cursor.execute("""
         SELECT users.discord FROM ny_groups_meta, 
         users, players WHERE ny_groups_meta.character_identifier=players.citizenid AND 
-        players.userId=users.userId
+        players.userId=users.userId ORDER BY ny_groups_meta.internal_identifier
         """)
         for discord in cursor.fetchall():
             discord_raw.append((discord))
