@@ -25,10 +25,10 @@ class changedcname(commands.Cog):
         
     @commands.Cog.listener()
     async def on_ready(self):
-        self.check_inactive_members.start()
+        self.change_name_badge.start()
     
     @tasks.loop(minutes=15)
-    async def check_inactive_members(self):
+    async def change_name_badge(self):
         config = self._load_config()
         enable_change_dc_name = config.getboolean("Role Management","enable_change_dc_name")
         if not enable_change_dc_name:
@@ -79,13 +79,15 @@ class changedcname(commands.Cog):
         """)
         for internal_identifier in cursor.fetchall():
             badgenr.append((internal_identifier))
+        
         cursor.execute("""
         SELECT players.charinfo FROM ny_groups_meta, 
         users, players WHERE ny_groups_meta.character_identifier=players.citizenid AND 
         players.userId=users.userId
         """)
-        for charinfo in cursor.fetchall():
-            charinfo.append((charinfo))
+        for char_info in cursor.fetchall():
+            charinfo.append((char_info))
+        
         cursor.execute("""
         SELECT users.discord FROM ny_groups_meta, 
         users, players WHERE ny_groups_meta.character_identifier=players.citizenid AND 
