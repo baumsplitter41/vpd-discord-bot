@@ -73,6 +73,7 @@ class changedcname(commands.Cog):
         #needed arrays
         badgenr = []
         charinfo = []
+        users = []
         discord_raw = []
         firstname = []
         lastname = []
