@@ -86,7 +86,6 @@ class changedcname(commands.Cog):
         """)
         for internal_identifier in cursor.fetchall():
             badgenr.append(internal_identifier[0])
-        print(badgenr)
         
         cursor.execute("""
         SELECT players.charinfo FROM ny_groups_meta, 
@@ -95,7 +94,6 @@ class changedcname(commands.Cog):
         """)
         for char_info in cursor.fetchall():
             charinfo.append(char_info[0])
-        print(charinfo)
         
         cursor.execute("""
         SELECT users.discord FROM ny_groups_meta, 
@@ -104,7 +102,6 @@ class changedcname(commands.Cog):
         """)
         for discord in cursor.fetchall():
             discord_raw.append((discord))
-        print(discord_raw)
         
 
         #get users to the discordIDs
@@ -136,7 +133,6 @@ class changedcname(commands.Cog):
                 ignored_duplicates.append(cinfo)
 
                 continue
-            print("ignored", ignored_duplicates)
 
 
             seen_user_ids.add(user.id)
@@ -157,10 +153,6 @@ class changedcname(commands.Cog):
             except (json.JSONDecodeError, KeyError, TypeError):
                 firstname.append("")
                 lastname.append("")
-        print(firstname)
-        print(lastname)
-        print(badgenr)
-        print("ignored", ignored_duplicates)
 
 
         #change username        
