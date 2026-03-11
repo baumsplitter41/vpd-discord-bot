@@ -144,20 +144,17 @@ bot = commands.Bot(
 )
 
 #Loading Cogs
-async def load_extensions():
+def load_extensions():
     cogs_dir = "./cogs"
     if not os.path.exists(cogs_dir):
         print(f"Cogs directory '{cogs_dir}' not found!")
         return
-    channel = discord.utils.get(bot.guilds[0].channels, id=int(channel_status_log))
     for filename in os.listdir(cogs_dir):
         if filename.endswith(".py"):
             cog_list = os.path.splitext(filename)[0]
             try:
                 bot.load_extension(f"cogs.{cog_list}")
                 print(f"Loaded cog: {cog_list}")
-                if channel and cog_list:
-                    await channel.send(f"Registered Slash-Commands:\n{cog_list}")
             except Exception as e:
                 print(f"Failed to load cog {cog_list}: {e}")
 
@@ -650,6 +647,6 @@ async def update_users_periodically():
 
 #---------------------------------#
 #Run function
-bot.loop.create_task(load_extensions())
+load_extensions()
 bot.run(token)
 #---------------------------------#
