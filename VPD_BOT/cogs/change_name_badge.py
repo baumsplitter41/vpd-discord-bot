@@ -9,8 +9,6 @@ import time
 import mysql.connector
 import json
 
-
-
 ## Note: to use this script on a other server you need to change the SQL querys. It is deactivatable in the config.cfg file.
 
 
@@ -127,7 +125,7 @@ class changedcname(commands.Cog):
                 continue 
 
             if user.id in seen_user_ids:
-                print(f"Duplicate user found: {user.name} (ID: {user.id})")
+                #print(f"Duplicate user found: {user.name} (ID: {user.id})")
                 ignored_duplicates.append(user.id)
                 ignored_duplicates.append(badge)
                 ignored_duplicates.append(cinfo)
@@ -164,7 +162,8 @@ class changedcname(commands.Cog):
                 if member:
                     await member.edit(nick=nick)
             except Exception as e:
-                print(f"Failed to change nickname for {user.name}: {e}")
+                #print(f"Failed to change nickname for {user.name}: {e}")
+                continue
 
       
         cursor.close()
