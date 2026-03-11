@@ -28,6 +28,11 @@ class einweisungping(commands.Cog):
         if channel_ping is None:
             print(f"Channel with ID {channel_ping_id} not found.")
             return
+        channel_join_id = config.getint("Einweisung", "channel_join_id")
+        channel_join = self.bot.get_channel(channel_join_id)
+        if channel_join is None:
+            print(f"Channel with ID {channel_join_id} not found.")
+            return
         
         ping_role_ids = [int(role_id.strip()) for role_id in config.get("Einweisung", "ping_role_id").split(",")]
         ping_roles = [member.guild.get_role(role_id) for role_id in ping_role_ids]
@@ -36,7 +41,7 @@ class einweisungping(commands.Cog):
             return
         
         if after.channel is not None:
-            if after.channel.id == channel_ping_id: 
+            if after.channel.id == channel_join_id: 
                 ping_message = f"{' '.join(role.mention for role in ping_roles)} {member.mention} ist dem Einweisungskanal beigetreten!"
                 await channel_ping.send(ping_message)
         
