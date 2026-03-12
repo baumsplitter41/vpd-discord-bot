@@ -1,7 +1,7 @@
 # vpd-discord-bot
 Moderation und utility bot for the VicePD Discord.
 
-## Commands:
+### Commands:
 /ban
 /unban
 /kick
@@ -23,7 +23,7 @@ Moderation und utility bot for the VicePD Discord.
 /einweisung
 
 
-## Additional funktions:
+### Additional funktions:
 - sending a DM to a user who was'nt on the server for 14 days.
 - logging actions on the discord server in a channel
 - loging all moderation actions in a channel and in a database
