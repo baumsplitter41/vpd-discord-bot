@@ -31,4 +31,3 @@ Moderation und utility bot for the VicePD Discord.
 - sending welcome messages when a user joins the server
 - changing server nicknames of users according to their badge number and character name
 - anti spam and blackword system
-- 
