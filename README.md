@@ -2,25 +2,25 @@
 Moderation und utility bot for the VicePD Discord.
 
 ### Commands:
-/ban
-/unban
-/kick
-/warn
-/modinfo
-/verify_message
-/promotion
-/fire
-/userinfo
-/greet
-/help_start
-/help_cache
-/help_team
-/help_tasten
-/demotion
-/delete
-/unit
-/say
-/einweisung
+- /ban
+- /unban
+- /kick
+- /warn
+- /modinfo
+- /verify_message
+- /promotion
+- /fire
+- /userinfo
+- /greet
+- /help_start
+- /help_cache
+- /help_team
+- /help_tasten
+- /demotion
+- /delete
+- /unit
+- /say
+- /einweisung
 
 
 ### Additional funktions:
