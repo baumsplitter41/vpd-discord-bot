@@ -51,7 +51,7 @@ configFilePath = r'config.cfg'
 config.read_file(open(configFilePath))
 
 label_rules = config.get('Reactionroles Rules', 'label_rules')
-role_rules = config.get('Reactionroles Rules', 'rules_role')
+roles_rules = config.get('Reactionroles Rules', 'rules_roles')
 
 channel_status_log = config.get('Logs', 'status_log')
 channel_mod_log = config.get('Logs', 'mod_log')
@@ -541,18 +541,25 @@ class PersistentRoleView(discord.ui.View):
         custom_id="persistent_view:role_verify" 
     )
     async def verify_callback(self, button: discord.ui.Button, interaction: discord.Interaction):
-        role = interaction.guild.get_role(int(role_rules))
-        
-        if role is None:
-            await interaction.response.send_message("Error: The konfigured role was not found", ephemeral=True)
+        for role in roles_rules:
+            role_obj = interaction.guild.get_role(int(roles_rules))
+            if role_obj:
+                role.append(role_obj)
+
+        if not role in role_obj:
+            await interaction.response.send_message("Error: No valid roles found", ephemeral=True)
             return
 
-        if role in interaction.user.roles:
-            await interaction.user.remove_roles(role)
-            await interaction.response.send_message(f"Rolle **{role.name}** wurde entfernt.", ephemeral=True)
-        else:
-            await interaction.user.add_roles(role)
-            await interaction.response.send_message(f"Du hast die Rolle **{role.name}** erhalten!", ephemeral=True)
+        if role in role_obj is None:
+            await interaction.response.send_message("Error: The konfigured role was not found", ephemeral=True)
+            return
+        for role in role_obj:
+            if role in interaction.user.roles:
+                await interaction.user.remove_roles(role)
+                await interaction.response.send_message(f"Rolle **{role.name}** wurde entfernt.", ephemeral=True)
+            else:
+                await interaction.user.add_roles(role)
+                await interaction.response.send_message(f"Du hast die Rolle **{role.name}** erhalten!", ephemeral=True)
 
 
 
