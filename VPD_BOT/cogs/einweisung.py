@@ -34,6 +34,8 @@ class einweisung(commands.Cog):
 #Role Configuration
         acces_role_id = int(config.get('Einweisung', 'acces_role_id'))
         acces_role = server.get_role(acces_role_id)
+        uneingewiesen_role_id = int(config.get('Einweisung', 'uneingewiesen_role_id'))
+        uneingewiesen_role = server.get_role(uneingewiesen_role_id)
 
 
         department1_supervisor_id = int(config.get('Einweisung', 'department1_supervisor_id'))
@@ -70,8 +72,10 @@ class einweisung(commands.Cog):
         try:
             if n == 1:
                 await user.add_roles(department1_role, department1_deputy, acces_role, department1_unit_role)
+                await user.remove_roles(uneingewiesen_role)
             #elif n == 2:
                # await user.add_roles(department2_role, department2_deputy, acces_role)
+               # await user.remove_roles(uneingewiesen_role)
         except discord.Forbidden:
             await ctx.respond("I don't have permission to assign roles!", ephemeral=True)
             return
