@@ -51,7 +51,8 @@ configFilePath = r'config.cfg'
 config.read_file(open(configFilePath))
 
 label_rules = config.get('Reactionroles Rules', 'label_rules')
-roles_rules = config.get('Reactionroles Rules', 'rules_roles')
+roles_rules = config.get('Reactionroles Rules', 'rules_roles').split(",")
+roles_rules = [role.strip() for role in roles_rules if role.strip()]
 
 channel_status_log = config.get('Logs', 'status_log')
 channel_mod_log = config.get('Logs', 'mod_log')
