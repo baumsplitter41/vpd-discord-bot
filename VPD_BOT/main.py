@@ -555,13 +555,26 @@ class PersistentRoleView(discord.ui.View):
             await interaction.response.send_message("Error: No valid roles found", ephemeral=True)
             return
 
+        removed_roles = []
+        added_roles = []
         for role in role_objs:
             if role in interaction.user.roles:
                 await interaction.user.remove_roles(role)
-                await interaction.response.send_message(f"Rolle **{role.name}** wurde entfernt.", ephemeral=True)
+                removed_roles.append(role.name)
             else:
                 await interaction.user.add_roles(role)
-                await interaction.response.send_message(f"Du hast die Rolle **{role.name}** erhalten!", ephemeral=True)
+                added_roles.append(role.name)
+        
+        msg = ""
+        if removed_roles:
+            msg += f"Folgende Rollen wurden entfernt: {', '.join(removed_roles)}.\n"
+        if added_roles:
+            msg += f"Du hast folgende Rollen erhalten: {', '.join(added_roles)}."
+        
+        if msg == "":
+            msg = "Keine Rollen wurden geändert."
+        
+        await interaction.response.send_message(msg, ephemeral=True)
 
 
 
