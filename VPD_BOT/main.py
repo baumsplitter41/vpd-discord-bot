@@ -542,19 +542,20 @@ class PersistentRoleView(discord.ui.View):
         custom_id="persistent_view:role_verify" 
     )
     async def verify_callback(self, button: discord.ui.Button, interaction: discord.Interaction):
-        for role in roles_rules:
-            role_obj = interaction.guild.get_role(int(roles_rules))
-            if role_obj:
-                role.append(role_obj)
+        role_objs = []
+        for role_id in roles_rules:
+            try:
+                role_obj = interaction.guild.get_role(int(role_id))
+                if role_obj:
+                    role_objs.append(role_obj)
+            except Exception:
+                continue
 
-        if not role in role_obj:
+        if not role_objs:
             await interaction.response.send_message("Error: No valid roles found", ephemeral=True)
             return
 
-        if role in role_obj is None:
-            await interaction.response.send_message("Error: The konfigured role was not found", ephemeral=True)
-            return
-        for role in role_obj:
+        for role in role_objs:
             if role in interaction.user.roles:
                 await interaction.user.remove_roles(role)
                 await interaction.response.send_message(f"Rolle **{role.name}** wurde entfernt.", ephemeral=True)
