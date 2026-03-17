@@ -4,7 +4,7 @@ from discord.commands import Option
 from discord.commands import slash_command
 
 
-class delete(commands.Cog):
+class DeleteMessage(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
@@ -36,4 +36,4 @@ class delete(commands.Cog):
             await ctx.respond(f"Deleted {len(deleted_messages)} messages.", ephemeral=True)
 
 def setup(bot: discord.Bot):
-    bot.add_cog(delete(bot))
+    bot.add_cog(DeleteMessage(bot))
