@@ -80,7 +80,7 @@ class remiderinactive(commands.Cog):
                     user = self.bot.get_user(user_id)
                     if user is not None:
                         try:
-                            await user.send("Hey! We noticed that you haven't been active in the server for a while. If you want to stay in the server, please log in to the game at least once every 14 days. If you have any questions, feel free to reach out to the moderators.")
+                            await user.send("Hey, du warst eine ganze Weile außer Dienst – höchste Zeit, wieder einzusteigen und den Bürgern von Los Santos auf den Straßen zu helfen! 🚔")
                             await log_channel.send(f"Sent inactivity reminder DM to {user.name} ({user.id})")
                         except Exception as e:
                             print(f"Could not send DM to {user.name}: {e}")
