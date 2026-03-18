@@ -73,9 +73,11 @@ class unit(commands.Cog):
             unit_role = units[2]
         elif unit == "Air Support":
             unit_role = units[3]
+        elif unit == "SAR":
+            unit_role == units[4]
         elif unit == "Help":
             unit_role = None
-            help_text = "Available Units:\n- Detective\n- SWAT\n- Canine\n- Air Support"
+            help_text = "Available Units:\n- Detective\n- SWAT\n- Canine\n- Air Support\n - SAR"
             await ctx.respond(help_text, ephemeral=True)
             return
         else:
