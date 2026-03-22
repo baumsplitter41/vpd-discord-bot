@@ -27,7 +27,6 @@ class actionlog(commands.Cog):
 #Deleted Message Log
     @commands.Cog.listener()
     async def on_message_delete(self, message: discord.Message):
-
         if message.author.bot:
             return
         config = self._load_config()
@@ -38,16 +37,16 @@ class actionlog(commands.Cog):
         if log_channel is None:
             return
         
-        async def get_audit_log_user(guild, action, target_id):
-            try:
-                async for entry in guild.audit_logs(limit=10, action=action):
-                    if entry.target.id == target_id:
-                        return entry.user
-            except discord.Forbidden:
-                pass
-            return None
-        
-        moderator = await get_audit_log_user(message.guild, discord.AuditLogAction.message_delete, message.id)
+        # Fetch audit log to find who deleted the message
+        try:
+            async for entry in message.guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
+                if entry.extra.channel.id == message.channel.id:
+                    deleter = entry.user
+                    break
+            else:
+                deleter = None
+        except:
+            deleter = None
         
         if message.content is None and not message.attachments:
             content = "No content available"
@@ -55,15 +54,17 @@ class actionlog(commands.Cog):
             content = "Content not available, but there are attachments."
         else:
             content = message.content
+        
         embed = discord.Embed(
             title="Message Deleted",
-            description=f"A message by {message.author.mention} was deleted in {message.channel.mention} by {moderator.mention if moderator else 'Unknown'}.",
+            description=f"A message by {message.author.mention} was deleted in {message.channel.mention}." + (f"\nDeleted by: {deleter.mention}" if deleter else ""),
             color=discord.Color.red(),
             timestamp=message.created_at
         )
         embed.add_field(name="Message Content", value=content[:1024], inline=False)
         embed.set_footer(text=f"User ID: {message.author.id} | Message ID: {message.id}")
         await log_channel.send(embed=embed)
+
 
 #Edited Message Log
     @commands.Cog.listener()
@@ -143,19 +144,10 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        async def get_audit_log_user(guild, action, target_id):
-            try:
-                async for entry in guild.audit_logs(limit=10, action=action):
-                    if entry.target.id == target_id:
-                        return entry.user
-            except discord.Forbidden:
-                pass
-            return None
-        moderator = await get_audit_log_user(after.guild, discord.AuditLogAction.role_update, after.id)
 
         embed = discord.Embed(
             title="Role Updated",
-            description=f"The role **{before.name}** has been updated by {moderator.mention if moderator else 'Unknown'}.",
+            description=f"The role **{before.name}** has been updated.",
             color=discord.Color.blue(),
             timestamp=discord.utils.utcnow()
         )
@@ -176,20 +168,10 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        
-        async def get_audit_log_user(guild, action, target_id):
-            try:
-                async for entry in guild.audit_logs(limit=10, action=action):
-                    if entry.target.id == target_id:
-                        return entry.user
-            except discord.Forbidden:
-                pass
-            return None
-        moderator = await get_audit_log_user(role.guild, discord.AuditLogAction.role_create, role.id)
 
         embed = discord.Embed(
             title="Role Created",
-            description=f"The role **{role.name}** has been created by {moderator.mention if moderator else 'Unknown'}.",
+            description=f"The role **{role.name}** has been created.",
             color=discord.Color.green(),
             timestamp=discord.utils.utcnow()
         )
@@ -208,20 +190,10 @@ class actionlog(commands.Cog):
         log_channel = self._get_log_channel()
         if log_channel is None:
             return
-        
-        async def get_audit_log_user(guild, action, target_id):
-            try:
-                async for entry in guild.audit_logs(limit=10, action=action):
-                    if entry.target.id == target_id:
-                        return entry.user
-            except discord.Forbidden:
-                pass
-            return None
-        moderator = await get_audit_log_user(role.guild, discord.AuditLogAction.role_delete, role.id)
 
         embed = discord.Embed(
             title="Role Deleted",
-            description=f"The role **{role.name}** has been deleted by {moderator.mention if moderator else 'Unknown'}.",
+            description=f"The role **{role.name}** has been deleted.",
             color=discord.Color.red(),
             timestamp=discord.utils.utcnow()
         )
@@ -247,20 +219,10 @@ class actionlog(commands.Cog):
         added_roles = after_roles - before_roles
         removed_roles = before_roles - after_roles
 
-        async def get_audit_log_user(guild, action, target_id):
-            try:
-                async for entry in guild.audit_logs(limit=10, action=action):
-                    if entry.target.id == target_id:
-                        return entry.user
-            except discord.Forbidden:
-                pass
-            return None
-        moderator = await get_audit_log_user(after.guild, discord.AuditLogAction.member_role_update, after.id)
-
         for role in added_roles:
             embed = discord.Embed(
                 title="Role Added",
-                description=f"The role **{role.name}** has been added to {after.mention} by {moderator.mention if moderator else 'Unknown'}.",
+                description=f"The role **{role.name}** has been added to {after.mention}.",
                 color=discord.Color.green(),
                 timestamp=discord.utils.utcnow()
             )
@@ -270,7 +232,7 @@ class actionlog(commands.Cog):
         for role in removed_roles:
             embed = discord.Embed(
                 title="Role Removed",
-                description=f"The role **{role.name}** has been removed from {after.mention} by {moderator.mention if moderator else 'Unknown'}.",
+                description=f"The role **{role.name}** has been removed from {after.mention}.",
                 color=discord.Color.red(),
                 timestamp=discord.utils.utcnow()
             )
@@ -289,20 +251,9 @@ class actionlog(commands.Cog):
         if log_channel is None:
             return
 
-        async def get_audit_log_user(guild, action, target_id):
-            try:
-                async for entry in guild.audit_logs(limit=10, action=action):
-                    if entry.target.id == target_id:
-                        return entry.user
-            except discord.Forbidden:
-                pass
-            return None
-        moderator = await get_audit_log_user(after, discord.AuditLogAction.guild_update, after.id)
-
-
         embed = discord.Embed(
             title="Server Updated",
-            description=f"The server has been updated by {moderator.mention if moderator else 'Unknown'}.",
+            description=f"The server has been updated.",
             color=discord.Color.blue(),
             timestamp=discord.utils.utcnow()
         )
@@ -358,19 +309,9 @@ class actionlog(commands.Cog):
         if log_channel is None:
             return
 
-        async def get_audit_log_user(guild, action, target_id):
-            try:
-                async for entry in guild.audit_logs(limit=10, action=action):
-                    if entry.target.id == target_id:
-                        return entry.user
-            except discord.Forbidden:
-                pass
-            return None
-        moderator = await get_audit_log_user(after.guild, discord.AuditLogAction.channel_update, after.id)
-
         embed = discord.Embed(
             title="Channel Updated",
-            description=f"The channel **{before.name}** has been updated by {moderator.mention if moderator else 'Unknown'}.",
+            description=f"The channel **{before.name}** has been updated.",
             color=discord.Color.blue(),
             timestamp=discord.utils.utcnow()
         )
@@ -391,19 +332,9 @@ class actionlog(commands.Cog):
         if log_channel is None:
             return
 
-        async def get_audit_log_user(guild, action, target_id):
-            try:
-                async for entry in guild.audit_logs(limit=10, action=action):
-                    if entry.target.id == target_id:
-                        return entry.user
-            except discord.Forbidden:
-                pass
-            return None
-        moderator = await get_audit_log_user(channel.guild, discord.AuditLogAction.channel_create, channel.id)
-
         embed = discord.Embed(
             title="Channel Created",
-            description=f"The channel **{channel.name}** has been created by {moderator.mention if moderator else 'Unknown'}.",
+            description=f"The channel **{channel.name}** has been created.",
             color=discord.Color.green(),
             timestamp=discord.utils.utcnow()
         )
@@ -423,19 +354,9 @@ class actionlog(commands.Cog):
         if log_channel is None:
             return
 
-        async def get_audit_log_user(guild, action, target_id):
-            try:
-                async for entry in guild.audit_logs(limit=10, action=action):
-                    if entry.target.id == target_id:
-                        return entry.user
-            except discord.Forbidden:
-                pass
-            return None
-        moderator = await get_audit_log_user(channel.guild, discord.AuditLogAction.channel_delete, channel.id)
-
         embed = discord.Embed(
             title="Channel Deleted",
-            description=f"The channel **{channel.name}** has been deleted by {moderator.mention if moderator else 'Unknown'}.",
+            description=f"The channel **{channel.name}** has been deleted.",
             color=discord.Color.red(),
             timestamp=discord.utils.utcnow()
         )
