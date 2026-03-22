@@ -26,7 +26,7 @@ class actionlog(commands.Cog):
     
 #Deleted Message Log
     @commands.Cog.listener()
-    async def on_message_delete(self, message: discord.Message, moderator: discord.Member):
+    async def on_message_delete(self, message: discord.Message):
 
         if message.author.bot:
             return
@@ -38,23 +38,32 @@ class actionlog(commands.Cog):
         if log_channel is None:
             return
         
+        async def get_audit_log_user(guild, action, target_id):
+            try:
+                async for entry in guild.audit_logs(limit=10, action=action):
+                    if entry.target.id == target_id:
+                        return entry.user
+            except discord.Forbidden:
+                pass
+            return None
+        
+        moderator = await get_audit_log_user(message.guild, discord.AuditLogAction.message_delete, message.id)
+        
+        if message.content is None and not message.attachments:
+            content = "No content available"
+        elif message.content is None:
+            content = "Content not available, but there are attachments."
         else:
-            if message.content is None and not message.attachments:
-                content = "No content available"
-            elif message.content is None:
-                content = "Content not available, but there are attachments."
-            else:
-                content = message.content
-            moderator = self.bot.get_user(moderator)
-            embed = discord.Embed(
-                title="Message Deleted",
-                description=f"A message by {message.author.mention} was deleted in {message.channel.mention} by {moderator.mention}.",
-                color=discord.Color.red(),
-                timestamp=message.created_at
-            )
-            embed.add_field(name="Message Content", value=content[:1024], inline=False)
-            embed.set_footer(text=f"User ID: {message.author.id} | Message ID: {message.id}")
-            await log_channel.send(embed=embed)
+            content = message.content
+        embed = discord.Embed(
+            title="Message Deleted",
+            description=f"A message by {message.author.mention} was deleted in {message.channel.mention} by {moderator.mention if moderator else 'Unknown'}.",
+            color=discord.Color.red(),
+            timestamp=message.created_at
+        )
+        embed.add_field(name="Message Content", value=content[:1024], inline=False)
+        embed.set_footer(text=f"User ID: {message.author.id} | Message ID: {message.id}")
+        await log_channel.send(embed=embed)
 
 #Edited Message Log
     @commands.Cog.listener()
