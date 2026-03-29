@@ -39,18 +39,22 @@ class einweisung(commands.Cog):
 
 
         department1_supervisor_id = int(config.get('Einweisung', 'department1_supervisor_id'))
+        department1_fto_id = int(config.get('Einweisung', 'department1_fto_id'))
         department1_role_id = int(config.get('Einweisung', 'department1_role_id'))
         department1_role = server.get_role(department1_role_id)
         department1_supervisor = server.get_role(department1_supervisor_id)
+        department1_fto = server.get_role(department1_fto_id)
         department1_deputy_id = int(config.get('Einweisung', 'department1_deputy_id'))
         department1_deputy = server.get_role(department1_deputy_id)
         department1_unit_role_id = int(config.get('Einweisung', 'department1_unit_role_id'))
         department1_unit_role = server.get_role(department1_unit_role_id)
 
         #department2_supervisor_id = int(config.get('Einweisung', 'department2_supervisor_id'))
+        #department2_fto_id = int(config.get('Einweisung', 'department2_fto_id'))
         #department2_role_id = int(config.get('Einweisung', 'department2_role_id'))
         #department2_role = server.get_role(department2_role_id)
         #department2_supervisor = server.get_role(department2_supervisor_id)
+        #department2_fto = server.get_role(department2_fto_id)
         #department2_deputy_id = int(config.get('Einweisung', 'department2_deputy_id'))
         #department2_deputy = server.get_role(department2_deputy_id)
         #department2_unit_role_id = int(config.get('Einweisung', 'department2_unit_role_id'))
@@ -61,9 +65,9 @@ class einweisung(commands.Cog):
             await ctx.respond("One or more roles are not configured properly!", ephemeral=True)
             return
         
-        if department1_supervisor in ctx.author.roles:
+        if department1_supervisor in ctx.author.roles or department1_fto in ctx.author.roles:
             n = 1
-        #elif department2_supervisor in ctx.author.roles:
+        #elif department2_supervisor in ctx.author.roles or department2_fto in ctx.author.roles:
             #n = 2
         else: 
             await ctx.respond("You don't have permission to use this command!", ephemeral=True)
