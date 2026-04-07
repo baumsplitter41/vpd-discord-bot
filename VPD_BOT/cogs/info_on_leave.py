@@ -38,8 +38,8 @@ class infoleaving(commands.Cog):
         department_roles_ids = [int(role_id.strip()) for role_id in config.get("Role Management", "department1_ranks").split(",")]
         if any(role.id in department_roles_ids for role in member.roles):
             embed = discord.Embed(
-                title="Departmentmeber left the server.",
-                description=f"{member.mention} has left the server. Name: {member.name}, {member.nick}, ID: {member.id}",
+                title="Department Member left the server.",
+                description=f"{member.mention} has left the server. \n Name: {member.nick}, ID: {member.id}",
                 color=discord.Color.dark_red(),
                 timestamp=discord.utils.utcnow()
             )
