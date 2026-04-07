@@ -40,7 +40,7 @@ class infoleaving(commands.Cog):
             embed = discord.Embed(
                 title="Department Member left the server.",
                 description=f"{member.mention} has left the server. \n Name: {member.nick}, ID: {member.id}",
-                color=discord.Color.dark_red(),
+                color=discord.Color.orange(),
                 timestamp=discord.utils.utcnow()
             )
             embed.set_footer(text=f"User ID: {member.id}")
