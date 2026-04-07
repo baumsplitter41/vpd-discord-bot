@@ -36,8 +36,7 @@ class infoleaving(commands.Cog):
         if info_channel is None:
             return
         department_roles_ids = [int(role_id.strip()) for role_id in config.get("Role Management", "department1_ranks").split(",")]
-        department_roles = [member.guild.get_role(role_id) for role_id in department_roles_ids]
-        if any(role.id in department_roles for role in member.roles):
+        if any(role.id in department_roles_ids for role in member.roles):
             embed = discord.Embed(
                 title="Departmentmeber left the server.",
                 description=f"{member.mention} has left the server. Name: {member.name}, {member.nick}, ID: {member.id}",
