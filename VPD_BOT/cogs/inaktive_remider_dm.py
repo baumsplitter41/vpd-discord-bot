@@ -22,10 +22,6 @@ class remiderinactive(commands.Cog):
         config.read(configFilePath)
         return config
 
-        
-    @commands.Cog.listener()
-    async def on_ready(self):
-        self.check_inactive_members.start()
     
     @tasks.loop(hours=48)
     async def check_inactive_members(self):
