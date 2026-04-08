@@ -164,6 +164,7 @@ class changedcname(commands.Cog):
             try:
                 guild = self.bot.get_guild(int(guild_id))
                 member = guild.get_member(user.id)
+                print(f"Changing nickname for {user.name} to {nick}")
                 if member:
                     await member.edit(nick=nick)
             except Exception as e:
