@@ -144,6 +144,7 @@ class changedcname(commands.Cog):
         users = unique_users
         badgenr = unique_badgenr
         charinfo = unique_charinfo
+        print(f"Unique users: {len(users)}, Ignored duplicates: {len(ignored_duplicates)}")
 
         #get charname
         for char_data in charinfo:
