@@ -76,18 +76,21 @@ class remiderinactive(commands.Cog):
             discord_raw = discord.split(":")
             for i in range(len(discord_raw)):
                 if discord_raw[i].isdigit():
-                    user_id = int(discord_raw[i])
-                    user = self.bot.get_user(user_id)
-                    if user is not None:
-                        try:
-                            await user.send("Hey, du warst eine ganze Weile außer Dienst – höchste Zeit, wieder einzusteigen und den Bürgern von Los Santos auf den Straßen zu helfen! 🚔")
-                            await log_channel.send(f"Sent inactivity reminder DM to {user.name} ({user.id})")
-                        except Exception as e:
-                            print(f"Could not send DM to {user.name}: {e}")
-                            await log_channel.send(f"Could not send DM to {user.name} ({user.id}): {e}")
-                    else:
-                        print(f"Could not find user with ID {user_id}")
-                        await log_channel.send(f"Could not find user with ID {user_id}")
+                    discord_ids = []
+                    discord_ids.append(discord_raw[i])
+        for discord in discord_ids:   
+            user_id = int(discord_ids[i])
+            user = self.bot.get_user(user_id)
+            if user is not None:
+                try:
+                    await user.send("Hey, du warst eine ganze Weile außer Dienst – höchste Zeit, wieder einzusteigen und den Bürgern von Los Santos auf den Straßen zu helfen! 🚔")
+                    await log_channel.send(f"Sent inactivity reminder DM to {user.name} ({user.id})")
+                except Exception as e:
+                    print(f"Could not send DM to {user.name}: {e}")
+                    await log_channel.send(f"Could not send DM to {user.name} ({user.id}): {e}")
+            else:
+                print(f"Could not find user with ID {user_id}")
+                await log_channel.send(f"Could not find user with ID {user_id}")
         
         cursor.close()
         conn.close()
