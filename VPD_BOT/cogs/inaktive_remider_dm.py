@@ -71,15 +71,16 @@ class remiderinactive(commands.Cog):
         for license, discord in cursor.fetchall():
             inaktive_players.append(discord)
 
+        #Core script
+        discord_ids = []
+        for discord_value in inaktive_players:
+            discord_raw = discord_value.split(":")
+            for discord_part in discord_raw:
+                if discord_part.isdigit():
+                    discord_ids.append(discord_part)
 
-        for discord in inaktive_players:
-            discord_raw = inaktive_players.split(":")
-            for i in range(len(discord_raw)):
-                if discord_raw[i].isdigit():
-                    discord_ids = []
-                    discord_ids.append(discord_raw[i])
-        for discord in discord_ids:   
-            user_id = int(discord_ids[i])
+        for discord_id in discord_ids:
+            user_id = int(discord_id)
             user = self.bot.get_user(user_id)
             if user is not None:
                 try:
