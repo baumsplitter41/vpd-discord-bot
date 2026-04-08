@@ -113,8 +113,8 @@ class changedcname(commands.Cog):
                     break
         
         #check on duplicates
-        valid_users_map = {}
-        blacklisted_ids = set()
+        valid_users = {}
+        blacklisted_ids = []
         ignored_duplicates = []
         unique_users = []
         unique_badgenr = []
@@ -128,15 +128,15 @@ class changedcname(commands.Cog):
             if user_id in blacklisted_ids:
                 ignored_duplicates.append((user, badge, cinfo))
                 continue
-            elif user_id in valid_users_map:
-                first_entry = valid_users_map.pop(user_id)
+            elif user_id in valid_users:
+                first_entry = valid_users.pop(user_id)
                 ignored_duplicates.append(first_entry)
                 ignored_duplicates.append((user, badge, cinfo))
-                blacklisted_ids.add(user_id)
+                blacklisted_ids.append(user_id)
             else:
-                valid_users_map[user_id] = (user, badge, cinfo)
+                valid_users[user_id] = (user, badge, cinfo)
 
-        for user, badge, cinfo in valid_users_map.values():
+        for user, badge, cinfo in valid_users.values():
             unique_users.append(user)
             unique_badgenr.append(badge)
             unique_charinfo.append(cinfo)
