@@ -98,7 +98,6 @@ class remiderinactive(commands.Cog):
         conn.close()
 
 
-
 def setup(bot: discord.Bot):
     bot.add_cog(remiderinactive(bot))
                             
