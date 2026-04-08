@@ -129,7 +129,9 @@ class changedcname(commands.Cog):
                 ignored_duplicates.append(user.id)
                 ignored_duplicates.append(badge)
                 ignored_duplicates.append(cinfo)
-
+                unique_badgenr.remove(badge)
+                unique_users.remove(user)
+                unique_charinfo.remove(cinfo)
                 continue
 
 
