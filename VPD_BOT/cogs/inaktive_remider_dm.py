@@ -66,10 +66,10 @@ class remiderinactive(commands.Cog):
         inaktive_players = []
         
         cursor.execute("""
-        SELECT license, discord FROM users WHERE license in (SELECT license FROM players WHERE last_logged_out < CURDATE() - INTERVAL 14 DAY)
+        SELECT users.license, users.discord FROM users, players WHERE players.last_logged_out < CURDATE() - INTERVAL 14 DAY;
         """)
         for license, discord in cursor.fetchall():
-            inaktive_players.append((discord))
+            inaktive_players.append(discord)
 
 
         for discord in inaktive_players:
