@@ -23,7 +23,7 @@ class remiderinactive(commands.Cog):
         return config
 
     
-    @tasks.loop(hours=48)
+    @tasks.loop(hours=168) # Run every 7 days
     async def check_inactive_members(self):
         config = self._load_config()
         enable_inavtive_reminder_dm = config.getboolean("Welcome","enable_inavtive_reminder_dm")
@@ -62,7 +62,7 @@ class remiderinactive(commands.Cog):
         inaktive_players = []
         
         cursor.execute("""
-        SELECT users.license2, MAX(users.discord) AS discord, MAX(players.last_updated) AS last_logged_out FROM users JOIN players ON users.license2 = players.license GROUP BY users.license2 HAVING MAX(players.last_updated) < CURDATE() - INTERVAL 14 DAY;
+        SELECT users.discord, MAX(users.license2)AS license2,  MAX(players.last_updated) AS last_logged_out FROM users JOIN players ON users.license2 = players.license GROUP BY users.discord HAVING MAX(players.last_updated) < CURDATE() - INTERVAL 14 DAY;
         """)
         for discord in cursor.fetchall():
             inaktive_players.append(discord)
