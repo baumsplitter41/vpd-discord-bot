@@ -66,7 +66,7 @@ class remiderinactive(commands.Cog):
         inaktive_players = []
         
         cursor.execute("""
-        SELECT DISTINCT users.license, users.discord FROM users, players WHERE players.last_updated < CURDATE() - INTERVAL 14 DAY;
+        SELECT users.license2, MAX(users.discord) AS discord, MAX(players.last_updated) AS last_logged_out FROM users JOIN players ON users.license2 = players.license GROUP BY users.license2 HAVING MAX(players.last_updated) < CURDATE() - INTERVAL 14 DAY;
         """)
         for license, discord in cursor.fetchall():
             inaktive_players.append(discord)
