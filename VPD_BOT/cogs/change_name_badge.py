@@ -124,9 +124,8 @@ class changedcname(commands.Cog):
             if user is None:
                 continue 
             user_id = user.id
-            seen_user_ids.append(user_id)
 
-            if user.id in seen_user_ids:
+            if user_id in seen_user_ids:
                 #print(f"Duplicate user found: {user.name} (ID: {user.id})")
                 ignored_duplicates.append(user.id)
                 ignored_duplicates.append(badge)
@@ -138,7 +137,7 @@ class changedcname(commands.Cog):
                     unique_charinfo.remove(cinfo)
                 continue
             else:
-                seen_user_ids.add(user.id)
+                seen_user_ids.append(user_id)
                 unique_users.append(user)
                 unique_badgenr.append(badge)
                 unique_charinfo.append(cinfo)
