@@ -75,6 +75,7 @@ class remiderinactive(commands.Cog):
         discord_ids = []
         for i in range(len(inaktive_players)):
             discord_raw = str(inaktive_players[i]).split(":")
+            print(discord_raw)
             for discord_part in discord_raw:
                 if discord_part.isdigit():
                     discord_ids.append(discord_part)
