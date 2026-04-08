@@ -23,7 +23,7 @@ class remiderinactive(commands.Cog):
         return config
 
     
-    @tasks.loop(hours=168) # Run every 7 days
+    @tasks.loop(hours=120) # Run every 5 days
     async def check_inactive_members(self):
         config = self._load_config()
         enable_inavtive_reminder_dm = config.getboolean("Welcome","enable_inavtive_reminder_dm")
