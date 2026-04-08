@@ -125,16 +125,16 @@ class changedcname(commands.Cog):
                 continue 
             
             #delete users if they are duplicated
-            if user_id in blacklisted_ids:
+            if user.id in blacklisted_ids:
                 ignored_duplicates.append((user, badge, cinfo))
                 continue
-            elif user_id in valid_users:
-                first_entry = valid_users.pop(user_id)
+            elif user.id in valid_users:
+                first_entry = valid_users.pop(user.id)
                 ignored_duplicates.append(first_entry)
                 ignored_duplicates.append((user, badge, cinfo))
-                blacklisted_ids.append(user_id)
+                blacklisted_ids.append(user.id)
             else:
-                valid_users[user_id] = (user, badge, cinfo)
+                valid_users[user.id] = (user, badge, cinfo)
 
         for user, badge, cinfo in valid_users.values():
             unique_users.append(user)
