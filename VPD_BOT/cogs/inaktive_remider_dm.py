@@ -68,14 +68,14 @@ class remiderinactive(commands.Cog):
         cursor.execute("""
         SELECT users.license2, MAX(users.discord) AS discord, MAX(players.last_updated) AS last_logged_out FROM users JOIN players ON users.license2 = players.license GROUP BY users.license2 HAVING MAX(players.last_updated) < CURDATE() - INTERVAL 14 DAY;
         """)
-        for license2, discord in cursor.fetchall():
+        for discord in cursor.fetchall():
             inaktive_players.append(discord)
 
         #Core script
         discord_ids = []
-        for player in inaktive_players:
-            if player is not None:
-                discord_raw = player.split(":")
+        for i in range(len(inaktive_players)):
+            if i is not None:
+                discord_raw = str(inaktive_players[i]).split(":")
                 for discord_part in discord_raw:
                     if discord_part.isdigit():
                         discord_ids.append(discord_part)
