@@ -117,28 +117,30 @@ class changedcname(commands.Cog):
         unique_users = []
         unique_badgenr = []
         unique_charinfo = []
-        seen_user_ids = set()
+        seen_user_ids = []  # To track seen user IDs
         ignored_duplicates = []  # To track and ignore duplicate users
 
         for user, badge, cinfo in zip(users, badgenr, charinfo):
             if user is None:
                 continue 
+            user_id = user.id
+            seen_user_ids.append(user_id)
 
             if user.id in seen_user_ids:
                 #print(f"Duplicate user found: {user.name} (ID: {user.id})")
                 ignored_duplicates.append(user.id)
                 ignored_duplicates.append(badge)
                 ignored_duplicates.append(cinfo)
+                #remove the duplicate user
                 unique_badgenr.remove(badge)
                 unique_users.remove(user)
                 unique_charinfo.remove(cinfo)
                 continue
-
-
-            seen_user_ids.add(user.id)
-            unique_users.append(user)
-            unique_badgenr.append(badge)
-            unique_charinfo.append(cinfo)
+            else:
+                seen_user_ids.add(user.id)
+                unique_users.append(user)
+                unique_badgenr.append(badge)
+                unique_charinfo.append(cinfo)
 
         users = unique_users
         badgenr = unique_badgenr
