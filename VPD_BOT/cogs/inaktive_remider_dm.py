@@ -73,11 +73,12 @@ class remiderinactive(commands.Cog):
 
         #Core script
         discord_ids = []
-        for i in range(len(inaktive_players)):
-            discord_raw = inaktive_players[i].split(":")
-            for discord_part in discord_raw:
-                if discord_part.isdigit():
-                    discord_ids.append(discord_part)
+        for player in inaktive_players:
+            if player is not None:
+                discord_raw = player.split(":")
+                for discord_part in discord_raw:
+                    if discord_part.isdigit():
+                        discord_ids.append(discord_part)
 
         for discord_id in discord_ids:
             user_id = int(discord_id)
