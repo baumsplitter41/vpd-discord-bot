@@ -132,9 +132,10 @@ class changedcname(commands.Cog):
                 ignored_duplicates.append(badge)
                 ignored_duplicates.append(cinfo)
                 #remove the duplicate user
-                unique_badgenr.remove(badge)
-                unique_users.remove(user)
-                unique_charinfo.remove(cinfo)
+                if user in unique_users:
+                    unique_badgenr.remove(badge)
+                    unique_users.remove(user)
+                    unique_charinfo.remove(cinfo)
                 continue
             else:
                 seen_user_ids.add(user.id)
