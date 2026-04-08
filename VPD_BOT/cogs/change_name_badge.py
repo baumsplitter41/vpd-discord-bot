@@ -112,35 +112,34 @@ class changedcname(commands.Cog):
                     users.append(user)
                     break
         
-
-        # check on duplicates
+        #check on duplicates
+        valid_users_map = {}
+        blacklisted_ids = set()
+        ignored_duplicates = []
         unique_users = []
         unique_badgenr = []
         unique_charinfo = []
-        seen_user_ids = []  # To track seen user IDs
-        ignored_duplicates = []  # To track and ignore duplicate users
 
         for user, badge, cinfo in zip(users, badgenr, charinfo):
             if user is None:
                 continue 
-            user_id = user.id
-
-            if user_id in seen_user_ids:
-                #print(f"Duplicate user found: {user.name} (ID: {user.id})")
-                ignored_duplicates.append(user.id)
-                ignored_duplicates.append(badge)
-                ignored_duplicates.append(cinfo)
-                #remove the duplicate user
-                if user in unique_users:
-                    unique_badgenr.remove(badge)
-                    unique_users.remove(user)
-                    unique_charinfo.remove(cinfo)
+            
+            #delete users if they are duplicated
+            if user_id in blacklisted_ids:
+                ignored_duplicates.append((user, badge, cinfo))
                 continue
+            elif user_id in valid_users_map:
+                first_entry = valid_users_map.pop(user_id)
+                ignored_duplicates.append(first_entry)
+                ignored_duplicates.append((user, badge, cinfo))
+                blacklisted_ids.add(user_id)
             else:
-                seen_user_ids.append(user_id)
-                unique_users.append(user)
-                unique_badgenr.append(badge)
-                unique_charinfo.append(cinfo)
+                valid_users_map[user_id] = (user, badge, cinfo)
+
+        for user, badge, cinfo in valid_users_map.values():
+            unique_users.append(user)
+            unique_badgenr.append(badge)
+            unique_charinfo.append(cinfo)
 
         users = unique_users
         badgenr = unique_badgenr
@@ -168,12 +167,9 @@ class changedcname(commands.Cog):
             except Exception as e:
                 #print(f"Failed to change nickname for {user.name}: {e}")
                 continue
-
       
         cursor.close()
         conn.close()
-
-
 
 def setup(bot: discord.Bot):
     bot.add_cog(changedcname(bot))
