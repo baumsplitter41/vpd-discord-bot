@@ -101,16 +101,17 @@ class changedcname(commands.Cog):
         for discord in cursor.fetchall():
             discord_raw.append((discord))
         
-
+        discord_id = []
         #get users to the discordIDs
         for discord in discord_raw:
-            discord_id = discord[0].split(":")
-            for i in range(len(discord_id)):
-                if discord_id[i].isdigit():
-                    user_id = int(discord_id[i])
-                    user = self.bot.get_user(user_id)
-                    users.append(user)
-                    break
+            if discord and discord[0]:
+                discord_id = discord[0].split(":")
+                for i in range(len(discord_id)):
+                    if discord_id[i].isdigit():
+                        user_id = int(discord_id[i])
+                        user = self.bot.get_user(user_id)
+                        users.append(user)
+                        break
         
         #check on duplicates
         valid_users = {}
