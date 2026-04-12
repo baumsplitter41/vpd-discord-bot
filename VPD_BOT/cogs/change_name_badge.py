@@ -82,10 +82,6 @@ class changedcname(commands.Cog):
         FROM ny_groups_meta
         JOIN players ON ny_groups_meta.character_identifier = players.citizenid
         JOIN users ON players.userId = users.userId
-        WHERE ny_groups_meta.internal_identifier IS NOT NULL
-        AND players.charinfo IS NOT NULL
-        AND users.discord IS NOT NULL
-        ORDER BY ny_groups_meta.internal_identifier
         """)
         
         for internal_identifier, char_info, discord in cursor.fetchall():
