@@ -78,31 +78,20 @@ class changedcname(commands.Cog):
         
         #get information from database
         cursor.execute("""
-        SELECT ny_groups_meta.internal_identifier FROM ny_groups_meta, 
-        users, players WHERE ny_groups_meta.character_identifier=players.citizenid AND 
-        players.userId=users.userId ORDER BY ny_groups_meta.internal_identifier
+        SELECT ny_groups_meta.internal_identifier, players.charinfo, users.discord
+        FROM ny_groups_meta
+        JOIN players ON ny_groups_meta.character_identifier = players.citizenid
+        JOIN users ON players.userId = users.userId
+        WHERE ny_groups_meta.internal_identifier IS NOT NULL
+        AND players.charinfo IS NOT NULL
+        AND users.discord IS NOT NULL
+        ORDER BY ny_groups_meta.internal_identifier
         """)
-        for internal_identifier in cursor.fetchall():
-            if internal_identifier[0] is not None:
-                badgenr.append(internal_identifier[0])
         
-        cursor.execute("""
-        SELECT players.charinfo FROM ny_groups_meta, 
-        users, players WHERE ny_groups_meta.character_identifier=players.citizenid AND 
-        players.userId=users.userId ORDER BY ny_groups_meta.internal_identifier
-        """)
-        for char_info in cursor.fetchall():
-            if char_info[0] is not None:
-                charinfo.append(char_info[0])
-        
-        cursor.execute("""
-        SELECT users.discord FROM ny_groups_meta, 
-        users, players WHERE ny_groups_meta.character_identifier=players.citizenid AND 
-        players.userId=users.userId ORDER BY ny_groups_meta.internal_identifier
-        """)
-        for discord in cursor.fetchall():
-            if discord[0] is not None:
-                discord_raw.append((discord))
+        for internal_identifier, char_info, discord in cursor.fetchall():
+            badgenr.append(internal_identifier)
+            charinfo.append(char_info)
+            discord_raw.append((discord,))
         
         #get users to the discordIDs
         for discord in discord_raw:
