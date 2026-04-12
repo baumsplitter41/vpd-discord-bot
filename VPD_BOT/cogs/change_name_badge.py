@@ -30,140 +30,117 @@ class changedcname(commands.Cog):
     @tasks.loop(minutes=15)
     async def change_name_badge(self):
         config = self._load_config()
-        enable_change_dc_name = config.getboolean("Role Management","enable_change_dc_name")
+        enable_change_dc_name = config.getboolean("Role Management", "enable_change_dc_name", fallback=False)
         if not enable_change_dc_name:
-            return # Exit the function if the feature is disabled in the config
+            return 
 
-
-    #Load .env file for the gameserver database
-        dbhost = os.getenv("HOST2")
-        if dbhost is None:
-            raise ValueError("HOST2 not found in .env file")
-        dbname = os.getenv("NAME2")
-        if dbname is None:
-            raise ValueError("NAME2 not found in .env file")
-        dbpsswd = os.getenv("PASSWORD2")
-        if dbpsswd is None:
-            raise ValueError("PASSWORD2 not found in .env file")
-        dbdb = os.getenv("DATABASE2")
-        if dbdb is None:
-            raise ValueError("DATABASE2 not found in .env file")
-        
-        #Get guild ID
+        # Load .env file for the gameserver database
         load_dotenv()
+        dbhost = os.getenv("HOST2")
+        dbname = os.getenv("NAME2")
+        dbpsswd = os.getenv("PASSWORD2")
+        dbdb = os.getenv("DATABASE2")
         guild_id = os.getenv("SERVER")
-        if guild_id is None:
-            raise ValueError("SERVER not found in .env file")
-        
 
-        #Database initialization
-        conn = mysql.connector.connect(
-            host=dbhost,
-            user=dbname,
-            password=dbpsswd,
-            charset='utf8mb4',
-            collation='utf8mb4_unicode_ci'
-        )
-        cursor = conn.cursor()
-        conn.database = dbdb
+        if not all([dbhost, dbname, dbpsswd, dbdb, guild_id]):
+            print("Fehler: Mindestens eine .env Variable fehlt!")
+            return
 
+        guild = self.bot.get_guild(int(guild_id))
+        if not guild:
+            print("Server (Guild) nicht gefunden.")
+            return
 
-        #needed arrays
-        badgenr = []
-        charinfo = []
-        users = []
-        discord_raw = []
-        firstname = []
-        lastname = []
-        
-        #get information from database
+        # Database initialization
+        try:
+            conn = mysql.connector.connect(
+                host=dbhost, user=dbname, password=dbpsswd, database=dbdb,
+                charset='utf8mb4', collation='utf8mb4_unicode_ci'
+            )
+            cursor = conn.cursor()
+        except Exception as e:
+            print(f"Datenbankverbindung fehlgeschlagen: {e}")
+            return
+
+        # 1. ALLES in EINER Abfrage holen (verhindert Listen-Verschiebungen)
         cursor.execute("""
-        SELECT 
-            ny_groups_meta.internal_identifier, 
-            players.charinfo, 
-            users.discord 
-        FROM ny_groups_meta
-        JOIN players ON ny_groups_meta.character_identifier = players.citizenid
-        JOIN users ON players.userId = users.userId
-        ORDER BY ny_groups_meta.internal_identifier
+            SELECT 
+                ny_groups_meta.internal_identifier, 
+                players.charinfo, 
+                users.discord 
+            FROM ny_groups_meta
+            JOIN players ON ny_groups_meta.character_identifier = players.citizenid
+            JOIN users ON players.userId = users.userId
+            ORDER BY ny_groups_meta.internal_identifier
         """)
+        rows = cursor.fetchall()
         
-        for internal_identifier, char_info, discord in cursor.fetchall():
-            badgenr.append(internal_identifier)
-            charinfo.append(char_info)
-            discord_raw.append((discord,))
-        
-        #get users to the discordIDs
-        for discord in discord_raw:
-            discord_id = discord[0].split(":")
-            for i in range(len(discord_id)):
-                if discord_id[i].isdigit():
-                    user_id = int(discord_id[i])
-                    user = self.bot.get_user(user_id)
-                    if user is not None:
-                        users.append(user)
-                        break
-    
-        #check on duplicates
-        valid_users = {}
-        blacklisted_ids = []
-        ignored_duplicates = []
-        unique_users = []
-        unique_badgenr = []
-        unique_charinfo = []
-
-        for user, badge, cinfo in zip(users, badgenr, charinfo):
-            if user is None:
-                continue 
-            
-            #delete users if they are duplicated
-            if user.id in blacklisted_ids:
-                ignored_duplicates.append((user, badge, cinfo))
-                continue
-            elif user.id in valid_users:
-                first_entry = valid_users.pop(user.id)
-                ignored_duplicates.append(first_entry)
-                ignored_duplicates.append((user, badge, cinfo))
-                blacklisted_ids.append(user.id)
-            else:
-                valid_users[user.id] = (user, badge, cinfo)
-
-        for user, badge, cinfo in valid_users.values():
-            unique_users.append(user)
-            unique_badgenr.append(badge)
-            unique_charinfo.append(cinfo)
-
-        users = unique_users
-        badgenr = unique_badgenr
-        charinfo = unique_charinfo
-        print(f"Unique users: {len(users)}, Ignored duplicates: {len(ignored_duplicates)}")
-
-        #get charname
-        for char_data in charinfo:
-            try:
-                char_dict = json.loads(char_data)
-                firstname.append(char_dict.get("firstname", ""))
-                lastname.append(char_dict.get("lastname", ""))
-            except (json.JSONDecodeError, KeyError, TypeError):
-                firstname.append("")
-                lastname.append("")
-
-
-        #change username        
-        for user, badge, first, last in zip(users, badgenr, firstname, lastname):
-            nick = f"[{badge}] {first} {last}"
-            try:
-                guild = self.bot.get_guild(int(guild_id))
-                member = guild.get_member(user.id)
-                #print(f"Changing nickname for {user.name} to {nick}")
-                if member:
-                    await member.edit(nick=nick)
-            except Exception as e:
-                #print(f"Failed to change nickname for {user.name}: {e}")
-                continue
-      
         cursor.close()
         conn.close()
+
+        # 2. Daten filtern und Duplikate (Twinks) aussortieren
+        valid_users = {}
+        blacklisted_ids = set()
+
+        for badge, char_data, discord_str in rows:
+            if not discord_str:
+                continue
+
+            # Discord ID extrahieren
+            discord_id_parts = discord_str.split(":")
+            user_id = None
+            for part in discord_id_parts:
+                if part.isdigit():
+                    user_id = int(part)
+                    break
+            
+            if not user_id:
+                continue
+
+            # --- DEIN DUPLIKAT-SCHUTZ ---
+            # Wenn der User schon geblacklistet ist, überspringen
+            if user_id in blacklisted_ids:
+                continue 
+            
+            # Wenn wir den User zum ZWEITEN Mal sehen, ist es ein Duplikat
+            if user_id in valid_users:
+                del valid_users[user_id] # Von den gültigen löschen
+                blacklisted_ids.add(user_id) # Auf die Blacklist setzen
+                continue
+
+            # Vornamen und Nachnamen aus JSON holen
+            firstname, lastname = "", ""
+            if char_data:
+                try:
+                    char_dict = json.loads(char_data)
+                    firstname = char_dict.get("firstname", "")
+                    lastname = char_dict.get("lastname", "")
+                except (json.JSONDecodeError, KeyError, TypeError):
+                    pass 
+
+            # Ziel-Nickname generieren und auf 32 Zeichen limitieren (Discord Limit)
+            target_nick = f"[{badge}] {firstname} {lastname}".strip()
+            if len(target_nick) > 32:
+                target_nick = target_nick[:32]
+
+            # User in die Liste der "sicheren" Einträge packen
+            valid_users[user_id] = target_nick
+
+
+        # 3. Namen auf dem Discord-Server aktualisieren
+        print(f"Aktualisiere {len(valid_users)} User. Duplikate ignoriert: {len(blacklisted_ids)}")
+        
+        for user_id, target_nick in valid_users.items():
+            member = guild.get_member(user_id)
+            if member:
+                # WICHTIG: Nur ändern, wenn der Name nicht schon exakt so ist! (Schützt vor Discord API Sperren)
+                if member.display_name != target_nick:
+                    try:
+                        await member.edit(nick=target_nick)
+                    except discord.Forbidden:
+                        pass # Der Bot hat nicht die Rechte (User hat höhere Rolle als der Bot)
+                    except Exception as e:
+                        print(f"Fehler beim Ändern des Namens von User {user_id}: {e}")
 
 def setup(bot: discord.Bot):
     bot.add_cog(changedcname(bot))
