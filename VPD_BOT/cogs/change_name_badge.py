@@ -103,15 +103,14 @@ class changedcname(commands.Cog):
         
         #get users to the discordIDs
         for discord in discord_raw:
-            if discord[0] is not None:
-                discord_id = discord[0].split(":")
-                for i in range(len(discord_id)):
-                    if discord_id[i].isdigit():
-                        user_id = int(discord_id[i])
-                        user = self.bot.get_user(user_id)
-                        if user is not None:
-                            users.append(user)
-                            break
+            discord_id = discord[0].split(":")
+            for i in range(len(discord_id)):
+                if discord_id[i].isdigit():
+                    user_id = int(discord_id[i])
+                    user = self.bot.get_user(user_id)
+                    if user is not None:
+                        users.append(user)
+                        break
     
         #check on duplicates
         valid_users = {}
