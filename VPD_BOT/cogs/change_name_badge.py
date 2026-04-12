@@ -101,18 +101,18 @@ class changedcname(commands.Cog):
         for discord in cursor.fetchall():
             discord_raw.append((discord))
         
-        discord_id = []
         #get users to the discordIDs
         for discord in discord_raw:
-            if discord and discord[0]:
+            if discord[0] is not None:
                 discord_id = discord[0].split(":")
                 for i in range(len(discord_id)):
                     if discord_id[i].isdigit():
                         user_id = int(discord_id[i])
                         user = self.bot.get_user(user_id)
-                        users.append(user)
-                        break
-        
+                        if user is not None:
+                            users.append(user)
+                            break
+    
         #check on duplicates
         valid_users = {}
         blacklisted_ids = []
