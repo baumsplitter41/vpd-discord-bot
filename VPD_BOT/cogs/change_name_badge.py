@@ -83,7 +83,8 @@ class changedcname(commands.Cog):
         players.userId=users.userId ORDER BY ny_groups_meta.internal_identifier
         """)
         for internal_identifier in cursor.fetchall():
-            badgenr.append(internal_identifier[0])
+            if internal_identifier[0] is not None:
+                badgenr.append(internal_identifier[0])
         
         cursor.execute("""
         SELECT players.charinfo FROM ny_groups_meta, 
@@ -91,7 +92,8 @@ class changedcname(commands.Cog):
         players.userId=users.userId ORDER BY ny_groups_meta.internal_identifier
         """)
         for char_info in cursor.fetchall():
-            charinfo.append(char_info[0])
+            if char_info[0] is not None:
+                charinfo.append(char_info[0])
         
         cursor.execute("""
         SELECT users.discord FROM ny_groups_meta, 
@@ -99,7 +101,8 @@ class changedcname(commands.Cog):
         players.userId=users.userId ORDER BY ny_groups_meta.internal_identifier
         """)
         for discord in cursor.fetchall():
-            discord_raw.append((discord))
+            if discord[0] is not None:
+                discord_raw.append((discord))
         
         #get users to the discordIDs
         for discord in discord_raw:
