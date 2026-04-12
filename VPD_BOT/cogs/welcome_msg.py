@@ -31,7 +31,7 @@ class welcome_msg(commands.Cog):
         
         embed = discord.Embed(
             title="VicePD",
-            description=f"Willkommen {member.mention}, auf **VicePD**! \n\n Bitte lese dir das <#1442279753707946215> durch. Die Einhaltung der Regeln stellt sicher, dass der Server ein freundlicher und unterhaltsamer Ort für alle ist und bleibt. \n\n Viel Spaß auf VicePD!",
+            description=f"Herzlich Willkommen {member.mention}, auf **VicePD**! \n\n Bitte lies dir kurz unser <#1442279753707946215> durch. \n Starte deinen Weg beim LSCSO: Melde dich danach im Channel <#1469776042058191055> und mache den ersten Schritt in deine Laufbahn als LEO-Beamter.\n\n Viel Spaß auf dem Server!",
             color=discord.Color.blurple(),
             timestamp=discord.utils.utcnow()
         )
