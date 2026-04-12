@@ -78,10 +78,14 @@ class changedcname(commands.Cog):
         
         #get information from database
         cursor.execute("""
-        SELECT ny_groups_meta.internal_identifier, players.charinfo, users.discord
+        SELECT 
+            ny_groups_meta.internal_identifier, 
+            players.charinfo, 
+            users.discord 
         FROM ny_groups_meta
         JOIN players ON ny_groups_meta.character_identifier = players.citizenid
         JOIN users ON players.userId = users.userId
+        ORDER BY ny_groups_meta.internal_identifier
         """)
         
         for internal_identifier, char_info, discord in cursor.fetchall():
