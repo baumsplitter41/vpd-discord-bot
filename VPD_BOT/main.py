@@ -8,6 +8,9 @@ from datetime import datetime, time
 import configparser
 import mysql.connector
 import asyncio
+import json
+from flask import Flask, request, jsonify
+from pathlib import Path
 
 
 intents = discord.Intents.default()
@@ -42,6 +45,10 @@ if dbpsswd is None:
 dbdb = os.getenv("DATABASE")
 if dbdb is None:
     raise ValueError("DATABASE not found in .env file")
+
+API_KEY = os.getenv("API_KEY")
+if API_KEY is None:
+    raise ValueError("API_KEY not found in .env file")
 
 #---------------------------------#
 #ConfigParser
@@ -577,22 +584,52 @@ class PersistentRoleView(discord.ui.View):
         await interaction.response.send_message(msg, ephemeral=True)
 
 
-
-@bot.slash_command(name="verify_message", description="Send the reactionrole message| This is for setup only!")
+#Setup the reaction role message
+@bot.slash_command(name="verify_message", description="Send the reactionrole message | This is for setup only!")
 async def setup_rr(
     ctx: discord.ApplicationContext,
     channel: discord.TextChannel, 
-    title: str,
-    description: str
 ):
 
     if not ctx.author.guild_permissions.administrator:
         await ctx.respond("You dont have the permissions to do that..", ephemeral=True)
         return
+    
+    json_path = Path(__file__).resolve().parent.joinpath("json_files", "verify_text.json")
+    if not json_path.exists():
+        await ctx.respond("The .json file is missing.")
+        return
+
+    try:
+        with json_path.open("r", encoding="utf-8") as f:
+            json_data = json.load(f)
+    except json.JSONDecodeError:
+        await ctx.respond("The .json file is not valid JSON.")
+        return
+
+    if isinstance(json_data, dict):
+        entries = [json_data]
+    elif isinstance(json_data, list):
+        entries = json_data
+    else:
+        await ctx.respond("The .json file has an unexpected structure.")
+        return
+
+    if not entries or not isinstance(entries[0], dict):
+        await ctx.respond("The .json file has an unexpected structure.")
+        return
+
+    if not entries:
+        await ctx.respond("The .json file is empty.")
+        return
+
+    entry = entries[0]
+    jstitle = entry.get("title", "Verify")
+    jsdesc = entry.get("desc", "No description provided.")
 
     embed = discord.Embed(
-        title=title,
-        description=f"{description}\n\nViel Spass auf dem Server!",
+        title=jstitle,
+        description=jsdesc,
         color=discord.Color.red()
     )
     embed.set_image(url="https://i.imgur.com/FoF791J.png")
@@ -667,6 +704,8 @@ async def update_users_periodically():
         await asyncio.sleep(60)  # Update every minute
 
 
+
+#_________________________________#
 #---------------------------------#
 #Run function
 load_extensions()
