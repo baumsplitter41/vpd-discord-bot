@@ -54,7 +54,7 @@ class userinfo(commands.Cog):
         config = self._load_config()
         team_role_id = config.get('Team Roles', 'team_role_id')
         team_role = ctx.guild.get_role(int(team_role_id))
-        conn = self._connect_db().connection
+        conn = self._connect_db()
         cursor = conn.cursor()
         conn.database = self._connect_db().dbdb
 
