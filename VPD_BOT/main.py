@@ -430,11 +430,11 @@ async def warn(
     await ctx.defer(ephemeral=True)
 
     if not ctx.author.guild_permissions.kick_members:
-        await ctx.followup.send("No permission.", ephemeral=True)
+        await ctx.respond("No permission.", ephemeral=True)
         return
 
     if user in (bot.user, ctx.author):
-        await ctx.followup.send("Invalid target.", ephemeral=True)
+        await ctx.respond("Invalid target.", ephemeral=True)
         return
     
 
@@ -493,7 +493,7 @@ async def note(
     user: Option(discord.User, required=True),  # type: ignore
     information: Option(str, required=True)  # type: ignore
 ):
-    await ctx.defer(ephemeral=False)
+    await ctx.defer(ephemeral=True)
     team_role = ctx.guild.get_role(int(team_role_id))
 
     if not team_role in ctx.author.roles:
@@ -530,7 +530,7 @@ async def note(
     
     await channel.send(embed=embed)
     await ctx.followup.send(
-        f"Note {information} has been added to {user.mention}",
+        f"Note '{information}' has been added to {user.mention}",
         ephemeral=True
     )
 
@@ -764,6 +764,7 @@ async def update_users_periodically():
             print(f"[!] Fehler beim Update der User: {e}")
         
         await asyncio.sleep(60)  # Update every minute
+
 
 
 
