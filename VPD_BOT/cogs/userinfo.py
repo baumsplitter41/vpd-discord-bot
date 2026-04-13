@@ -56,7 +56,7 @@ class userinfo(commands.Cog):
         team_role = ctx.guild.get_role(int(team_role_id))
         conn = self._connect_db()
         cursor = conn.cursor()
-        conn.database = self._connect_db().dbdb
+        conn.database = self._connect_db().database
 
         if team_role not in ctx.author.roles:
             await ctx.respond("You don't have the permission to use this command!", ephemeral=True)
