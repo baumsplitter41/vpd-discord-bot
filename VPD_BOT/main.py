@@ -9,7 +9,7 @@ import configparser
 import mysql.connector
 import asyncio
 import json
-#from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify
 from pathlib import Path
 
 
@@ -139,6 +139,18 @@ CREATE TABLE IF NOT EXISTS Kick (
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 """)
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Notes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid BIGINT,
+    username VARCHAR(100),
+    moderatorname VARCHAR(100),
+    information VARCHAR(250),
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+""")
+
 
 
 #---------------------------------#
@@ -474,6 +486,55 @@ async def warn(
     )
 
 #---------------------------------#
+#Note -> add informations to a user for team internal use
+@bot.slash_command(name="note", description="Add a note to a user for internal use")
+async def note(
+    ctx,
+    user: Option(discord.User, required=True),  # type: ignore
+    information: Option(str, required=True)  # type: ignore
+):
+    await ctx.defer(ephemeral=False)
+
+    if not team_role_id in ctx.author.roles:
+        await ctx.followup.send("You don't have permissions to execute this command", ephemeral=True)
+        return
+    
+    if user in (bot.user, ctx.author):
+        await ctx.followup.send("Invalid target.", ephemeral=True)
+        return
+    
+    channel= discord.utils.get(ctx.guild.channels, id = int(channel_mod_log))
+
+    embed = discord.Embed(
+        title=f"Note added to **{user.name}**",
+        color=discord.Color.blue()
+    )
+    time = discord.utils.format_dt(datetime.now(), "f")
+    embed.add_field(name="Date", value=time, inline=False)
+    embed.add_field(name="Moderator", value=f"{ctx.author}", inline=False)
+    embed.add_field(name="Note", value=information, inline=False)
+
+    embed.add_field(name="User ID", value=user.id)
+
+    embed.set_thumbnail(url=user.display_avatar.url)
+    embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
+    embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
+
+    #Database entry
+    cursor.execute(
+        "INSERT INTO Notes (userid, username, moderatorname, information) VALUES (%s, %s, %s, %s)",
+        (user.id, str(user), str(ctx.author), information)
+    )
+    conn.commit()
+    
+    await channel.send(embed=embed)
+    await ctx.followup.send(
+        f"Note {information} has been added to {user.mention}",
+        ephemeral=True
+    )
+
+
+#---------------------------------#
 #Modinfo
 @bot.slash_command(name="modinfo", description="Shows the moderative history of a user from this Server")
 async def modinfo(
@@ -702,8 +763,6 @@ async def update_users_periodically():
             print(f"[!] Fehler beim Update der User: {e}")
         
         await asyncio.sleep(60)  # Update every minute
-
-
 
 #_________________________________#
 #---------------------------------#
