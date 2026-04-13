@@ -62,7 +62,6 @@ class changedcname(commands.Cog):
             print(f"Datenbankverbindung fehlgeschlagen: {e}")
             return
 
-        # 1. ALLES in EINER Abfrage holen (verhindert Listen-Verschiebungen)
         cursor.execute("""
             SELECT 
                 ny_groups_meta.internal_identifier, 
@@ -78,7 +77,7 @@ class changedcname(commands.Cog):
         cursor.close()
         conn.close()
 
-        # 2. Daten filtern und Duplikate (Twinks) aussortieren
+        #remove dublicates 
         valid_users = {}
         blacklisted_ids = set()
 
@@ -86,7 +85,6 @@ class changedcname(commands.Cog):
             if not discord_str:
                 continue
 
-            # Discord ID extrahieren
             discord_id_parts = discord_str.split(":")
             user_id = None
             for part in discord_id_parts:
@@ -97,18 +95,16 @@ class changedcname(commands.Cog):
             if not user_id:
                 continue
 
-            # --- DEIN DUPLIKAT-SCHUTZ ---
-            # Wenn der User schon geblacklistet ist, überspringen
+            #skip dublictated users
             if user_id in blacklisted_ids:
                 continue 
             
-            # Wenn wir den User zum ZWEITEN Mal sehen, ist es ein Duplikat
             if user_id in valid_users:
-                del valid_users[user_id] # Von den gültigen löschen
-                blacklisted_ids.add(user_id) # Auf die Blacklist setzen
+                del valid_users[user_id]
+                blacklisted_ids.add(user_id)
                 continue
 
-            # Vornamen und Nachnamen aus JSON holen
+            #build the name from charinfo
             firstname, lastname = "", ""
             if char_data:
                 try:
@@ -118,27 +114,23 @@ class changedcname(commands.Cog):
                 except (json.JSONDecodeError, KeyError, TypeError):
                     pass 
 
-            # Ziel-Nickname generieren und auf 32 Zeichen limitieren (Discord Limit)
             target_nick = f"[{badge}] {firstname} {lastname}".strip()
             if len(target_nick) > 32:
                 target_nick = target_nick[:32]
 
-            # User in die Liste der "sicheren" Einträge packen
             valid_users[user_id] = target_nick
 
-
-        # 3. Namen auf dem Discord-Server aktualisieren
+        #rename funktion on the discord server
         print(f"Aktualisiere {len(valid_users)} User. Duplikate ignoriert: {len(blacklisted_ids)}")
         
         for user_id, target_nick in valid_users.items():
             member = guild.get_member(user_id)
             if member:
-                # WICHTIG: Nur ändern, wenn der Name nicht schon exakt so ist! (Schützt vor Discord API Sperren)
                 if member.display_name != target_nick:
                     try:
                         await member.edit(nick=target_nick)
                     except discord.Forbidden:
-                        pass # Der Bot hat nicht die Rechte (User hat höhere Rolle als der Bot)
+                        pass
                     except Exception as e:
                         print(f"Fehler beim Ändern des Namens von User {user_id}: {e}")
 
