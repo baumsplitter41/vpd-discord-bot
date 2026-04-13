@@ -628,7 +628,6 @@ class PersistentRoleView(discord.ui.View):
         added_roles = []
         for role in role_objs:
             if role in interaction.user.roles:
-                await interaction.user.remove_roles(role)
                 removed_roles.append(role.name)
             else:
                 await interaction.user.add_roles(role)
@@ -636,7 +635,7 @@ class PersistentRoleView(discord.ui.View):
         
         msg = ""
         if removed_roles:
-            msg += f"Folgende Rollen wurden entfernt: {', '.join(removed_roles)}.\n"
+            msg += f"Du hast die benötigten Rollen bereits erhalten."
         if added_roles:
             msg += f"Du hast folgende Rollen erhalten: {', '.join(added_roles)}."
         
