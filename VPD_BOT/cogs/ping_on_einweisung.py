@@ -43,6 +43,7 @@ class einweisungping(commands.Cog):
         if after.channel is not None:
             if after.channel.id == channel_join_id: 
                 ping_message = f"{' '.join(role.mention for role in ping_roles)} {member.mention} ist dem Einweisungskanal beigetreten!"
+                print(ping_message)
                 await channel_ping.send(ping_message)
 
 def setup(bot: discord.Bot):
