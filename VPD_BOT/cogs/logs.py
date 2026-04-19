@@ -277,19 +277,22 @@ class actionlog(commands.Cog):
 
         if before.channel is None and after.channel is not None:
             action = "joined"
-            channel = after.channel
+            channel1 = after.channel
+            channel2 = None
         elif before.channel is not None and after.channel is None:
             action = "left"
-            channel = before.channel
+            channel1 = before.channel
+            channel2 = None
         elif before.channel is not None and after.channel is not None and before.channel != after.channel:
-            action = "moved from"
-            channel = before.channel
+            channel1 = before.channel
+            channel2 = after.channel
+            action = "moved from to"
         else:
             return
 
         embed = discord.Embed(
             title="Voice State Updated",
-            description=f"{member.mention} has {action} the voice channel {channel.mention}.",
+            description=f"{member.mention} has {action} the voice channel {channel1.mention} {channel2.mention}.",
             color=discord.Color.purple(),
             timestamp=discord.utils.utcnow()
         )
