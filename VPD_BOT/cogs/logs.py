@@ -278,24 +278,34 @@ class actionlog(commands.Cog):
         if before.channel is None and after.channel is not None:
             action = "joined"
             channel1 = after.channel
-            channel2 = None
+            embed = discord.Embed(
+                title="Voice State Updated",
+                description=f"{member.mention} has {action} the voice channel {channel1.mention}.",
+                color=discord.Color.purple(),
+                timestamp=discord.utils.utcnow()
+            )
         elif before.channel is not None and after.channel is None:
             action = "left"
             channel1 = before.channel
-            channel2 = None
+            embed = discord.Embed(
+                title="Voice State Updated",
+                description=f"{member.mention} has {action} the voice channel {channel1.mention}.",
+                color=discord.Color.purple(),
+                timestamp=discord.utils.utcnow()
+            )
         elif before.channel is not None and after.channel is not None and before.channel != after.channel:
             channel1 = before.channel
             channel2 = after.channel
-            action = "moved from to"
+            action = "moved from"
+            embed = discord.Embed(
+                title="Voice State Updated",
+                description=f"{member.mention} has {action} the voice channel {channel1.mention} to {channel2.mention}.",
+                color=discord.Color.purple(),
+                timestamp=discord.utils.utcnow()
+        )
         else:
             return
 
-        embed = discord.Embed(
-            title="Voice State Updated",
-            description=f"{member.mention} has {action} the voice channel {channel1.mention} {channel2.mention}.",
-            color=discord.Color.purple(),
-            timestamp=discord.utils.utcnow()
-        )
         embed.set_footer(text=f"User ID: {member.id}")
         await log_channel.send(embed=embed)
 
