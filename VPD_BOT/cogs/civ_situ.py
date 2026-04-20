@@ -67,8 +67,9 @@ class civsitu(commands.Cog):
 
     #Slash command to trigger the Modal form
     @slash_command()
-    async def civsitu(ctx: discord.ApplicationContext):
-        modal = Situ(title="Modal via Slash Command") # type: ignore
+    async def civsitu(self, ctx: discord.ApplicationContext):
+        """Start a new civ-RP situation."""
+        modal = Situ(title="Create a new civ-rp situation") # type: ignore
         await ctx.send_modal(modal)
  
 
