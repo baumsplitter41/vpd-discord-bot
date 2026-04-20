@@ -57,7 +57,7 @@ class civsitu(commands.Cog):
             self.embed_pub = embed_pub
 
             #sending the embed
-            await interaction.response.send_message("Die Situation wurde erfolgreich erstellt und veröffentlicht.", ephemeral=True)
+            await interaction.response.send_message("Your situation request has been created.", ephemeral=True)
             situ_channel = self._get_situ_channel()
             msg = await situ_channel.send(embeds=[embed_pub])
             name = f"situation-{interaction.user.name}"
@@ -76,7 +76,7 @@ class civsitu(commands.Cog):
             #sending the embed with more information into the thread
             self.embed_team = embed_team
             await thread.send(embeds=[embed_team])
-            await thread.send(f"{interaction.user.mention} Please wait with the start of your situation unil a (civ-) team member approved your situation.")
+            await thread.send(f"{interaction.user.mention} Please wait with the start of your situation until a (civ-) team member approved your situation.")
 
 
     #Slash command to trigger the Modal form
