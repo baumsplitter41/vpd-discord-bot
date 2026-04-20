@@ -11,9 +11,9 @@ class civsitu(commands.Cog):
     
     #Modal form
     class Situ(discord.ui.Modal):
-        def __init__(self, *args, **kwargs):
+        def __init__(self,  bot: discord.Bot, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            #self.bot = civsitu.self.bot
+            self.bot = bot
 
             #Modal form layout
             self.add_item(discord.ui.InputText(label="Teilnehmende Spieler", placeholder="Gib die Namen der teilnehmenden Spieler abgesehen von dir ein.", required=False, ))
@@ -30,7 +30,7 @@ class civsitu(commands.Cog):
         def _get_situ_channel(self):
             config = self._load_config()
             situ_channel_id = int(config["Civ"]["situ_channel_id"])
-            situ_channel = civsitu.bot.get_channel(situ_channel_id)
+            situ_channel = self.bot.get_channel(situ_channel_id)
             if situ_channel is None:
                 print(f"Log channel with ID {situ_channel_id} not found.")
                 return None
