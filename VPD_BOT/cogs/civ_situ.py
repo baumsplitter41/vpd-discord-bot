@@ -49,7 +49,7 @@ class civsitu(commands.Cog):
             embed_pub.add_field(name="Long Input", value=self.children[1].value, inline=False)
             self.embed_pub = embed_pub
             await interaction.response.send_message("Die Situation wurde erfolgreich erstellt und veröffentlicht.", ephemeral=True)
-            situ_channel = self._get_situ_channel()
+            situ_channel = civsitu._get_situ_channel()
             msg = await situ_channel.send(embeds=[embed_pub])
             name = f"situation-{interaction.user.name}"
             thread =await msg.create_thread(name=name, auto_archive_duration=1440)
