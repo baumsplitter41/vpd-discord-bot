@@ -71,6 +71,7 @@ class civsitu(commands.Cog):
             embed_team.add_field(name="Situationsbeschreibung", value=self.children[2].value, inline=False)
             embed_team.add_field(name="Besonderheiten", value=self.children[3].value, inline=False)
 
+            #sending the embed with more information into the thread
             self.embed_team = embed_team
             await thread.send(embeds=[embed_team])
             await thread.send("Please wait with the start of your situation unil a (civ-) team member approved your situation.")
@@ -78,7 +79,7 @@ class civsitu(commands.Cog):
 
     #Slash command to trigger the Modal form
     @slash_command()
-    async def civsitu(self, ctx: discord.ApplicationContext):
+    async def civsituation(self, ctx: discord.ApplicationContext):
         """Start a new civ-RP situation."""
         modal = self.Situ(self.bot, title="Create a new civ-rp situation") # type: ignore
         await ctx.send_modal(modal)
