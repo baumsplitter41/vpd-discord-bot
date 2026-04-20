@@ -69,7 +69,7 @@ class civsitu(commands.Cog):
     @slash_command()
     async def civsitu(self, ctx: discord.ApplicationContext):
         """Start a new civ-RP situation."""
-        modal = Situ(title="Create a new civ-rp situation") # type: ignore
+        modal = self.Situ(title="Create a new civ-rp situation") # type: ignore
         await ctx.send_modal(modal)
  
 
