@@ -21,6 +21,7 @@ class civsitu(commands.Cog):
             self.add_item(discord.ui.InputText(label="Benötigte Ausrüstung", placeholder="Gib die benötigte Ausrüstung an (Drogen, Waffen, etc.)."))
             self.add_item(discord.ui.InputText(label="Situationsbeschreibung", style=discord.InputTextStyle.long, placeholder="Beschreibe die Situation so detailliert wie möglich (Was? Wo? Wie?)."))
             self.add_item(discord.ui.InputText(label="Besonderheiten", placeholder="Langzeitsituationen, besondere Umstände, etc.", required=False))
+            self.add_item(discord.ui.InputText(label="Geschätzte Dauer", placeholder="Gib die geschätzte Dauer der Situation an.", required=True))
 
         #funktions to load the config and get the channels
         def _load_config(self):
@@ -52,7 +53,7 @@ class civsitu(commands.Cog):
             embed_pub = discord.Embed(title="Aktive Situation")
             embed_pub.add_field(name="Ersteller", value=interaction.user.mention, inline=False)
             embed_pub.add_field(name="Teilnehmer", value=self.children[0].value, inline=False)
-            embed_pub.add_field(name="Long Input", value=self.children[1].value, inline=False)
+            embed_pub.add_field(name="Geschätzte Dauer", value=self.children[4].value, inline=False)
             self.embed_pub = embed_pub
 
             #sending the embed
@@ -70,6 +71,7 @@ class civsitu(commands.Cog):
             embed_team.add_field(name="Benötigte Ausrüstung", value=self.children[1].value, inline=False)
             embed_team.add_field(name="Situationsbeschreibung", value=self.children[2].value, inline=False)
             embed_team.add_field(name="Besonderheiten", value=self.children[3].value, inline=False)
+            embed_pub.add_field(name="Geschätzte Dauer", value=self.children[4].value, inline=False)
 
             #sending the embed with more information into the thread
             self.embed_team = embed_team
