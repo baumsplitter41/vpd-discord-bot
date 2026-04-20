@@ -71,12 +71,12 @@ class civsitu(commands.Cog):
             embed_team.add_field(name="Benötigte Ausrüstung", value=self.children[1].value, inline=False)
             embed_team.add_field(name="Situationsbeschreibung", value=self.children[2].value, inline=False)
             embed_team.add_field(name="Besonderheiten", value=self.children[3].value, inline=False)
-            embed_pub.add_field(name="Geschätzte Dauer", value=self.children[4].value, inline=False)
+            embed_team.add_field(name="Geschätzte Dauer", value=self.children[4].value, inline=False)
 
             #sending the embed with more information into the thread
             self.embed_team = embed_team
             await thread.send(embeds=[embed_team])
-            await thread.send("Please wait with the start of your situation unil a (civ-) team member approved your situation.")
+            await thread.send(f"{interaction.user.mention} Please wait with the start of your situation unil a (civ-) team member approved your situation.")
 
 
     #Slash command to trigger the Modal form
