@@ -30,6 +30,8 @@ class civsitu(commands.Cog):
             print(f"Log channel with ID {situ_team_channel_id} not found.")
             return None
         return situ_team_channel"""
+    
+    #situ_team_channel = self._get_situ_team_channel()
 
     #Modal form
     class Situ(discord.ui.Modal):
@@ -70,6 +72,7 @@ class civsitu(commands.Cog):
     @slash_command()
     async def civsitu(self, ctx: discord.ApplicationContext):
         """Start a new civ-RP situation."""
+        situ_channel = self._get_situ_channel()
         modal = self.Situ(title="Create a new civ-rp situation") # type: ignore
         await ctx.send_modal(modal)
  
