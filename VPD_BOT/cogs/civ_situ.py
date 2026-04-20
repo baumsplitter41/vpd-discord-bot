@@ -11,9 +11,8 @@ class civsitu(commands.Cog):
     
     #Modal form
     class Situ(discord.ui.Modal):
-        def __init__(self, *args, **kwargs):
+        def __init__(self, bot: discord.Bot, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            bot = civsitu.self.bot
             self.bot = bot
 
 
@@ -81,7 +80,7 @@ class civsitu(commands.Cog):
     @slash_command()
     async def civsitu(self, ctx: discord.ApplicationContext):
         """Start a new civ-RP situation."""
-        modal = self.Situ(title="Create a new civ-rp situation") # type: ignore
+        modal = self.Situ(self.bot, title="Create a new civ-rp situation") # type: ignore
         await ctx.send_modal(modal)
  
 
