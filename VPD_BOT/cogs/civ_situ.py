@@ -13,7 +13,7 @@ class civsitu(commands.Cog):
     class Situ(discord.ui.Modal):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            self.bot = kwargs.get("bot")
+            self.bot = civsitu.bot
 
             #Modal form layout
             self.add_item(discord.ui.InputText(label="Teilnehmende Spieler", placeholder="Gib die Namen der teilnehmenden Spieler abgesehen von dir ein.", required=False, ))
