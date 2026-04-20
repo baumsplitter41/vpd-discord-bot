@@ -13,7 +13,7 @@ class civsitu(commands.Cog):
     class Situ(discord.ui.Modal):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            bot = self.bot
+            bot = civsitu.bot
             self.bot = bot
 
 
