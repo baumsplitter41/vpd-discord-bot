@@ -33,7 +33,8 @@ class civsitu(commands.Cog):
 
     #Modal form
     class Situ(discord.ui.Modal):
-        def __super__init__(self, *args, **kwargs):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
             self.add_item(discord.ui.InputText(label="Teilnehmende Spieler", placeholder="Gib die Namen der teilnehmenden Spieler abgesehen von dir ein.", required=False, ))
             self.add_item(discord.ui.InputText(label="Benötigte Ausrüstung", placeholder="Gib die benötigte Ausrüstung an (Drogen, Waffen, etc.)."))
             self.add_item(discord.ui.InputText(label="Situationsbeschreibung", style=discord.InputTextStyle.long, placeholder="Beschreibe die Situation so detailliert wie möglich (Was? Wo? Wie?)."))
