@@ -18,7 +18,7 @@ class autodelmsg(commands.Cog):
         return config
     def _get_info_channel(self):
         config = self._load_config()
-        channel_ids = [int(channel_id.strip()) for channel_id in config.get("Moderation")("autodelete_channel_id").split(",")]
+        channel_ids = [int(channel_id.strip()) for channel_id in config["Moderation"]["autodelete_channel_id"].split(",")]
         channels = [self.bot.get_channel(channel_id) for channel_id in channel_ids]
         if any(channel is None for channel in channels):
             print(f"One or more roles with IDs {channel_ids} not found.")
