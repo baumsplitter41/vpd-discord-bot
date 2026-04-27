@@ -66,8 +66,8 @@ class remiderinactive(commands.Cog):
         """)
         for discord in cursor.fetchall():
             inaktive_players.append(discord)
-            print(f"Found inactive player: {discord[0]} with license {discord[1]} last logged out at {discord[2]}")
-            await log_channel.send(f"Found inactive player: {discord[0]} with license {discord[1]} last logged out at {discord[2]}")
+            #print(f"Found inactive player: {discord[0]} with license {discord[1]} last logged out at {discord[2]}")
+            #await log_channel.send(f"Found inactive player: {discord[0]} with license {discord[1]} last logged out at {discord[2]}")
             
 
         #Core script
