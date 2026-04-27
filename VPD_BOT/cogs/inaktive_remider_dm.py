@@ -66,19 +66,19 @@ class remiderinactive(commands.Cog):
         """)
         for discord in cursor.fetchall():
             inaktive_players.append(discord)
+            print(f"Found inactive player: {discord[0]} with license {discord[1]} last logged out at {discord[2]}")
+            await log_channel.send(f"Found inactive player: {discord[0]} with license {discord[1]} last logged out at {discord[2]}")
+            
 
         #Core script
         discord_ids = []
         for players in inaktive_players:
-            discord_field = str(players[0]) if players[0] is not None else ""
-            discord_parts = discord_field.split(":")
-            discord_raw = discord_parts[1] if len(discord_parts) > 1 else discord_field
-
+            discord_raw = players[1].split(":")[1]
             if discord_raw.isdigit():
                     discord_id = discord_raw
             else:
-                print(f"Invalid Discord ID format for discord field {discord_field}: {discord_raw}")
-                await log_channel.send(f"Invalid Discord ID format for discord field {discord_field}: {discord_raw}")
+                print(f"Invalid Discord ID format for license {players[0]}: {discord_raw}")
+                await log_channel.send(f"Invalid Discord ID format for license {players[0]}: {discord_raw}")
                 continue
             if discord_id is not None:
                 discord_ids.append(discord_id)
@@ -106,7 +106,7 @@ class remiderinactive(commands.Cog):
     ):
         if ctx.author.guild_permissions.administrator:
             await ctx.respond("Manually triggering the inactivity reminder DM...", ephemeral=True)
-            await self.check_inactive_members(self)
+            await self.check_inactive_members()
         else:
             await ctx.respond("You do not have permission to use this command.", ephemeral=True)
 
