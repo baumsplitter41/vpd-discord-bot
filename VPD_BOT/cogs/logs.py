@@ -79,6 +79,8 @@ class actionlog(commands.Cog):
             return
         if before.author.bot:
             return
+        if before.content == after.content:
+            return
         else:
             embed = discord.Embed(
                 title="Message Edited",
