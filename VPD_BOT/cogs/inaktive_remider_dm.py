@@ -73,12 +73,14 @@ class remiderinactive(commands.Cog):
         #Core script
         discord_ids = []
         for players in inaktive_players:
-            discord_raw = players[0].split(":")[0]
+            discord_id = None
+            discord_value = str(players[0]).strip() if players[0] is not None else ""
+            discord_raw = discord_value.split(":")[-1].strip()
             if discord_raw.isdigit():
-                    discord_id = discord_raw
+                discord_id = discord_raw
             else:
-                print(f"Invalid Discord ID format for license {players[0]}: {discord_raw}")
-                await log_channel.send(f"Invalid Discord ID format for license {players[0]}: {discord_raw}")
+                print(f"Invalid Discord ID format for value {players[0]}: {discord_raw}")
+                await log_channel.send(f"Invalid Discord ID format for value {players[0]}: {discord_raw}")
                 continue
             if discord_id is not None:
                 discord_ids.append(discord_id)
