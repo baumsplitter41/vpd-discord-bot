@@ -42,7 +42,7 @@ class autodelmsg(commands.Cog):
                     if (time.time() - message.created_at.timestamp()) > (message_age_limit * 3600):
                         try:
                             await message.delete()
-                            print(f"Deleted message from {message.author} in {channel.name} due to age.")
+                            #print(f"Deleted message from {message.author} in {channel.name} due to age.")
                         except Exception as e:
                             print(f"Failed to delete message: {e}")
             await asyncio.sleep(3600) #Check every hour
