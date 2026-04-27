@@ -6,7 +6,7 @@ import configparser
 import time
 
 
-class einweisungping(commands.Cog):
+class supportping(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
@@ -46,5 +46,6 @@ class einweisungping(commands.Cog):
                 print(ping_message)
                 await channel_ping.send(ping_message)
 
+
 def setup(bot: discord.Bot):
-    bot.add_cog(einweisungping(bot))
+    bot.add_cog(supportping(bot))
