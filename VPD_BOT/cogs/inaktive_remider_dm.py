@@ -96,6 +96,16 @@ class remiderinactive(commands.Cog):
         
         cursor.close()
         conn.close()
+    @slash_command(name="inaktivedm", description= "Manually trigger the inactivity reminder DM.")
+    async def promotion(
+        self,
+        ctx: discord.ApplicationContext
+    ):
+        if ctx.author.guild_permissions.administrator:
+            await ctx.respond("Manually triggering the inactivity reminder DM...")
+            await self.check_inactive_members()
+        else:
+            await ctx.respond("You do not have permission to use this command.", ephemeral=True)
 
 
 def setup(bot: discord.Bot):
