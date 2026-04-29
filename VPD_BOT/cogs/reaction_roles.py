@@ -81,7 +81,7 @@ class reactionroles(commands.Cog):
         if not ctx.author.guild_permissions.administrator:
             await ctx.respond("You don't have permission to use this command.")
             return
-        embed = self._get_reaction_role_message()
+        embed = self._reaction_role_embed()
         if embed is None:
             await ctx.respond("Failed to load the reaction role message.")
             return
