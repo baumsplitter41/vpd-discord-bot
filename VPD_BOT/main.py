@@ -57,8 +57,8 @@ config = configparser.RawConfigParser()
 configFilePath = r'config.cfg'
 config.read_file(open(configFilePath))
 
-label_rules = config.get('Reactionroles Rules', 'label_rules')
-roles_rules = config.get('Reactionroles Rules', 'rules_roles').split(",")
+label_rules = config.get('Reactionroles', 'label_rules')
+roles_rules = config.get('Reactionroles', 'rules_roles').split(",")
 roles_rules = [role.strip() for role in roles_rules if role.strip()]
 
 channel_status_log = config.get('Logs', 'status_log')
@@ -280,6 +280,8 @@ async def ban(
         )
         conn.commit()
 
+    except discord.NotFound:
+        await ctx.respond("Error: User not found.", ephemeral=True)
     except discord.Forbidden:
         await ctx.respond("Error: I don't have permission to ban this user.", ephemeral=True)
     except discord.HTTPException as e:
@@ -763,8 +765,6 @@ async def update_users_periodically():
             print(f"[!] Fehler beim Update der User: {e}")
         
         await asyncio.sleep(60)  # Update every minute
-
-
 
 
 #_________________________________#
