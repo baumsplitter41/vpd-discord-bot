@@ -116,8 +116,8 @@ class reactionroles(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         #Get variables
-        user = self.bot._get_user(payload.user_id)
-        guild = self.bot._get_guild(payload.guild_id)
+        user = self.bot.get_user(payload.user_id)
+        guild = self.bot.get_guild(payload.guild_id)
         if user.bot:
             return
         message_id = self._get_message_id()
