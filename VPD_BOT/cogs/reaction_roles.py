@@ -19,16 +19,25 @@ class reactionroles(commands.Cog):
     
     def _get_roles(self):
         config = self._load_config()
-        role_ids = [int(role_ids.strip()) for role_id in config["Reactionroles"]["reactionroles_role_ids"].split(",")]
-        roles = [self.bot.get_roles(role_ids) for role_id in role_ids]
+        role_ids = [int(role_id.strip()) for role_id in config["Reactionroles"]["reactionroles_role_ids"].split(",")]
+        roles = [self.bot.get_role(role_id) for role_id in role_ids]
         if any(role is None for role in roles):
             print(f"One or more roles with IDs {role_ids} not found.")
             return
         return roles
     def _get_emojis(self):
         config = self._load_config()
-        emojis = [int(emojis.strip()) for emoji in config["Reactionroles"]["reactionroles_emojis"].split(",")]
+        emojis = [int(emoji.strip()) for emoji in config["Reactionroles"]["reactionroles_emojis"].split(",")]
         return emojis
+    def _get_message_id(self):
+        config = self._load_config()
+        message_id = int(config["Reactionroles"]["reactionroles_message_id"].strip())
+        return message_id
+    def _write_message_id(self, message_id):
+        config = self._load_config()
+        config["Reactionroles"]["reactionroles_message_id"] = str(message_id)
+        with open('config.cfg', 'w') as configfile:
+            config.write(configfile)
     
     #Get the reaction role embed text from the .json file
     def _reaction_role_embed(self):
@@ -88,7 +97,7 @@ class reactionroles(commands.Cog):
         message = await channel.send(embed=embed)
         await ctx.respond(f"Reaction role message has been set up in {channel.mention}.", ephemeral=True)
         # Add reactions to the message
-        emojis = self._reaction_role_embed()
+        emojis = self._get_emojis()
         if emojis is None:
             await ctx.respond("Failed to load emojis from config.", ephemeral=True)
             return
@@ -98,7 +107,8 @@ class reactionroles(commands.Cog):
             except Exception as e:
                 await ctx.respond(f"Failed to add reaction {emoji}: {e}", ephemeral=True)
         message_id = message.id
-        return message_id
+        self._write_message_id(self, message_id)
+        
         
 #-----------------------------------------------#
 
@@ -106,13 +116,14 @@ class reactionroles(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         #Get variables
-        user = self.bot.get_user(payload.user_id)
-        guild = self.bot.get_guild(payload.guild_id)
+        user = self.bot._get_user(payload.user_id)
+        guild = self.bot._get_guild(payload.guild_id)
         if user.bot:
             return
-        message_id = self.reactionmsg(ctx=None) 
-        if payload.message_id != message_id:
+        message_id = self._get_message_id()
+        if message_id is None:
             return
+        message = await guild.fetch_message(message_id)
         emojis = self._get_emojis()
         if emojis is None:
             return
@@ -127,7 +138,7 @@ class reactionroles(commands.Cog):
             if payload.emoji.id == emoji:
                 await user.add_roles(role)
                 remove_reaction = discord.utils.get(guild.emojis, id=emoji)
-                await payload.member.remove_reaction(remove_reaction, payload.message_id)
+                await payload.member.remove_reaction(remove_reaction, message)
                 break
 
 
@@ -135,13 +146,14 @@ class reactionroles(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
         #Get variables
-        user = self.bot.get_user(payload.user_id)
-        guild = self.bot.get_guild(payload.guild_id)
+        user = self.bot._get_user(payload.user_id)
+        guild = self.bot._get_guild(payload.guild_id)
         if user.bot:
             return
-        message_id = self.reactionmsg(ctx=None) 
-        if payload.message_id != message_id:
+        message_id = self._get_message_id()
+        if message_id is None:
             return
+        message = await guild.fetch_message(message_id)
         emojis = self._get_emojis()
         if emojis is None:
             return
@@ -156,7 +168,7 @@ class reactionroles(commands.Cog):
             if payload.emoji.id == emoji:
                 await user.remove_roles(role)
                 remove_reaction = discord.utils.get(guild.emojis, id=emoji)
-                await payload.member.remove_reaction(remove_reaction, payload.message_id)
+                await payload.member.remove_reaction(remove_reaction, message)
                 break
         
         
