@@ -33,11 +33,6 @@ class reactionroles(commands.Cog):
         config = self._load_config()
         message_id = int(config["Reactionroles"]["reactionroles_message_id"].strip())
         return message_id
-    def _write_message_id(self, message_id):
-        configFile = r'config.cfg'
-        configFile["Reactionroles"]["reactionroles_message_id"] = str(message_id)
-        with open('config.cfg', 'w') as configfile:
-            configFile.write(configfile)
     
     #Get the reaction role embed text from the .json file
     def _reaction_role_embed(self):
@@ -106,8 +101,6 @@ class reactionroles(commands.Cog):
             except Exception as e:
                 await ctx.respond(f"Failed to add reaction {emoji}: {e}", ephemeral=True)
         
-        message_id = self.bot.get_message(message).id
-        self._write_message_id(self, message_id)
         
         
 #-----------------------------------------------#
