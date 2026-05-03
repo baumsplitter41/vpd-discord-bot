@@ -105,7 +105,8 @@ class reactionroles(commands.Cog):
                 await message.add_reaction(emoji)
             except Exception as e:
                 await ctx.respond(f"Failed to add reaction {emoji}: {e}", ephemeral=True)
-        message_id = message.id
+        
+        message_id = self.bot.get_message(message)
         self._write_message_id(self, message_id)
         
         
