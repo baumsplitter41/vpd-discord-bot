@@ -27,7 +27,7 @@ class reactionroles(commands.Cog):
         return roles
     def _get_emojis(self):
         config = self._load_config()
-        emojis = [int(emoji.strip()) for emoji in config["Reactionroles"]["reactionroles_emojis"].split(",")]
+        emojis = [emoji.strip() for emoji in config["Reactionroles"]["reactionroles_emojis"].split(",")]
         return emojis
     def _get_message_id(self):
         config = self._load_config()
