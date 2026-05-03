@@ -34,10 +34,10 @@ class reactionroles(commands.Cog):
         message_id = int(config["Reactionroles"]["reactionroles_message_id"].strip())
         return message_id
     def _write_message_id(self, message_id):
-        config = self._load_config()
-        config["Reactionroles"]["reactionroles_message_id"] = str(message_id)
+        configFile = r'config.cfg'
+        configFile["Reactionroles"]["reactionroles_message_id"] = str(message_id)
         with open('config.cfg', 'w') as configfile:
-            config.write(configfile)
+            configFile.write(configfile)
     
     #Get the reaction role embed text from the .json file
     def _reaction_role_embed(self):
@@ -76,7 +76,6 @@ class reactionroles(commands.Cog):
         )
         embed.set_author(name="VicePD", icon_url="https://i.imgur.com/6QteFrg.png")
         embed.set_footer(text="VicePD - Bot | Made by BaumSplitter41")
-
         return embed
     
 
