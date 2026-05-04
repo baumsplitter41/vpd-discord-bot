@@ -119,9 +119,10 @@ class reactionroles(commands.Cog):
         if emojis is None:
             print("Emojis are not set in config.")
             return
-        #if payload.emoji.id not in emojis:
-        #    print(f"Emoji {payload.emoji} is not in the list of valid emojis.")
-        #    return
+        for emoji in emojis:
+            if payload.emoji.id == emoji:
+                print(f"Emoji {payload.emoji} is in the list of valid emojis.")
+                break
         role_ids = self._get_roles()
         if role_ids is None:
             print("Roles are not set in config.")
@@ -164,9 +165,10 @@ class reactionroles(commands.Cog):
         if emojis is None:
             print("Emojis are not set in config.")
             return
-        #if payload.emoji.id not in emojis:
-        #    print(f"Emoji {payload.emoji} is not in the list of valid emojis.")
-        #    return
+        for emoji in emojis:
+            if payload.emoji.id == emoji:
+                print(f"Emoji {payload.emoji} is in the list of valid emojis.")
+                break
         role_ids = self._get_roles()
         if role_ids is None:
             print("Roles are not set in config.")
