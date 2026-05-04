@@ -121,9 +121,9 @@ class reactionroles(commands.Cog):
             print("Emojis are not set in config.")
             return
         for emoji in emojis:
-            if payload.emoji.name == emoji:
-                print(f"Emoji {payload.emoji} is in the list of valid emojis.")
-                break
+            if payload.emoji.name != emoji:
+                print(f"Emoji {payload.emoji} does not match {emoji}.")
+                return
         role_ids = self._get_roles()
         if role_ids is None:
             print("Roles are not set in config.")
@@ -134,6 +134,7 @@ class reactionroles(commands.Cog):
                 return
         roles = [guild.get_role(role_id) for role_id in role_ids]
         
+
         #Add the role to the user
         """for emoji, role in zip(emojis, roles):
             if payload.emoji.id == emoji:
@@ -149,6 +150,7 @@ class reactionroles(commands.Cog):
             if payload.emoji.name == emojis[i]:
                 try:
                     await member.add_roles(roles[i])
+                    print(f"Added role {roles[i].name} to user {member.name}.")
                 except Exception as e:
                     print(f"Failed to add role {roles[i].name} to user {member.name}: {e}")
                     break
@@ -165,11 +167,11 @@ class reactionroles(commands.Cog):
                 print(f"Emoji {payload.emoji} does not match {emojis[i]} for role {roles[i].name}.")
 
 
+
     #Remove role from user
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload: discord.RawReactionActionEvent):
         #Get variables
-        print(payload.emoji)
         guild = self.bot.get_guild(payload.guild_id)
         if guild is None:
             return
@@ -185,9 +187,9 @@ class reactionroles(commands.Cog):
             print("Emojis are not set in config.")
             return
         for emoji in emojis:
-            if payload.emoji.name == emoji:
-                print(f"Emoji {payload.emoji} is in the list of valid emojis.")
-                break
+            if payload.emoji.name != emoji:
+                print(f"Emoji {payload.emoji} does not match {emoji}.")
+                return
         role_ids = self._get_roles()
         if role_ids is None:
             print("Roles are not set in config.")
@@ -196,8 +198,6 @@ class reactionroles(commands.Cog):
             if guild.get_role(role_id) is None:
                 print(f"Role with ID {role_id} not found.")
                 return
-            else:
-                print(f"Role with ID {role_id} found: {guild.get_role(role_id).name}")
         roles = [guild.get_role(role_id) for role_id in role_ids]
         
 
@@ -206,6 +206,7 @@ class reactionroles(commands.Cog):
             if payload.emoji.name == emoji:
                 try:
                     await member.remove_roles(role)
+                    print(f"Removed role {role.name} from user {member.name}.")
                 except Exception as e:
                     print(f"Failed to remove role {role.name} from user {member.name}: {e}")
                     break
