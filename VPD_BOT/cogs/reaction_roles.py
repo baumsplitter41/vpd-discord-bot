@@ -126,12 +126,12 @@ class reactionroles(commands.Cog):
             print("Roles are not set in config.")
             return
         for role_id in role_ids:
-            if self.bot.get_role(role_id) is None:
+            if guild.get_role(role_id) is None:
                 print(f"Role with ID {role_id} not found.")
                 return
             else:
-                print(f"Role with ID {role_id} found: {self.bot.get_role(role_id).name}")
-        roles = [self.bot.get_role(role_id) for role_id in role_ids]
+                print(f"Role with ID {role_id} found: {guild.get_role(role_id).name}")
+        roles = [guild.get_role(role_id) for role_id in role_ids]
         
         #Add the role to the user
         for emoji, role in zip(emojis, roles):
@@ -167,12 +167,12 @@ class reactionroles(commands.Cog):
             print("Roles are not set in config.")
             return
         for role_id in role_ids:
-            if self.bot.get_role(role_id) is None:
+            if guild.get_role(role_id) is None:
                 print(f"Role with ID {role_id} not found.")
                 return
             else:
-                print(f"Role with ID {role_id} found: {self.bot.get_role(role_id).name}")
-        roles = [self.bot.get_role(role_id) for role_id in role_ids]
+                print(f"Role with ID {role_id} found: {guild.get_role(role_id).name}")
+        roles = [guild.get_role(role_id) for role_id in role_ids]
         
 
         #Add the role to the user
