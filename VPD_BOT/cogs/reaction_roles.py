@@ -136,7 +136,7 @@ class reactionroles(commands.Cog):
         roles = [guild.get_role(role_id) for role_id in role_ids]
         
         #Add the role to the user
-        for emoji, role in zip(emojis, roles):
+        """for emoji, role in zip(emojis, roles):
             if payload.emoji.id == emoji:
                 try:
                     await user.add_roles(role)
@@ -145,6 +145,16 @@ class reactionroles(commands.Cog):
                     break
                 except Exception as e:
                     print(f"Failed to add role {role.name} to user {user.name}: {e}")
+                    break"""
+        for i in range(len(emojis)):
+            if payload.emoji.id == emojis[i]:
+                try:
+                    await user.add_roles(roles[i])
+                    remove_reaction = discord.utils.get(guild.emojis, id=emojis[i])
+                    await payload.member.remove_reaction(remove_reaction, message_id)
+                    break
+                except Exception as e:
+                    print(f"Failed to add role {roles[i].name} to user {user.name}: {e}")
                     break
 
 
