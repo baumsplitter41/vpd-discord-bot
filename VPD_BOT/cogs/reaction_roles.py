@@ -157,6 +157,8 @@ class reactionroles(commands.Cog):
                 except Exception as e:
                     print(f"Failed to add role {roles[i].name} to user {member.name}: {e}")
                     break
+            else:
+                print(f"Emoji {payload.emoji} does not match {emojis[i]} for role {roles[i].name}.")
 
 
     #Remove role from user
