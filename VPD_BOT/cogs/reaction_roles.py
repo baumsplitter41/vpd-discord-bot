@@ -109,7 +109,7 @@ class reactionroles(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
         #Get variables
-        user = self.parse_reaction_payload(payload)
+        user = self.bot.get_user(payload.user_id)
         guild = self.bot.get_guild(payload.guild_id)
         if user.bot:
             return
@@ -139,7 +139,8 @@ class reactionroles(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload: discord.RawReactionActionEvent):
         #Get variables
-        user = self.parse_reaction_payload(payload)
+        user = self.bot.get_user(payload.user_id)
+        guild = self.bot.get_guild(payload.guild_id)
         if user.bot:
             return
         message_id = self._get_message_id()
