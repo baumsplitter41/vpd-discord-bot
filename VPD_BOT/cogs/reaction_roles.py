@@ -20,11 +20,7 @@ class reactionroles(commands.Cog):
     def _get_roles(self):
         config = self._load_config()
         role_ids = [int(role_id.strip()) for role_id in config["Reactionroles"]["reactionroles_role_ids"].split(",")]
-        roles = [self.guild.get_roleget_role(role_id) for role_id in role_ids]
-        if any(role is None for role in roles):
-            print(f"One or more roles with IDs {role_ids} not found.")
-            return
-        return roles
+        return role_ids
     def _get_emojis(self):
         config = self._load_config()
         emojis = [emoji.strip() for emoji in config["Reactionroles"]["reactionroles_emojis"].split(",")]
@@ -125,10 +121,17 @@ class reactionroles(commands.Cog):
         #if payload.emoji.id not in emojis:
         #    print(f"Emoji {payload.emoji} is not in the list of valid emojis.")
         #    return
-        roles = self._get_roles()
-        if roles is None:
+        role_ids = self._get_roles()
+        if role_ids is None:
             print("Roles are not set in config.")
             return
+        for role_id in role_ids:
+            if self.bot.get_role(role_id) is None:
+                print(f"Role with ID {role_id} not found.")
+                return
+            else:
+                print(f"Role with ID {role_id} found: {self.bot.get_role(role_id).name}")
+        roles = [self.bot.get_role(role_id) for role_id in role_ids]
         
         #Add the role to the user
         for emoji, role in zip(emojis, roles):
@@ -159,10 +162,17 @@ class reactionroles(commands.Cog):
         #if payload.emoji.id not in emojis:
         #    print(f"Emoji {payload.emoji} is not in the list of valid emojis.")
         #    return
-        roles = self._get_roles()
-        if roles is None:
+        role_ids = self._get_roles()
+        if role_ids is None:
             print("Roles are not set in config.")
             return
+        for role_id in role_ids:
+            if self.bot.get_role(role_id) is None:
+                print(f"Role with ID {role_id} not found.")
+                return
+            else:
+                print(f"Role with ID {role_id} found: {self.bot.get_role(role_id).name}")
+        roles = [self.bot.get_role(role_id) for role_id in role_ids]
         
 
         #Add the role to the user
