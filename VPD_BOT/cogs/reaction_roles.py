@@ -203,6 +203,8 @@ class reactionroles(commands.Cog):
                 except Exception as e:
                     print(f"Failed to remove role {role.name} from user {user.name}: {e}")
                     break
+            else:
+                print(f"Emoji {payload.emoji} does not match {emoji} for role {role.name}.")
         
         
 def setup(bot: discord.Bot):
