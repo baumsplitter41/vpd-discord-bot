@@ -120,7 +120,7 @@ class reactionroles(commands.Cog):
             print("Emojis are not set in config.")
             return
         for emoji in emojis:
-            if payload.emoji.id == emoji:
+            if payload.emoji.name == emoji:
                 print(f"Emoji {payload.emoji} is in the list of valid emojis.")
                 break
         role_ids = self._get_roles()
@@ -147,7 +147,7 @@ class reactionroles(commands.Cog):
                     print(f"Failed to add role {role.name} to user {user.name}: {e}")
                     break"""
         for i in range(len(emojis)):
-            if payload.emoji.id == emojis[i]:
+            if payload.emoji.name == emojis[i]:
                 try:
                     await user.add_roles(roles[i])
                     remove_reaction = discord.utils.get(guild.emojis, id=emojis[i])
@@ -176,7 +176,7 @@ class reactionroles(commands.Cog):
             print("Emojis are not set in config.")
             return
         for emoji in emojis:
-            if payload.emoji.id == emoji:
+            if payload.emoji.name == emoji:
                 print(f"Emoji {payload.emoji} is in the list of valid emojis.")
                 break
         role_ids = self._get_roles()
@@ -194,7 +194,7 @@ class reactionroles(commands.Cog):
 
         #Add the role to the user
         for emoji, role in zip(emojis, roles):
-            if payload.emoji.id == emoji:
+            if payload.emoji.name == emoji:
                 try:
                     await user.remove_roles(role)
                     remove_reaction = discord.utils.get(guild.emojis, id=emoji)
