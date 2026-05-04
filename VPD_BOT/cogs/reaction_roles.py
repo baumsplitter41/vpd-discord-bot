@@ -149,13 +149,17 @@ class reactionroles(commands.Cog):
             if payload.emoji.name == emojis[i]:
                 try:
                     await member.add_roles(roles[i])
+                except Exception as e:
+                    print(f"Failed to add role {roles[i].name} to user {member.name}: {e}")
+                    break
+                try:
                     channel = self.bot.get_channel(payload.channel_id)
                     if channel is not None:
                         message = await channel.fetch_message(message_id)
                         await message.remove_reaction(payload.emoji, member)
                     break
                 except Exception as e:
-                    print(f"Failed to add role {roles[i].name} to user {member.name}: {e}")
+                    print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
                     break
             else:
                 print(f"Emoji {payload.emoji} does not match {emojis[i]} for role {roles[i].name}.")
@@ -202,13 +206,17 @@ class reactionroles(commands.Cog):
             if payload.emoji.name == emoji:
                 try:
                     await member.remove_roles(role)
+                except Exception as e:
+                    print(f"Failed to remove role {role.name} from user {member.name}: {e}")
+                    break
+                try:
                     channel = self.bot.get_channel(payload.channel_id)
                     if channel is not None:
                         message = await channel.fetch_message(message_id)
                         await message.remove_reaction(payload.emoji, member)
                     break
                 except Exception as e:
-                    print(f"Failed to remove role {role.name} from user {member.name}: {e}")
+                    print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
                     break
             else:
                 print(f"Emoji {payload.emoji} does not match {emoji} for role {role.name}.")
