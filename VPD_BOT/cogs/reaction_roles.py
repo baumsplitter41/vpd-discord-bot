@@ -115,14 +115,18 @@ class reactionroles(commands.Cog):
             return
         message_id = self._get_message_id()
         if message_id is None:
+            print("Message ID is not set in config.")
             return
         emojis = self._get_emojis()
         if emojis is None:
+            print("Emojis are not set in config.")
             return
         if payload.emoji.id not in emojis:
+            print(f"Emoji {payload.emoji} is not in the list of valid emojis.")
             return
         roles = self._get_roles()
         if roles is None:
+            print("Roles are not set in config.")
             return
         
         #Add the role to the user
@@ -145,15 +149,20 @@ class reactionroles(commands.Cog):
             return
         message_id = self._get_message_id()
         if message_id is None:
+            print("Message ID is not set in config.")
             return
         emojis = self._get_emojis()
         if emojis is None:
+            print("Emojis are not set in config.")
             return
         if payload.emoji.id not in emojis:
+            print(f"Emoji {payload.emoji} is not in the list of valid emojis.")
             return
         roles = self._get_roles()
         if roles is None:
+            print("Roles are not set in config.")
             return
+        
         
         #Add the role to the user
         for emoji, role in zip(emojis, roles):
