@@ -148,6 +148,7 @@ class reactionroles(commands.Cog):
                     break"""
         for i in range(len(emojis)):
             if payload.emoji.name == emojis[i]:
+                print(f"Adding role {roles[i].name} to user {member.name} for emoji {emojis[i]}.")
                 try:
                     await member.add_roles(roles[i])
                     print(f"Added role {roles[i].name} to user {member.name}.")
@@ -204,6 +205,7 @@ class reactionroles(commands.Cog):
         #Add the role to the user
         for emoji, role in zip(emojis, roles):
             if payload.emoji.name == emoji:
+                print(f"Removing role {role.name} from user {member.name} for emoji {emoji}.")
                 try:
                     await member.remove_roles(role)
                     print(f"Removed role {role.name} from user {member.name}.")
