@@ -110,13 +110,13 @@ class reactionroles(commands.Cog):
     async def on_raw_reaction_add(self, payload):
         #Get variables
         user = self.bot.get_user(payload.user_id)
+        user = self.bot.get(payload.user_id)
         guild = self.bot.get_guild(payload.guild_id)
         if user.bot:
             return
         message_id = self._get_message_id()
         if message_id is None:
             return
-        message = await guild.fetch_message(message_id)
         emojis = self._get_emojis()
         if emojis is None:
             return
@@ -131,7 +131,7 @@ class reactionroles(commands.Cog):
             if payload.emoji.id == emoji:
                 await user.add_roles(role)
                 remove_reaction = discord.utils.get(guild.emojis, id=emoji)
-                await payload.member.remove_reaction(remove_reaction, message)
+                await payload.member.remove_reaction(remove_reaction, message_id)
                 break
 
 
@@ -146,7 +146,6 @@ class reactionroles(commands.Cog):
         message_id = self._get_message_id()
         if message_id is None:
             return
-        message = await guild.fetch_message(message_id)
         emojis = self._get_emojis()
         if emojis is None:
             return
@@ -161,7 +160,7 @@ class reactionroles(commands.Cog):
             if payload.emoji.id == emoji:
                 await user.remove_roles(role)
                 remove_reaction = discord.utils.get(guild.emojis, id=emoji)
-                await payload.member.remove_reaction(remove_reaction, message)
+                await payload.member.remove_reaction(remove_reaction, message_id)
                 break
         
         
