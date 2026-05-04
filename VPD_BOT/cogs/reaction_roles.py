@@ -136,11 +136,15 @@ class reactionroles(commands.Cog):
         #Add the role to the user
         for emoji, role in zip(emojis, roles):
             if payload.emoji.id == emoji:
-                print(zip(emojis, roles))
-                await user.add_roles(role)
-                remove_reaction = discord.utils.get(guild.emojis, id=emoji)
-                await payload.member.remove_reaction(remove_reaction, message_id)
-                break
+                try:
+                    print(zip(emojis, roles))
+                    await user.add_roles(role)
+                    remove_reaction = discord.utils.get(guild.emojis, id=emoji)
+                    await payload.member.remove_reaction(remove_reaction, message_id)
+                    break
+                except Exception as e:
+                    print(f"Failed to add role {role.name} to user {user.name}: {e}")
+                    break
 
 
     #Remove role from user
@@ -178,10 +182,14 @@ class reactionroles(commands.Cog):
         #Add the role to the user
         for emoji, role in zip(emojis, roles):
             if payload.emoji.id == emoji:
-                await user.remove_roles(role)
-                remove_reaction = discord.utils.get(guild.emojis, id=emoji)
-                await payload.member.remove_reaction(remove_reaction, message_id)
-                break
+                try:
+                    await user.remove_roles(role)
+                    remove_reaction = discord.utils.get(guild.emojis, id=emoji)
+                    await payload.member.remove_reaction(remove_reaction, message_id)
+                    break
+                except Exception as e:
+                    print(f"Failed to remove role {role.name} from user {user.name}.")
+                    break
         
         
 def setup(bot: discord.Bot):
