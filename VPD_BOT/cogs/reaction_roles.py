@@ -107,9 +107,11 @@ class reactionroles(commands.Cog):
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
         #Get variables
         print(payload.emoji)
-        user = self.bot.get_user(payload.user_id)
         guild = self.bot.get_guild(payload.guild_id)
-        if user.bot:
+        if guild is None:
+            return
+        member = payload.member or guild.get_member(payload.user_id)
+        if member is None or member.bot:
             return
         message_id = self._get_message_id()
         if message_id is None:
@@ -136,17 +138,17 @@ class reactionroles(commands.Cog):
         roles = [guild.get_role(role_id) for role_id in role_ids]
         
         #Add the role to the user
-        """for emoji, role in zip(emojis, roles):
+        for emoji, role in zip(emojis, roles):
             if payload.emoji.id == emoji:
                 try:
-                    await user.add_roles(role)
+                    await member.add_roles(role)
                     remove_reaction = discord.utils.get(guild.emojis, id=emoji)
                     await payload.member.remove_reaction(remove_reaction, message_id)
                     break
                 except Exception as e:
-                    print(f"Failed to add role {role.name} to user {user.name}: {e}")
-                    break"""
-        for i in range(len(emojis)):
+                    print(f"Failed to add role {role.name} to user {member.name}: {e}")
+                    break
+        """for i in range(len(emojis)):
             if payload.emoji.name == emojis[i]:
                 try:
                     await user.add_roles(roles[i])
@@ -155,7 +157,7 @@ class reactionroles(commands.Cog):
                     break
                 except Exception as e:
                     print(f"Failed to add role {roles[i].name} to user {user.name}: {e}")
-                    break
+                    break"""
 
 
     #Remove role from user
@@ -163,9 +165,11 @@ class reactionroles(commands.Cog):
     async def on_raw_reaction_remove(self, payload: discord.RawReactionActionEvent):
         #Get variables
         print(payload.emoji)
-        user = self.bot.get_user(payload.user_id)
         guild = self.bot.get_guild(payload.guild_id)
-        if user.bot:
+        if guild is None:
+            return
+        member = guild.get_member(payload.user_id)
+        if member is None or member.bot:
             return
         message_id = self._get_message_id()
         if message_id is None:
@@ -196,12 +200,12 @@ class reactionroles(commands.Cog):
         for emoji, role in zip(emojis, roles):
             if payload.emoji.name == emoji:
                 try:
-                    await user.remove_roles(role)
+                    await member.remove_roles(role)
                     remove_reaction = discord.utils.get(guild.emojis, id=emoji)
                     await payload.member.remove_reaction(remove_reaction, message_id)
                     break
                 except Exception as e:
-                    print(f"Failed to remove role {role.name} from user {user.name}: {e}")
+                    print(f"Failed to remove role {role.name} from user {member.name}: {e}")
                     break
             else:
                 print(f"Emoji {payload.emoji} does not match {emoji} for role {role.name}.")
