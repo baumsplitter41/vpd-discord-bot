@@ -28,6 +28,7 @@ class reactionroles(commands.Cog):
     def _get_emojis(self):
         config = self._load_config()
         emojis = [emoji.strip() for emoji in config["Reactionroles"]["reactionroles_emojis"].split(",")]
+        print(emojis)
         return emojis
     def _get_message_id(self):
         config = self._load_config()
@@ -121,9 +122,9 @@ class reactionroles(commands.Cog):
         if emojis is None:
             print("Emojis are not set in config.")
             return
-        if payload.emoji.id not in emojis:
-            print(f"Emoji {payload.emoji} is not in the list of valid emojis.")
-            return
+        #if payload.emoji.id not in emojis:
+        #    print(f"Emoji {payload.emoji} is not in the list of valid emojis.")
+        #    return
         roles = self._get_roles()
         if roles is None:
             print("Roles are not set in config.")
@@ -152,13 +153,12 @@ class reactionroles(commands.Cog):
             print("Message ID is not set in config.")
             return
         emojis = self._get_emojis()
-        print(emojis)
         if emojis is None:
             print("Emojis are not set in config.")
             return
-        if payload.emoji.id not in emojis:
-            print(f"Emoji {payload.emoji} is not in the list of valid emojis.")
-            return
+        #if payload.emoji.id not in emojis:
+        #    print(f"Emoji {payload.emoji} is not in the list of valid emojis.")
+        #    return
         roles = self._get_roles()
         if roles is None:
             print("Roles are not set in config.")
