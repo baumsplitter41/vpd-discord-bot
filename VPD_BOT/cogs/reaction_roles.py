@@ -134,10 +134,10 @@ class reactionroles(commands.Cog):
         roles = [guild.get_role(role_id) for role_id in role_ids]
         
         #Add the role to the user
+        print(zip(emojis, roles))
         for emoji, role in zip(emojis, roles):
             if payload.emoji.id == emoji:
                 try:
-                    print(zip(emojis, roles))
                     await user.add_roles(role)
                     remove_reaction = discord.utils.get(guild.emojis, id=emoji)
                     await payload.member.remove_reaction(remove_reaction, message_id)
@@ -180,6 +180,7 @@ class reactionroles(commands.Cog):
         
 
         #Add the role to the user
+        print(zip(emojis, roles))
         for emoji, role in zip(emojis, roles):
             if payload.emoji.id == emoji:
                 try:
