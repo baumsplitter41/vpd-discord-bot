@@ -20,7 +20,7 @@ class reactionroles(commands.Cog):
     def _get_roles(self):
         config = self._load_config()
         role_ids = [int(role_id.strip()) for role_id in config["Reactionroles"]["reactionroles_role_ids"].split(",")]
-        roles = [self.bot.get_role(role_id) for role_id in role_ids]
+        roles = [self.guild.get_roleget_role(role_id) for role_id in role_ids]
         if any(role is None for role in roles):
             print(f"One or more roles with IDs {role_ids} not found.")
             return
