@@ -24,7 +24,6 @@ class reactionroles(commands.Cog):
     def _get_emojis(self):
         config = self._load_config()
         emojis = [emoji.strip() for emoji in config["Reactionroles"]["reactionroles_emojis"].split(",")]
-        print(emojis)
         return emojis
     def _get_message_id(self):
         config = self._load_config()
@@ -133,12 +132,10 @@ class reactionroles(commands.Cog):
             if guild.get_role(role_id) is None:
                 print(f"Role with ID {role_id} not found.")
                 return
-            else:
-                print(f"Role with ID {role_id} found: {guild.get_role(role_id).name}")
         roles = [guild.get_role(role_id) for role_id in role_ids]
         
         #Add the role to the user
-        for emoji, role in zip(emojis, roles):
+        """for emoji, role in zip(emojis, roles):
             if payload.emoji.id == emoji:
                 try:
                     await member.add_roles(role)
@@ -147,17 +144,19 @@ class reactionroles(commands.Cog):
                     break
                 except Exception as e:
                     print(f"Failed to add role {role.name} to user {member.name}: {e}")
-                    break
-        """for i in range(len(emojis)):
+                    break"""
+        for i in range(len(emojis)):
             if payload.emoji.name == emojis[i]:
                 try:
-                    await user.add_roles(roles[i])
-                    remove_reaction = discord.utils.get(guild.emojis, id=emojis[i])
-                    await payload.member.remove_reaction(remove_reaction, message_id)
+                    await member.add_roles(roles[i])
+                    channel = self.bot.get_channel(payload.channel_id)
+                    if channel is not None:
+                        message = await channel.fetch_message(message_id)
+                        await message.remove_reaction(payload.emoji, member)
                     break
                 except Exception as e:
-                    print(f"Failed to add role {roles[i].name} to user {user.name}: {e}")
-                    break"""
+                    print(f"Failed to add role {roles[i].name} to user {member.name}: {e}")
+                    break
 
 
     #Remove role from user
@@ -201,8 +200,10 @@ class reactionroles(commands.Cog):
             if payload.emoji.name == emoji:
                 try:
                     await member.remove_roles(role)
-                    remove_reaction = discord.utils.get(guild.emojis, id=emoji)
-                    await payload.member.remove_reaction(remove_reaction, message_id)
+                    channel = self.bot.get_channel(payload.channel_id)
+                    if channel is not None:
+                        message = await channel.fetch_message(message_id)
+                        await message.remove_reaction(payload.emoji, member)
                     break
                 except Exception as e:
                     print(f"Failed to remove role {role.name} from user {member.name}: {e}")
