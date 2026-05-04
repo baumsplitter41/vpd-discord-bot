@@ -152,6 +152,7 @@ class reactionroles(commands.Cog):
             print("Message ID is not set in config.")
             return
         emojis = self._get_emojis()
+        print(emojis)
         if emojis is None:
             print("Emojis are not set in config.")
             return
@@ -163,7 +164,7 @@ class reactionroles(commands.Cog):
             print("Roles are not set in config.")
             return
         
-        
+
         #Add the role to the user
         for emoji, role in zip(emojis, roles):
             if payload.emoji.id == emoji:
