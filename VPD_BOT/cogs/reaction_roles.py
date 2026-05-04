@@ -188,7 +188,7 @@ class reactionroles(commands.Cog):
                     await payload.member.remove_reaction(remove_reaction, message_id)
                     break
                 except Exception as e:
-                    print(f"Failed to remove role {role.name} from user {user.name}.")
+                    print(f"Failed to remove role {role.name} from user {user.name}: {e}")
                     break
         
         
