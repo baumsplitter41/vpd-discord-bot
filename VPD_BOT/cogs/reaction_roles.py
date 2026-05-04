@@ -106,6 +106,7 @@ class reactionroles(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
         #Get variables
+        print(payload.emoji)
         user = self.bot.get_user(payload.user_id)
         guild = self.bot.get_guild(payload.guild_id)
         if user.bot:
@@ -134,7 +135,6 @@ class reactionroles(commands.Cog):
         roles = [guild.get_role(role_id) for role_id in role_ids]
         
         #Add the role to the user
-        print(zip(emojis, roles))
         for emoji, role in zip(emojis, roles):
             if payload.emoji.id == emoji:
                 try:
@@ -151,6 +151,7 @@ class reactionroles(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload: discord.RawReactionActionEvent):
         #Get variables
+        print(payload.emoji)
         user = self.bot.get_user(payload.user_id)
         guild = self.bot.get_guild(payload.guild_id)
         if user.bot:
@@ -180,7 +181,6 @@ class reactionroles(commands.Cog):
         
 
         #Add the role to the user
-        print(zip(emojis, roles))
         for emoji, role in zip(emojis, roles):
             if payload.emoji.id == emoji:
                 try:
