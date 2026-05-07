@@ -130,7 +130,7 @@ class Reactionroles(commands.Cog):
         
 
         #Add role function        
-        for i in range(len(emojis)):
+        """for i in range(len(emojis)):
             if payload.emoji.name == emojis[i]:
                 print(f"Adding role {roles[i].name} to user {member.name} for emoji {emojis[i]}.")
                 try:
@@ -149,10 +149,10 @@ class Reactionroles(commands.Cog):
                     print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
                     break
             else:
-                print(f"Emoji {payload.emoji} does not match {emojis[i]} for role {roles[i].name}.")
+                print(f"Emoji {payload.emoji} does not match {emojis[i]} for role {roles[i].name}.")"""
 
 
-        """or emoji, role in zip(emojis, roles):
+        for emoji, role in zip(emojis, roles):
             if payload.emoji.name == emoji:
                 print(f"Adding role {role.name} to user {member.name} for emoji {emoji}.")
                 try:
@@ -165,13 +165,13 @@ class Reactionroles(commands.Cog):
                     channel = self.bot.get_channel(payload.channel_id)
                     if channel is not None:
                         message = await channel.fetch_message(message_id)
-                        await message.remove_reaction(payload.emoji, member)
-                        break
+                    await message.remove_reaction(payload.emoji, member)
+                    break
                 except Exception as e:
                     print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
                     break
             else:
-                print(f"Emoji {payload.emoji} does not match {emoji} for role {role.name}.")"""
+                print(f"Emoji {payload.emoji} does not match {emoji} for role {role.name}.")
 
 
 
@@ -221,8 +221,8 @@ class Reactionroles(commands.Cog):
                     channel = self.bot.get_channel(payload.channel_id)
                     if channel is not None:
                         message = await channel.fetch_message(message_id)
-                        await message.remove_reaction(payload.emoji, member)
-                        break
+                    await message.remove_reaction(payload.emoji, member)
+                    break
                 except Exception as e:
                     print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
                     break
