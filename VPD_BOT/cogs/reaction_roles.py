@@ -97,12 +97,11 @@ class Reactionroles(commands.Cog):
         
         
 #-----------------------------------------------#
-
     #Add role to user
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
+
         #Get variables
-        print(payload.emoji)
         guild = self.bot.get_guild(payload.guild_id)
         if guild is None:
             return
@@ -130,7 +129,6 @@ class Reactionroles(commands.Cog):
                 return
         roles = [guild.get_role(role_id) for role_id in role_ids]
         
-
         #Add role function        
         for emoji, role in zip(emojis, roles):
             if payload.emoji.name == emoji:
@@ -139,22 +137,25 @@ class Reactionroles(commands.Cog):
                 except Exception as e:
                     print(f"Failed to add role {role.name} to user {member.name}: {e}")
                     break
-                """try:
+                try:
                     channel = self.bot.get_channel(payload.channel_id)
                     if channel is not None:
                         message = await channel.fetch_message(message_id)
-                    await message.remove_reaction(payload.emoji)
+                    await message.remove_reaction(payload.emoji, member)
                     break
                 except Exception as e:
                     print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
-                    break"""
+                    break
 
 
 
     #Remove role from user
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload: discord.RawReactionActionEvent):
+
         #Get variables
+        if payload.member is not None or payload.member == self.bot.user:
+            return
         guild = self.bot.get_guild(payload.guild_id)
         if guild is None:
             return
@@ -181,7 +182,6 @@ class Reactionroles(commands.Cog):
                 print(f"Role with ID {role_id} not found.")
                 return
         roles = [guild.get_role(role_id) for role_id in role_ids]
-        
 
         #Role remove function
         for emoji, role in zip(emojis, roles):
@@ -191,7 +191,7 @@ class Reactionroles(commands.Cog):
                 except Exception as e:
                     print(f"Failed to remove role {role.name} from user {member.name}: {e}")
                     break
-                """try:
+                try:
                     channel = self.bot.get_channel(payload.channel_id)
                     if channel is not None:
                         message = await channel.fetch_message(message_id)
@@ -199,8 +199,8 @@ class Reactionroles(commands.Cog):
                     break
                 except Exception as e:
                     print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
-                    break"""
+                    break
         
-        
+#Setup function
 def setup(bot: discord.Bot):
     bot.add_cog(Reactionroles(bot))
