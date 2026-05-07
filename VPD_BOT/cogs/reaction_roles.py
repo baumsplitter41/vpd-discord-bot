@@ -161,7 +161,7 @@ class Reactionroles(commands.Cog):
                 except Exception as e:
                     print(f"Failed to add role {role.name} to user {member.name}: {e}")
                     break
-                try:
+                """try:
                     channel = self.bot.get_channel(payload.channel_id)
                     if channel is not None:
                         message = await channel.fetch_message(message_id)
@@ -169,7 +169,7 @@ class Reactionroles(commands.Cog):
                     break
                 except Exception as e:
                     print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
-                    break
+                    break"""
             else:
                 print(f"Emoji {payload.emoji} does not match {emoji} for role {role.name}.")
 
@@ -217,7 +217,7 @@ class Reactionroles(commands.Cog):
                 except Exception as e:
                     print(f"Failed to remove role {role.name} from user {member.name}: {e}")
                     break
-                try:
+                """try:
                     channel = self.bot.get_channel(payload.channel_id)
                     if channel is not None:
                         message = await channel.fetch_message(message_id)
@@ -225,7 +225,7 @@ class Reactionroles(commands.Cog):
                     break
                 except Exception as e:
                     print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
-                    break
+                    break"""
             else:
                 print(f"Emoji {payload.emoji} does not match {emoji} for role {role.name}.")
         
