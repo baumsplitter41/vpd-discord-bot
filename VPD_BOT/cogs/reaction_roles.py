@@ -115,10 +115,9 @@ class Reactionroles(commands.Cog):
         if emojis is None:
             print("Emojis are not set in config.")
             return
-        for emoji in emojis:
-            if payload.emoji.name != emoji:
-                print(f"Emoji {payload.emoji} does not match {emoji}.")
-                return
+        if payload.emoji.name not in emojis:
+            print(f"Emoji {payload.emoji} does not match {emojis}.")
+            return
         role_ids = self._get_roles()
         if role_ids is None:
             print("Roles are not set in config.")
@@ -194,10 +193,9 @@ class Reactionroles(commands.Cog):
         if emojis is None:
             print("Emojis are not set in config.")
             return
-        for emoji in emojis:
-            if payload.emoji.name != emoji:
-                print(f"Emoji {payload.emoji} does not match {emoji}.")
-                return
+        if payload.emoji.name not in emojis:
+            print(f"Emoji {payload.emoji} does not match {emojis}.")
+            return
         role_ids = self._get_roles()
         if role_ids is None:
             print("Roles are not set in config.")
