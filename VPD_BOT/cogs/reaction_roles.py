@@ -130,28 +130,6 @@ class Reactionroles(commands.Cog):
         
 
         #Add role function        
-        """for i in range(len(emojis)):
-            if payload.emoji.name == emojis[i]:
-                print(f"Adding role {roles[i].name} to user {member.name} for emoji {emojis[i]}.")
-                try:
-                    await member.add_roles(roles[i])
-                    print(f"Added role {roles[i].name} to user {member.name}.")
-                except Exception as e:
-                    print(f"Failed to add role {roles[i].name} to user {member.name}: {e}")
-                    break
-                try:
-                    channel = self.bot.get_channel(payload.channel_id)
-                    if channel is not None:
-                        message = await channel.fetch_message(message_id)
-                        await message.remove_reaction(payload.emoji, member)
-                        break
-                except Exception as e:
-                    print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
-                    break
-            else:
-                print(f"Emoji {payload.emoji} does not match {emojis[i]} for role {roles[i].name}.")"""
-
-
         for emoji, role in zip(emojis, roles):
             if payload.emoji.name == emoji:
                 print(f"Adding role {role.name} to user {member.name} for emoji {emoji}.")
