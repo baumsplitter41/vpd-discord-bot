@@ -102,6 +102,8 @@ class Reactionroles(commands.Cog):
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
 
         #Get variables
+        if payload.member is None:
+            return
         guild = self.bot.get_guild(payload.guild_id)
         if guild is None:
             return
@@ -154,8 +156,11 @@ class Reactionroles(commands.Cog):
     async def on_raw_reaction_remove(self, payload: discord.RawReactionActionEvent):
 
         #Get variables
-        if payload.member is not None or payload.member == self.bot.user:
+        if payload.member is not None:
             return
+        if payload.member.bot:
+            return
+        
         guild = self.bot.get_guild(payload.guild_id)
         if guild is None:
             return
