@@ -110,7 +110,9 @@ class Reactionroles(commands.Cog):
         if member is None or member.bot:
             return
         message_id = self._get_message_id()
-
+        if message_id is None:
+            print("Message ID is not set in config.")
+            return
         emojis = self._get_emojis()
         if emojis is None:
             print("Emojis are not set in config.")
@@ -132,10 +134,8 @@ class Reactionroles(commands.Cog):
         #Add role function        
         for emoji, role in zip(emojis, roles):
             if payload.emoji.name == emoji:
-                print(f"Adding role {role.name} to user {member.name} for emoji {emoji}.")
                 try:
                     await member.add_roles(role)
-                    print(f"Added role {role.name} to user {member.name}.")
                 except Exception as e:
                     print(f"Failed to add role {role.name} to user {member.name}: {e}")
                     break
@@ -148,8 +148,6 @@ class Reactionroles(commands.Cog):
                 except Exception as e:
                     print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
                     break"""
-            else:
-                print(f"Emoji {payload.emoji} does not match {emoji} for role {role.name}.")
 
 
 
@@ -188,10 +186,8 @@ class Reactionroles(commands.Cog):
         #Role remove function
         for emoji, role in zip(emojis, roles):
             if payload.emoji.name == emoji:
-                print(f"Removing role {role.name} from user {member.name} for emoji {emoji}.")
                 try:
                     await member.remove_roles(role)
-                    print(f"Removed role {role.name} from user {member.name}.")
                 except Exception as e:
                     print(f"Failed to remove role {role.name} from user {member.name}: {e}")
                     break
@@ -204,8 +200,6 @@ class Reactionroles(commands.Cog):
                 except Exception as e:
                     print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
                     break"""
-            else:
-                print(f"Emoji {payload.emoji} does not match {emoji} for role {role.name}.")
         
         
 def setup(bot: discord.Bot):
