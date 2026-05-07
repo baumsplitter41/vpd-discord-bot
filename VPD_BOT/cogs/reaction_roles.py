@@ -158,8 +158,6 @@ class Reactionroles(commands.Cog):
         #Get variables
         if payload.member is not None:
             return
-        if payload.member.bot:
-            return
         if payload.user_id == self.bot.user.id:
             return
         guild = self.bot.get_guild(payload.guild_id)
