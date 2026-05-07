@@ -165,7 +165,7 @@ class Reactionroles(commands.Cog):
                     channel = self.bot.get_channel(payload.channel_id)
                     if channel is not None:
                         message = await channel.fetch_message(message_id)
-                    await message.remove_reaction(payload.emoji, member)
+                    await message.remove_reaction(payload.emoji)
                     break
                 except Exception as e:
                     print(f"Failed to remove reaction {payload.emoji} from user {member.name}: {e}")
