@@ -99,10 +99,9 @@ class Reactionroles(commands.Cog):
 #-----------------------------------------------#
     #Add role to user
     @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent, ctx=None):
+    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
 
         #Get variables
-        ctx = ctx or self.bot.get_context(payload)
         message_id = self._get_message_id()
         if message_id is None:
             print("Message ID is not set in config.")
