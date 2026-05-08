@@ -136,7 +136,6 @@ class Reactionroles(commands.Cog):
         interaction = discord.Interaction(
             data={"id": payload.message_id},
             state=self.bot._connection,
-            channel=guild.get_channel(payload.channel_id),
             user=payload.member,
             roles=payload.member.roles
         )
@@ -149,7 +148,7 @@ class Reactionroles(commands.Cog):
                 if role not in member.roles:
                     try:
                         await member.add_roles(role)
-                        await interaction.response.send_message(f"The role {role.name} has been removed from your roles.", ephemeral=True)
+                        #await interaction.response.send_message(f"The role {role.name} has been removed from your roles.", ephemeral=True)
 
                     except Exception as e:
                         print(f"Failed to add role {role.name} to user {member.name}: {e}")
@@ -160,7 +159,7 @@ class Reactionroles(commands.Cog):
                     try:
                         await member.remove_roles(role)
                         #await member.send(f"The role {role.name} has been removed from your roles.", ephemeral=True)
-                        await interaction.response.send_message(f"The role {role.name} has been removed from your roles.", ephemeral=True)
+                        #await interaction.response.send_message(f"The role {role.name} has been removed from your roles.", ephemeral=True)
                     except Exception as e:
                         print(f"Failed to remove role {role.name} from user {member.name}: {e}")
                         break
