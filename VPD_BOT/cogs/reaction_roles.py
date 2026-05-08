@@ -149,7 +149,15 @@ class Reactionroles(commands.Cog):
                 if role not in member.roles:
                     try:
                         await member.add_roles(role)
-                        #await interaction.response.send_message(f"The role {role.name} has been removed from your roles.", ephemeral=True)
+                        try:
+                            channel = self.bot.get_channel(payload.channel_id)
+                            if channel is not None:
+                                await channel.send(
+                                    f"{member.mention}, you received the **{role.name}** role.",
+                                    delete_after=5
+                                )
+                        except Exception as e:
+                            print(f"Failed to send confirmation message for {member.name}: {e}")
 
                     except Exception as e:
                         print(f"Failed to add role {role.name} to user {member.name}: {e}")
@@ -159,7 +167,16 @@ class Reactionroles(commands.Cog):
                 else:
                     try:
                         await member.remove_roles(role)
-                        #await interaction.response.send_message(f"The role {role.name} has been removed from your roles.", ephemeral=True)
+                        try:
+                            channel = self.bot.get_channel(payload.channel_id)
+                            if channel is not None:
+                                await channel.send(
+                                    f"{member.mention}, you received the **{role.name}** role.",
+                                    delete_after=5
+                                )
+                        except Exception as e:
+                            print(f"Failed to send confirmation message for {member.name}: {e}")
+                        
                     except Exception as e:
                         print(f"Failed to remove role {role.name} from user {member.name}: {e}")
                         break
