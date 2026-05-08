@@ -99,9 +99,10 @@ class Reactionroles(commands.Cog):
 #-----------------------------------------------#
     #Add role to user
     @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
+    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent, ctx=None):
 
         #Get variables
+        ctx = ctx or self.bot.get_context(payload)
         message_id = self._get_message_id()
         if message_id is None:
             print("Message ID is not set in config.")
@@ -148,7 +149,7 @@ class Reactionroles(commands.Cog):
                 if role not in member.roles:
                     try:
                         await member.add_roles(role)
-                        #await interaction.response.send_message(f"The role {role.name} has been removed from your roles.", ephemeral=True)
+                        await ctx.response.send_message(f"The role {role.name} has been removed from your roles.", ephemeral=True)
 
                     except Exception as e:
                         print(f"Failed to add role {role.name} to user {member.name}: {e}")
@@ -159,7 +160,7 @@ class Reactionroles(commands.Cog):
                     try:
                         await member.remove_roles(role)
                         #await member.send(f"The role {role.name} has been removed from your roles.", ephemeral=True)
-                        #await interaction.response.send_message(f"The role {role.name} has been removed from your roles.", ephemeral=True)
+                        await ctx.response.send_message(f"The role {role.name} has been removed from your roles.", ephemeral=True)
                     except Exception as e:
                         print(f"Failed to remove role {role.name} from user {member.name}: {e}")
                         break
