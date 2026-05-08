@@ -136,7 +136,6 @@ class Reactionroles(commands.Cog):
         interaction = discord.Interaction(
             data={"id": payload.message_id},
             state=self.bot._connection,
-            guild=guild,
             channel=guild.get_channel(payload.channel_id),
             user=payload.member,
             roles=payload.member.roles
