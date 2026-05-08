@@ -165,7 +165,7 @@ class Reactionroles(commands.Cog):
                             channel = self.bot.get_channel(payload.channel_id)
                             if channel is not None:
                                 await channel.send(
-                                    f"{member.mention}, you received the **{role.name}** role.",
+                                    f"{member.mention}, you removed the **{role.name}** role.",
                                     delete_after=5
                                 )
                         except Exception as e:
