@@ -134,12 +134,6 @@ class Reactionroles(commands.Cog):
                 print(f"Role with ID {role_id} not found.")
                 return
         roles = [guild.get_role(role_id) for role_id in role_ids]
-        interaction = discord.Interaction(
-            data={"id": payload.message_id},
-            state=self.bot._connection,
-            user=payload.member,
-            roles=payload.member.roles
-        )
         
         #manage roles function       
         for emoji, role in zip(emojis, roles):
