@@ -148,7 +148,7 @@ class Reactionroles(commands.Cog):
                             if channel is not None:
                                 await channel.send(
                                     f"{member.mention}, you received the **{role.name}** role.",
-                                    delete_after=5
+                                    delete_after=3
                                 )
                         except Exception as e:
                             print(f"Failed to send confirmation message for {member.name}: {e}")
@@ -166,7 +166,7 @@ class Reactionroles(commands.Cog):
                             if channel is not None:
                                 await channel.send(
                                     f"{member.mention}, you removed the **{role.name}** role.",
-                                    delete_after=5
+                                    delete_after=3
                                 )
                         except Exception as e:
                             print(f"Failed to send confirmation message for {member.name}: {e}")
